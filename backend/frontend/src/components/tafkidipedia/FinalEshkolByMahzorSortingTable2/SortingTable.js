@@ -8,8 +8,8 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import MigzarFilter from 'components/tafkidipedia/Filters/MigzarFilter';
 import CertainFilter from 'components/tafkidipedia/Filters/CertainFilter';
 import UnitFilter from 'components/tafkidipedia/Filters/UnitFilter';
-import EditEshkolFormModal from "views/general/adminpages/editeshkol/EditEshkolFormModal";
-import ProfilePageModal from 'views/general/generalpages/profilepage/ProfilePageModal';
+import EditEshkolFormModal from "views/adminpages/editeshkol/EditEshkolFormModal";
+import ProfilePageModal from 'views/generalpages/profilepage/ProfilePageModal';
 
 import EshkolFilter from 'components/tafkidipedia/Filters/EshkolFilter';
 
