@@ -14,6 +14,6 @@ router.post('/mkabaz/update', update)
 
 router.post('/mkabaz/remove/:id', remove);
 
-router.get('/mkabazsbymagad/:magadid', mkabazsbymagad);
+router.get('/mkabaz/mkabazsbymagad/:magadid', mkabazsbymagad);
 
 module.exports = router

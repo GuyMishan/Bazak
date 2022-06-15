@@ -60,7 +60,8 @@ import {
 
 import { isAuthenticated } from "auth/index";
 
-function SidebarAdmin(props) {
+function SidebarHativa(props) {
+  const { user } = isAuthenticated();
 
   const clickSubmit = (event) => {
     event.preventDefault();
@@ -76,7 +77,7 @@ function SidebarAdmin(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to="/dashboard/admin/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/dashboard/hativa/${user.hativaid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -91,7 +92,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/mahzorimpage" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -105,24 +106,9 @@ function SidebarAdmin(props) {
             </Row>
           </NavLink>
         </li>
-        <li>
-          <NavLink to="/manageusers" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
-            <Row style={{ direction: "rtl" }}>
-              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
-                {props.theme == 'white' ? <img src={editusers} style={{ height: "20px" }}></img>
-                  : <img src={editusers_white} style={{ height: "20px" }}></img>}
-              </Col>
-              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                  נתוני כח אדם
-                </h4>
-              </Col>
-            </Row>
-          </NavLink>
-        </li>
       </Nav>
     </>
   );
 }
 
-export default SidebarAdmin;
+export default SidebarHativa;

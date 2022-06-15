@@ -70,15 +70,21 @@ function Signin() {
     if (redirectToReferrer) {
       console.log(user);
       if (user && user.validated == true) {
-        // if (user.role === "0") {
-          history.push(`/dashboard`);
-        // }
-        // if (user.role === "1") {
-        //   history.push(`/unitdashboard/${user.unitid}`);
-        // }
-        // if (user.role === "2") {
-        //   history.push(`/candidatedashboard/${user._id}`);
-        // }
+        if (user.role === "0") {
+          history.push(`/dashboard/admin/0`);
+        }
+        if (user.role === "1") {
+          history.push(`/dashboard/gdod/${user.gdodid}`);
+        }
+        if (user.role === "2") {
+          history.push(`/dashboard/hativa/${user.hativaid}`);
+        }
+        if (user.role === "2") {
+          history.push(`/dashboard/ogda/${user.ogdaid}`);
+        }
+        if (user.role === "2") {
+          history.push(`/dashboard/pikod/${user.pikodid}`);
+        }
       }
       else {
         toast.success("משתמש לא מאושר מערכת");

@@ -38,8 +38,10 @@ import Logo100 from 'assets/img/team100.png';
 import Logo100_white from 'assets/img/team100_white.png';
 
 import SidebarAdmin from 'components/general/Sidebar/SidebarAdmin';
-import SidebarUnit from 'components/general/Sidebar/SidebarUnit';
-import SidebarCandidate from 'components/general/Sidebar/SidebarCandidate';
+import SidebarGdod from 'components/general/Sidebar/SidebarGdod';
+import SidebarHativa from 'components/general/Sidebar/SidebarHativa';
+import SidebarOgda from 'components/general/Sidebar/SidebarOgda';
+import SidebarPikod from 'components/general/Sidebar/SidebarPikod';
 
 import { signout } from "auth/index";
 
@@ -69,17 +71,21 @@ function Sidebar() {
         <div className="sidebar-wrapper" style={{ overflow: 'hidden' }}>
           {user.role === "0" ? <SidebarAdmin theme={color} /> :
 
-            user.role === "1" ? <SidebarUnit theme={color} /> :
+            user.role === "1" ? <SidebarGdod theme={color} /> :
 
-              user.role === "2" ? <SidebarCandidate theme={color} /> : null
+              user.role === "2" ? <SidebarHativa theme={color} /> :
+
+                user.role === "3" ? <SidebarOgda theme={color} /> :
+
+                  user.role === "4" ? <SidebarPikod theme={color} /> : null
           }
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
-          {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>
-                  : <img src={Logo100_white} style={{ height: "100px" }}></img>}
+            {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>
+              : <img src={Logo100_white} style={{ height: "100px" }}></img>}
             <Button
               onClick={clickSubmit}
               className="btn"
-              style={{ width: '80%' ,marginTop:'15px' }}
+              style={{ width: '80%', marginTop: '15px' }}
             >
               התנתק
             </Button>
