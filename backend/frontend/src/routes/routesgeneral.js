@@ -16,6 +16,7 @@ import EditUser from "views/authentication/EditUserForm";
 import DashboardPage from "views/generalpages/dashboardpage/DashboardPage";
 import ZminotPage from "views/generalpages/zminotpage/ZminotPage";
 import ProfilePage from "views/generalpages/profilepage/ProfilePage";
+import UnitTreePage from "views/generalpages/unittreepage/UnitTreePage";
 //excel routes
 import Exceluploadusers from "views/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
@@ -37,6 +38,7 @@ const routesgeneral =
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
             <LoggedinRoute path="/dashboard/:unittype/:unitid" exact component={DashboardPage} />
             <LoggedinRoute path="/zminotpage/:unittype/:unitid" exact component={ZminotPage} />
+            <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
             <LoggedinRoute path="/profilepage/:userid" exact component={ProfilePage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 

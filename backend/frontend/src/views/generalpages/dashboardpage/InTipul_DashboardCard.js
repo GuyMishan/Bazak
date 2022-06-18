@@ -18,6 +18,18 @@ import {
 } from "reactstrap";
 
 function InTipulDashboardCard(props) {
+    // const [count, setCount] = useState(0)
+
+    // function init() {
+    //     let tempdata = props.cardatas.filter(cardata => ((cardata.zminot == 'זמין')&&(cardata.kshirot == 'כשיר')));
+    //     setCount(tempdata.length)
+    // }
+
+    // useEffect(() => {
+    //     if (props.cardatas.length > 0) {
+    //         init();
+    //     }
+    // }, [props.cardatas])
 
     return (
         <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>

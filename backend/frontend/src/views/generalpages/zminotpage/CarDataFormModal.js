@@ -57,6 +57,35 @@ const CarDataFormModal = (props) => {
       })
   }
 
+  const fixnewcardataunitsbyunittype = async () => {
+    let tempcardata = {};
+    if (props.unittype == 'pikod') {
+      tempcardata.pikod = props.unitid
+    }
+    else if (props.unittype == 'ogda') {
+      tempcardata.ogda = props.unitid
+      let response = await axios.get(`http://localhost:8000/api/ogda/${props.unitid}`,)
+      tempcardata.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'hativa') {
+      tempcardata.hativa = props.unitid
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${props.unitid}`,)
+      tempcardata.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempcardata.ogda}`,)
+      tempcardata.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'gdod') {
+      tempcardata.gdod = props.unitid
+      let response2 = await axios.get(`http://localhost:8000/api/gdod/${props.unitid}`,)
+      tempcardata.hativa = response2.data.hativa
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${tempcardata.hativa}`,)
+      tempcardata.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempcardata.ogda}`,)
+      tempcardata.pikod = response.data.pikod
+    }
+    setCarData(tempcardata);
+  }
+
   // const getTipultypes = async () => {
   //   await axios.get("http://localhost:8000/api/tipultype")
   //     .then(response => {
@@ -79,28 +108,32 @@ const CarDataFormModal = (props) => {
 
   const getMagads = async (magadalid) => {
     let tempmagadalsmagads = [];
-    await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalid}`)
-      .then(response => {
-        for (let j = 0; j < response.data.length; j++)
-          tempmagadalsmagads.push(response.data[j])
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    setMagads(tempmagadalsmagads);
+    if (magadalid != undefined) {
+      await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalid}`)
+        .then(response => {
+          for (let j = 0; j < response.data.length; j++)
+            tempmagadalsmagads.push(response.data[j])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setMagads(tempmagadalsmagads);
+    }
   }
 
   const getMkabazs = async (magadid) => {
     let tempmagadmkabazs = [];
-    await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadid}`)
-      .then(response => {
-        for (let j = 0; j < response.data.length; j++)
-          tempmagadmkabazs.push(response.data[j])
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-    setMkabazs(tempmagadmkabazs);
+    if (magadid != undefined) {
+      await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadid}`)
+        .then(response => {
+          for (let j = 0; j < response.data.length; j++)
+            tempmagadmkabazs.push(response.data[j])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setMkabazs(tempmagadmkabazs);
+    }
   }
 
   const loadPikods = async () => {
@@ -176,6 +209,18 @@ const CarDataFormModal = (props) => {
     var flag = true;
     var ErrorReason = "";
 
+    //check if cardata with carnumber already exists..
+
+    if (((cardata.pikod == undefined) || (cardata.pikod == "")) || ((cardata.ogda == undefined) || (cardata.ogda == "")) || ((cardata.hativa == undefined) || (cardata.hativa == "")) || ((cardata.gdod == undefined) || (cardata.gdod == ""))) {
+      ErrorReason += ", פרטי יחידה לא מלאים"
+      flag = false;
+    }
+
+    if (((cardata.magadal == undefined) || (cardata.magadal == "")) || ((cardata.magad == undefined) || (cardata.magad == "")) || ((cardata.mkabaz == undefined) || (cardata.mkabaz == ""))) {
+      ErrorReason += ", פרטי סוג הכלי לא מלאים"
+      flag = false;
+    }
+
     if (flag == true) {
       if (props.cardataid != undefined) {
         UpdateCarData();
@@ -190,11 +235,13 @@ const CarDataFormModal = (props) => {
 
   async function CreateCarData() {
     let tempcardata = { ...cardata }
-    if(tempcardata.zminot=='זמין' && tempcardata.kshirot=='כשיר'){
-      tempcardata.tipuls=[];
+    if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
+      tempcardata.tipuls = [];
       delete tempcardata.takala_info;
+      delete tempcardata.expected_repair;
+
     }
-    else{
+    else {
       tempcardata.tipuls = finalspecialkeytwo;
     }
     let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata); //needs to check if tipuls/takala need to be emptied
@@ -205,11 +252,12 @@ const CarDataFormModal = (props) => {
   async function UpdateCarData() {
     var tempcardataid = props.cardataid;
     let tempcardata = { ...cardata }
-    if(tempcardata.zminot=='זמין' && tempcardata.kshirot=='כשיר'){
-      tempcardata.tipuls=[];
-      tempcardata.takala_info='';
+    if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
+      tempcardata.tipuls = [];
+      tempcardata.takala_info = '';
+      tempcardata.expected_repair = '';
     }
-    else{
+    else {
       tempcardata.tipuls = finalspecialkeytwo;
     }
     let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata) //needs to check if tipuls/takala need to be emptied
@@ -220,6 +268,9 @@ const CarDataFormModal = (props) => {
   function init() {
     if (props.cardataid != undefined) {
       loadcardata();
+    }
+    else {
+      fixnewcardataunitsbyunittype();
     }
     getMagadals();
     loadPikods();
@@ -276,12 +327,11 @@ const CarDataFormModal = (props) => {
           </CardHeader>
           <CardBody style={{ direction: 'rtl' }}>
             <Container>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>צ'</div>
-              <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
-
-              {/* <div style={{ textAlign: 'right', paddingTop: '10px' }}>מקבץ</div>
-              <Input placeholder="מקבץ" type="string" name="mkabaz" value={cardata.mkabaz} onChange={handleChange} /> */}
               <Row>
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>צ'</h6>
+                  <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
+                </Col>
                 {(!(cardata.magad)) ?
                   <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                     <h6>מאגד על</h6>
@@ -313,14 +363,22 @@ const CarDataFormModal = (props) => {
                   </Col>}
               </Row>
 
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מק"ט</div>
-              <Input placeholder={`מק"ט`} type="string" name="makat" value={cardata.makat} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>תיאור מק"ט</div>
-              <Input placeholder={`תיאור מק"ט`} type="string" name="makat_description" value={cardata.makat_description} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>משפחה</div>
-              <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} />
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מק"ט</div>
+                  <Input placeholder={`מק"ט`} type="string" name="makat" value={cardata.makat} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>תיאור מק"ט</div>
+                  <Input placeholder={`תיאור מק"ט`} type="string" name="makat_description" value={cardata.makat_description} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>משפחה</div>
+                  <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} />
+                </Col>
+                <Col>
+                </Col>
+              </Row>
 
               <Row>
                 {((props.unittype == "admin")) ?
@@ -376,34 +434,48 @@ const CarDataFormModal = (props) => {
                   </> : null}
               </Row>
 
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלוגה</div>
-              <Input placeholder="פלוגה" type="string" name="pluga" value={cardata.pluga} onChange={handleChange} />
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלוגה</div>
+                  <Input placeholder="פלוגה" type="string" name="pluga" value={cardata.pluga} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>שבצ"ק</div>
+                  <Input placeholder={`שבצ"ק`} type="string" name="shabzak" value={cardata.shabzak} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום בימ"ח</div>
+                  <Input placeholder={`מיקום בימ"ח`} type="string" name="mikum_bimh" value={cardata.mikum_bimh} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד הכלי</div>
+                  <Input placeholder="מעמד הכלי" type="select" name="stand" value={cardata.stand} onChange={handleChange}>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'סדיר'}>סדיר</option>
+                    <option value={'הכן'}>הכן</option>
+                    <option value={'הח"י'}>הח"י</option>
+                  </Input>
+                </Col>
+              </Row>
 
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>שבצ"ק</div>
-              <Input placeholder={`שבצ"ק`} type="string" name="shabzak" value={cardata.shabzak} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום בימ"ח</div>
-              <Input placeholder={`מיקום בימ"ח`} type="string" name="mikum_bimh" value={cardata.mikum_bimh} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד הכלי</div>
-              <Input placeholder="מעמד הכלי" type="string" name="stand" value={cardata.stand} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס הכלי</div>
-              <Input placeholder="סטאטוס הכלי" type="string" name="status" value={cardata.status} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
-              <Input placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
-                <option value={'בחר'}>בחר</option>
-                <option value={'זמין'}>זמין</option>
-                <option value={'לא זמין'}>לא זמין</option>
-              </Input>
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
-              <Input placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
-                <option value={'בחר'}>בחר</option>
-                <option value={'כשיר'}>כשיר</option>
-                <option value={'לא כשיר'}>לא כשיר</option>
-              </Input>
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
+                  <Input placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'זמין'}>זמין</option>
+                    <option value={'לא זמין'}>לא זמין</option>
+                  </Input>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
+                  <Input placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'כשיר'}>כשיר</option>
+                    <option value={'לא כשיר'}>לא כשיר</option>
+                  </Input>
+                </Col>
+              </Row>
 
               {cardata.kshirot == 'לא כשיר' || cardata.zminot == 'לא זמין' ?
                 <>
@@ -574,9 +646,7 @@ const CarDataFormModal = (props) => {
                             </Row>
 
                             <Row>
-                              <Col xs={12} md={4}>
-                              </Col>
-                              <Col xs={12} md={4}>
+                              <Col xs={12} md={8}>
                               </Col>
                               <Col xs={12} md={4}>
                                 <div>
@@ -593,19 +663,44 @@ const CarDataFormModal = (props) => {
                   </div>
                   {/* tipuls */}
 
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מהות התקלה</div>
-                  <Input placeholder="מהות התקלה" type="string" name="takala_info" value={cardata.takala_info} onChange={handleChange} />
+                  <Row>
+                    <Col>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>מהות התקלה</div>
+                      <Input placeholder="מהות התקלה" type="string" name="takala_info" value={cardata.takala_info} onChange={handleChange} />
+                    </Col>
+                    <Col>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>צפי תיקון</div>
+                      <Input placeholder="צפי תיקון" type="select" name="expected_repair" value={cardata.expected_repair} onChange={handleChange}>
+                        <option value={"בחר"}>{"בחר"}</option>
+                        <option value={"עד 6 שעות"}>{"עד 6 שעות"}</option>
+                        <option value={"עד 12 שעות"}>{"עד 12 שעות"}</option>
+                        <option value={"מעל 12 שעות"}>{"מעל 12 שעות"}</option>
+                        <option value={"מעל 24 שעות"}>{"מעל 24 שעות"}</option>
+                      </Input>
+                    </Col>
+                  </Row>
                 </>
                 : null}
 
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
-              <Input placeholder="מיקום" type="string" name="mikum" value={cardata.mikum} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>צפי תיקון</div>
-              <Input placeholder="צפי תיקון" type="string" name="expected_repair" value={cardata.expected_repair} onChange={handleChange} />
-
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
-              <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} />
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס הכלי</div>
+                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange}>
+                    <option value={"בחר"}>{"בחר"}</option>
+                    <option value={"פעיל"}>{"פעיל"}</option>
+                    <option value={"מושבת"}>{"מושבת"}</option>
+                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
+                  </Input>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
+                  <Input placeholder="מיקום" type="string" name="mikum" value={cardata.mikum} onChange={handleChange} />
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
+                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} />
+                </Col>
+              </Row>
 
               <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                 <button className="btn" onClick={clickSubmit}>עדכן</button>

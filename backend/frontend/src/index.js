@@ -9,6 +9,7 @@ import 'components/TableDark.css'
 import 'components/ExcelButton.css' 
 import 'components/EmptyButton.css' 
 import 'components/NewButton.css' 
+import 'components/NewButtonBlue.css' 
 import 'components/NewButtonDelete.css' 
 import "assets/css/black-dashboard-react.css";
 import ThemeContextWrapper from "./components/general/ThemeWrapper/ThemeWrapper";

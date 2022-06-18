@@ -91,8 +91,8 @@ function SidebarGdod(props) {
             </Row>
           </NavLink>
         </li>
-        <li>
-          <NavLink to="/mahzorimpage" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+        {/* <li>
+          <NavLink to={`/zminotpage/gdod/${user.gdodid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -105,7 +105,7 @@ function SidebarGdod(props) {
               </Col>
             </Row>
           </NavLink>
-        </li>
+        </li> */}
       </Nav>
     </>
   );

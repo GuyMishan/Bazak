@@ -32,6 +32,9 @@ function DashboardPage({ match }) {
   //user
   const [user, setUser] = useState(undefined)
   //user
+  //cardatas
+  const [cardatas, setCardatas] = useState([])
+  //cardatas
 
   async function loaduser() {
     let tempuser = isAuthenticated();
@@ -42,22 +45,36 @@ function DashboardPage({ match }) {
     loaduser();
   }
 
+  const getCardDataByUnitTypeAndUnitId = async () => {
+      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${match.params.unittype}/${match.params.unitid}`)
+        .then(response => {
+          setCardatas(response.data)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+  }
+
   useEffect(() => {
     init();
   }, [])
+
+  useEffect(() => {
+    getCardDataByUnitTypeAndUnitId();
+  }, [user])
 
   return (
     user ?
       <div>
         <Row>
           <Col xs={12} md={3}>
-            <ZminotDashboardCard />
+            <ZminotDashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <InTipul_DashboardCard />
+            <InTipul_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <Tipul_Exceptions_DashboardCard />
+            <Tipul_Exceptions_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
             <div style={{ textAlign: 'center' }}>
@@ -67,26 +84,28 @@ function DashboardPage({ match }) {
         </Row>
         <Row>
           <Col xs={12} md={3}>
-            <Hh_DashboardCard />
+            <Hh_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <Takalot_DashboardCard />
+            <Takalot_DashboardCard cardatas={cardatas}/>
           </Col>
         </Row>
         <Row>
           <Col xs={12} md={3}>
-            <Zminot_Tanks_DashboardCard />
+            <Zminot_Tanks_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <Zminot_Logistic_DashboardCard />
+            <Zminot_Logistic_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <Zminot_Power_Multiplier_DashboardCard />
+            <Zminot_Power_Multiplier_DashboardCard cardatas={cardatas}/>
           </Col>
           <Col xs={12} md={3}>
-            <Zminot_Cars_DashboardCard />
+            <Zminot_Cars_DashboardCard cardatas={cardatas}/>
           </Col>
         </Row>
+
+        <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><Button>טבלת זמינות</Button></Link>
       </div> : null
   );
 }

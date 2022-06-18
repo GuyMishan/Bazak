@@ -20,6 +20,7 @@
     "react-router-dom": "5.2.0",
     "react-scripts": "3.4.1",
     "react-select": "^5.1.0",
+    "react-simple-tree-menu": "^1.1.18",
     "react-table": "^7.7.0",
     "react-toastify": "^7.0.4",
     "react-toggle-button": "^2.2.0",

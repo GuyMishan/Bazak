@@ -193,6 +193,7 @@ export default function SignUpForm() {
       name: data.name,
       lastname: data.lastname,
       password: data.password,
+      role: data.role,
       personalnumber: data.personalnumber,
       gdodid: data.gdodid,
       hativaid: data.hativaid,

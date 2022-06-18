@@ -200,6 +200,8 @@ const EditUserForm = ({ match }) => {
       name: data.name,
       lastname: data.lastname,
       password: data.password,
+      role: data.role,
+      validated: data.validated,
       personalnumber: data.personalnumber,
       gdodid: data.gdodid,
       hativaid: data.hativaid,
@@ -243,13 +245,13 @@ const EditUserForm = ({ match }) => {
 
   return (
     <div className="">
-     <Container className="" dir='rtl'>
+      <Container className="" dir='rtl'>
         <Row className="justify-content-center">
           <Col lg="5" md="7">
             <Card className="shadow border-0">
               <CardBody className="px-lg-5 py-lg-5">
                 <div className="text-center text-muted mb-4">
-                  <small>הרשמה</small>
+                  <small>עריכת משתמש</small>
                 </div>
                 <Form role="form">
                   <FormGroup>
@@ -386,6 +388,14 @@ const EditUserForm = ({ match }) => {
                   ) : data.role === "" ? (
                     <div>נא להכניס הרשאה</div>
                   ) : null}
+
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מאושר/לא מאושר מערכת</div>
+                  <FormGroup>
+                    <Input type="select" name="validated" value={data.validated} onChange={handleChange}>
+                      <option value={true}>מאושר</option>
+                      <option value={false}>לא מאושר</option>
+                    </Input>
+                  </FormGroup>
 
                   <div className="text-center">
                     <button onClick={clickSubmit} className="btn">

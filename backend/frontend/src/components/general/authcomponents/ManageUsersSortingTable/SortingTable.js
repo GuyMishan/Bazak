@@ -108,9 +108,9 @@ const SortingTable = ({ match }) => {
                             if (cell.value == '0')
                               return <td>מנהל מערכת</td>
                             if (cell.value == '1')
-                              return <td>משתמש יחידה</td>
+                              return <td>משתמש גדוד</td>
                             if (cell.value == '2')
-                            return <td>משתמש מתמודד</td>
+                            return <td>משתמש חטיבה</td>
                             if (cell.value == '3')
                             return <td>משתמש אוגדה</td>
                             if (cell.value == '4')

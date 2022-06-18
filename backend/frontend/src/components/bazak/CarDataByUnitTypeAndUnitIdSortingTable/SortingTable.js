@@ -12,6 +12,7 @@ import people from "assets/img/people.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { Button } from "reactstrap";
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
+import Input from "reactstrap/lib/Input";
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -21,6 +22,50 @@ const SortingTable = (props) => {
   //cardata form modal
   const [iscardataformopen, setIscardataformopen] = useState(false);
   const [cardataidformodal, setCardataidformodal] = useState(undefined);
+  //units
+  const [gdods, setGdods] = useState([]);
+  const [hativas, setHativas] = useState([]);
+  const [ogdas, setOgdas] = useState([]);
+  const [pikods, setPikods] = useState([]);
+  //cartypes
+  const [mkabazs, setMkabazs] = useState([]);
+  const [magads, setMagads] = useState([]);
+  const [magadals, setMagadals] = useState([]);
+
+  const loadPikods = async () => {
+    let response = await axios.get("http://localhost:8000/api/pikod",)
+    setPikods(response.data);
+  }
+
+  const loadOgdas = async () => {
+    let response = await axios.get("http://localhost:8000/api/ogda",)
+    setOgdas(response.data);
+  }
+
+  const loadHativas = async () => {
+    let response = await axios.get("http://localhost:8000/api/hativa",)
+    setHativas(response.data);
+  }
+
+  const loadGdods = async () => {
+    let response = await axios.get("http://localhost:8000/api/gdod",)
+    setGdods(response.data);
+  }
+
+  const loadMagadals = async () => {
+    let response = await axios.get("http://localhost:8000/api/magadal",)
+    setMagadals(response.data);
+  }
+
+  const loadMagads = async () => {
+    let response = await axios.get("http://localhost:8000/api/magad",)
+    setMagads(response.data);
+  }
+
+  const loadMkabazs = async () => {
+    let response = await axios.get("http://localhost:8000/api/mkabaz",)
+    setMkabazs(response.data);
+  }
 
   function Toggle(evt) {
     if (evt.currentTarget.value == '') {
@@ -38,12 +83,12 @@ const SortingTable = (props) => {
   }
 
   async function updatechangedcardata() {
-    if(cardataidformodal!=undefined){
+    if (cardataidformodal != undefined) {
       let response = await axios.get(`http://localhost:8000/api/cardata/${cardataidformodal}`)
       let tempcardata = response.data[0];
-  
+
       let tempdata = [...data];
-  
+
       for (let i = 0; i < tempdata.length; i++) {
         if (cardataidformodal == tempdata[i]._id) {
           tempdata[i] = { ...tempcardata };
@@ -51,13 +96,23 @@ const SortingTable = (props) => {
       }
       setData(tempdata)
     }
-    else{
+    else {
       init();
     }
   }
 
   function init() {
     getCardDataByUnitTypeAndUnitId();
+  }
+
+  function init2() {
+    loadPikods();
+    loadOgdas();
+    loadHativas();
+    loadGdods();
+    loadMagadals();
+    loadMagads();
+    loadMkabazs();
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
@@ -77,6 +132,7 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     init();
+    init2();
     setPageSize(5);
   }, []);
 
@@ -104,17 +160,19 @@ const SortingTable = (props) => {
 
   return (
     <>
-      <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype}/>
-      <div style={{ float: 'right' }}>
-        <ReactHTMLTableToExcel
+      <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
+      <div style={{float:'right'}}>
+      <ReactHTMLTableToExcel
           id="test-table-xls-button"
           className="btn-green"
           table="table-to-xls"
           filename="קובץ - זמינות"
           sheet="קובץ - זמינות"
-          buttonText="הורד כקובץ אקסל" />
-        <Button value={undefined} onClick={Toggle}>הוסף צ'</Button>
+          buttonText="הורד כקובץ אקסל" 
+          style={{float:'right'}}
+          />
       </div>
+        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{float:'right',marginRight:'10px'}}>הוסף צ'</button>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()} id="table-to-xls">
@@ -143,17 +201,38 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date")) {
-                          return <td style={{width:`${100/22}%`,minWidth:'50px'}} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz")) {
+                          return <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
                           if (cell.column.id == "latest_recalibration_date") {
-                            return cell.value ?  <td style={{width:`${100/22}%`,minWidth:'50px'}} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{width:`${100/22}%`,minWidth:'50px'}} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '150px' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "pikod") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "ogda") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "hativa") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "gdod") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "magadal") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "magad") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "mkabaz") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
                           }
                         }
                       })
                     }
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Button value={row.original._id} onClick={Toggle}>עדכן</Button></div></td>{/*row.original._id=cardata._id*/}
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
                     {/* {console.log(row)} */}
                   </tr>
                 )

@@ -96,11 +96,6 @@ export const COLUMNS = [
         Filter: ColumnFilter
     },
     {
-        Header: 'צפי תיקון',
-        accessor: 'expected_repair',
-        Filter: ColumnFilter
-    },
-    {
         Header: 'מועד כיול אחרון',
         accessor: 'latest_recalibration_date',
         Filter: ColumnFilter

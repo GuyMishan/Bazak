@@ -79,10 +79,10 @@ function Signin() {
         if (user.role === "2") {
           history.push(`/dashboard/hativa/${user.hativaid}`);
         }
-        if (user.role === "2") {
+        if (user.role === "3") {
           history.push(`/dashboard/ogda/${user.ogdaid}`);
         }
-        if (user.role === "2") {
+        if (user.role === "4") {
           history.push(`/dashboard/pikod/${user.pikodid}`);
         }
       }
