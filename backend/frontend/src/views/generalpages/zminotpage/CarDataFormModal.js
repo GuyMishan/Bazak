@@ -28,6 +28,7 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 import Select from 'components/general/Select/AnimatedMultiSelect'
+import deletepic from "assets/img/delete.png";
 
 const CarDataFormModal = (props) => {
   //cardata
@@ -377,10 +378,17 @@ const CarDataFormModal = (props) => {
                   <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} />
                 </Col>
                 <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס הכלי</div>
+                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange}>
+                    <option value={"בחר"}>{"בחר"}</option>
+                    <option value={"פעיל"}>{"פעיל"}</option>
+                    <option value={"מושבת"}>{"מושבת"}</option>
+                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
+                  </Input>
                 </Col>
               </Row>
 
-              <Row>
+              <Row style={{ paddingTop: '10px' }}>
                 {((props.unittype == "admin")) ?
                   <>
                     {(!(cardata.ogda)) ?
@@ -655,7 +663,7 @@ const CarDataFormModal = (props) => {
                               </Col>
                             </Row>
 
-                            <Button type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => currentSpec.filter(x => x.id !== p.id)) }}>x</Button>
+                            <Button type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => currentSpec.filter(x => x.id !== p.id)) }}><img src={deletepic} height='20px'></img></Button>
                           </div>
                         )
                       })
@@ -666,8 +674,11 @@ const CarDataFormModal = (props) => {
                   <Row>
                     <Col>
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>מהות התקלה</div>
-                      <Input placeholder="מהות התקלה" type="string" name="takala_info" value={cardata.takala_info} onChange={handleChange} />
+                      <Input placeholder="מהות התקלה" type="textarea" name="takala_info" value={cardata.takala_info} onChange={handleChange} />
                     </Col>
+                  </Row>
+
+                  <Row>
                     <Col>
                       <div style={{ textAlign: 'right', paddingTop: '10px' }}>צפי תיקון</div>
                       <Input placeholder="צפי תיקון" type="select" name="expected_repair" value={cardata.expected_repair} onChange={handleChange}>
@@ -683,15 +694,6 @@ const CarDataFormModal = (props) => {
                 : null}
 
               <Row>
-                <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס הכלי</div>
-                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange}>
-                    <option value={"בחר"}>{"בחר"}</option>
-                    <option value={"פעיל"}>{"פעיל"}</option>
-                    <option value={"מושבת"}>{"מושבת"}</option>
-                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
-                  </Input>
-                </Col>
                 <Col>
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
                   <Input placeholder="מיקום" type="string" name="mikum" value={cardata.mikum} onChange={handleChange} />
