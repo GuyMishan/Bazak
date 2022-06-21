@@ -18,21 +18,17 @@ import {
 import axios from 'axios';
 import { signin, authenticate, isAuthenticated } from 'auth/index';
 
-import Zminot_Magadal_DashboardCard from './Zminot_Magadal_DashboardCard';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
+import SortingTable from 'components/bazak/SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
 
-function DashboardPage({ match }) {
+function SubUnitsPage({ match }) {
   //flag - cuz theres a problem in sidbar nav
   const [flag, setFlag] = useState(false)
   //cardatas
   const [cardatas, setCardatas] = useState([])
 
-  const [magadals, setMagadals] = useState([]);
-  //cardatas
-
   async function init() {
     await getCardDataByUnitTypeAndUnitId();
-    await getMagadals();
     setFlag(true);
   }
 
@@ -40,16 +36,6 @@ function DashboardPage({ match }) {
     await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${match.params.unittype}/${match.params.unitid}`)
       .then(response => {
         setCardatas(response.data)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
-  }
-
-  const getMagadals = async () => {
-    await axios.get(`http://localhost:8000/api/magadal`)
-      .then(response => {
-        setMagadals(response.data)
       })
       .catch((error) => {
         console.log(error);
@@ -68,15 +54,7 @@ function DashboardPage({ match }) {
   return (
     <div>
       <Row>
-        {magadals.map((magadal, i) => (
-          magadal ?
-            <>
-              <Col xs={12} md={3}>
-                <Zminot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
-              </Col>
-            </>
-            : null
-        ))}
+        <SortingTable unittype={match.params.unittype} unitid={match.params.unitid} />
       </Row>
       <Row>
         <Col xs={12} md={3} style={{ textAlign: 'right' }}>
@@ -92,4 +70,4 @@ function DashboardPage({ match }) {
   );
 }
 
-export default withRouter(DashboardPage);
+export default withRouter(SubUnitsPage);

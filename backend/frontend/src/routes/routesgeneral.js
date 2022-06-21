@@ -14,8 +14,8 @@ import ManageUsers from "views/authentication/manageusers/ManageUsers";
 import EditUser from "views/authentication/EditUserForm";
 //general routes
 import DashboardPage from "views/generalpages/dashboardpage/DashboardPage";
+import SubUnitsPage from "views/generalpages/subunitspage/SubUnitsPage";
 import ZminotPage from "views/generalpages/zminotpage/ZminotPage";
-import ProfilePage from "views/generalpages/profilepage/ProfilePage";
 import UnitTreePage from "views/generalpages/unittreepage/UnitTreePage";
 //excel routes
 import Exceluploadusers from "views/excelpages/ExcelUploadUsers"
@@ -37,9 +37,9 @@ const routesgeneral =
 
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
             <LoggedinRoute path="/dashboard/:unittype/:unitid" exact component={DashboardPage} />
+            <LoggedinRoute path="/subunitspage/:unittype/:unitid" exact component={SubUnitsPage} />
             <LoggedinRoute path="/zminotpage/:unittype/:unitid" exact component={ZminotPage} />
             <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
-            <LoggedinRoute path="/profilepage/:userid" exact component={ProfilePage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}

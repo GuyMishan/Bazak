@@ -90,8 +90,8 @@ function SidebarAdmin(props) {
             </Row>
           </NavLink>
         </li>
-        {/* <li>
-          <NavLink to={`/zminotpage/admin/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+        <li>
+          <NavLink to={`/subunitspage/admin/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -99,12 +99,12 @@ function SidebarAdmin(props) {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                  זמינות
+                  זמינות תת-יחידות
                 </h4>
               </Col>
             </Row>
           </NavLink>
-        </li> */}
+        </li>
         <li>
           <NavLink to={`/unittreepage/admin/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>

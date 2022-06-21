@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 
 
-const { create, find, read, update, remove, cardatabyunittypeandunitid } = require("../../controllers/general/cardata")
+const { create, find, read, update, remove, cardatabyunittypeandunitid,cardatabycarnumber } = require("../../controllers/general/cardata")
 
 router.post('/cardata', create);
 
@@ -17,5 +17,7 @@ router.post('/cardata/remove/:id', remove);
 //
 
 router.get('/cardata/cardatabyunittypeandunitid/:unittype/:unitid', cardatabyunittypeandunitid);
+
+router.get('/cardata/cardatabycarnumber/:carnumber', cardatabycarnumber);
 
 module.exports = router

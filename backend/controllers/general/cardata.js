@@ -41,7 +41,7 @@ exports.remove = (req, res) => {
 
 exports.cardatabyunittypeandunitid = (req, res) => {
   if (req.params.unittype == 'admin' && req.params.unitid == '0') {
-    Cardata.find()
+    Cardata.find({ pikod: { $ne: null },ogda: { $ne: null },hativa: { $ne: null },gdod: { $ne: null } })
       .then((cardata) => res.json(cardata))
       .catch((err) => res.status(400).json("Error: " + err));
   }
@@ -69,4 +69,10 @@ exports.cardatabyunittypeandunitid = (req, res) => {
               .then((cardata) => res.json(cardata))
               .catch((err) => res.status(400).json("Error: " + err));
           }
+};
+
+exports.cardatabycarnumber = (req, res) => {
+  Cardata.find({ carnumber: req.params.carnumber })
+    .then((cardata) => res.json(cardata))
+    .catch((err) => res.status(400).json("Error: " + err));
 };

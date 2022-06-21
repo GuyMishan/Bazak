@@ -12,7 +12,7 @@ import people from "assets/img/people.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { Button } from "reactstrap";
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
-import Input from "reactstrap/lib/Input";
+import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -22,6 +22,9 @@ const SortingTable = (props) => {
   //cardata form modal
   const [iscardataformopen, setIscardataformopen] = useState(false);
   const [cardataidformodal, setCardataidformodal] = useState(undefined);
+  //cardata form modal delete
+  const [iscardataformdeleteopen, setIscardataformdeleteopen] = useState(false);
+  const [cardataidfordeletemodal, setCardataidfordeletemodal] = useState(undefined);
   //units
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
@@ -79,6 +82,21 @@ const SortingTable = (props) => {
 
   function ToggleForModal(evt) {
     setIscardataformopen(!iscardataformopen);
+    updatechangedcardata(); // update table..
+  }
+
+  function ToggleDelete(evt) {
+    if (evt.currentTarget.value == '') {
+      setCardataidfordeletemodal(undefined)
+    }
+    else {
+      setCardataidfordeletemodal(evt.currentTarget.value)
+    }
+    setIscardataformdeleteopen(!iscardataformdeleteopen);
+  }
+
+  function ToggleForModalDelete(evt) {
+    setIscardataformdeleteopen(!iscardataformdeleteopen);
     updatechangedcardata(); // update table..
   }
 
@@ -161,6 +179,7 @@ const SortingTable = (props) => {
   return (
     <>
       <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
+      <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
       <div style={{float:'right'}}>
       <ReactHTMLTableToExcel
           id="test-table-xls-button"
@@ -188,6 +207,7 @@ const SortingTable = (props) => {
                     </div>
                   </th>
                 ))}
+                <th></th>
                 <th></th>
               </tr>
             ))}
@@ -233,6 +253,7 @@ const SortingTable = (props) => {
                       })
                     }
                     <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
+                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>{/*row.original._id=cardata._id*/}
                     {/* {console.log(row)} */}
                   </tr>
                 )

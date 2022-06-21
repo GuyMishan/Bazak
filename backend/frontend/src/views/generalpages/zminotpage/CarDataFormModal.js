@@ -210,7 +210,10 @@ const CarDataFormModal = (props) => {
     var flag = true;
     var ErrorReason = "";
 
-    //check if cardata with carnumber already exists..
+    if (((cardata.carnumber == undefined) || (cardata.carnumber == ""))) {
+      ErrorReason += ", שדה חסר צ'"
+      flag = false;
+    }
 
     if (((cardata.pikod == undefined) || (cardata.pikod == "")) || ((cardata.ogda == undefined) || (cardata.ogda == "")) || ((cardata.hativa == undefined) || (cardata.hativa == "")) || ((cardata.gdod == undefined) || (cardata.gdod == ""))) {
       ErrorReason += ", פרטי יחידה לא מלאים"
@@ -234,20 +237,27 @@ const CarDataFormModal = (props) => {
     }
   }
 
-  async function CreateCarData() {
-    let tempcardata = { ...cardata }
-    if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
-      tempcardata.tipuls = [];
-      delete tempcardata.takala_info;
-      delete tempcardata.expected_repair;
 
+  async function CreateCarData() {
+    let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
+    if (response.data.length > 0) {
+      toast.error("צ' כבר קיים במערכת");
     }
     else {
-      tempcardata.tipuls = finalspecialkeytwo;
+      let tempcardata = { ...cardata }
+      if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
+        tempcardata.tipuls = [];
+        delete tempcardata.takala_info;
+        delete tempcardata.expected_repair;
+
+      }
+      else {
+        tempcardata.tipuls = finalspecialkeytwo;
+      }
+      let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata); //needs to check if tipuls/takala need to be emptied
+      toast.success(`צ' נוסף בהצלחה`);
+      props.ToggleForModal();
     }
-    let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata); //needs to check if tipuls/takala need to be emptied
-    toast.success(`צ' נוסף בהצלחה`);
-    props.ToggleForModal();
   }
 
   async function UpdateCarData() {
@@ -493,175 +503,179 @@ const CarDataFormModal = (props) => {
                   <div>
                     {finalspecialkeytwo.length == 0 ?
                       <Row>
-                        <Button style={{ float: "right" }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף נתונים</Button>
+                        <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "tipul" }]) }}>הוסף טיפול</Button>
+                        </Col>
+                        <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "harig_tipul" }]) }}>הוסף חריגת טיפול</Button>
+                        </Col>
+                        <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "takala_mizdamenet" }]) }}>הוסף תקלה מזדמנת</Button>
+                        </Col>
+                        <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                          <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "hh_stand" }]) }}>הוסף עומד על ח"ח</Button>
+                        </Col>
                       </Row>
                       : finalspecialkeytwo.map((p, index) => {
                         return (
                           <div>
                             {index == 0 ?
                               <Row>
-                                <Button style={{ float: "right" }} type="button" onClick={() => {
-                                  if (finalspecialkeytwo.length < 3)
-                                    setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate() }])
-                                }}>
-                                  הוסף נתונים</Button>
+                                <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                                  <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "tipul" }]) }}>הוסף טיפול</Button>
+                                </Col>
+                                <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                                  <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "harig_tipul" }]) }}>הוסף חריגת טיפול</Button>
+                                </Col>
+                                <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                                  <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "takala_mizdamenet" }]) }}>הוסף תקלה מזדמנת</Button>
+                                </Col>
+                                <Col style={{ display: 'flex', justifyContent: 'center' }}>
+                                  <Button style={{ width: '100px', padding: '5px' }} type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => [...currentSpec, { id: generate(), type: "hh_stand" }]) }}>הוסף עומד על ח"ח</Button>
+                                </Col>
                               </Row>
                               : null}
 
-                            <Row>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>סוג הטיפול</p>
-                                  <Input onChange={(e) => {
-                                    const tipultype = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipultype = tipultype }))
-                                  }}
-                                    value={p.tipultype} type="select" placeholder="סוג הטיפול">
-                                    <option value={"בחר"}>{"בחר"}</option>
-                                    <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
-                                  </Input>
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>תאריך כניסה לטיפול</p>
-                                  <Input onChange={(e) => {
-                                    const tipul_entry_date = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul_entry_date = tipul_entry_date }))
-                                  }}
-                                    value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" />
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>מיקום הטיפול</p>
-                                  <Input onChange={(e) => {
-                                    const mikum_tipul = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].mikum_tipul = mikum_tipul }))
-                                  }}
-                                    value={p.mikum_tipul} type="select" placeholder="מיקום הטיפול">
-                                    <option value={"בחר"}>{"בחר"}</option>
-                                    <option value={"ביחידה"}>{"ביחידה"}</option>
-                                    <option value={"אגד ארצי"}>{"אגד ארצי"}</option>
-                                    <option value={`מש"א`}>{`מש"א`}</option>
-                                    <option value={"אחזקות חוץ"}>{"אחזקות חוץ"}</option>
-                                  </Input>
-                                </div>
-                              </Col>
-                            </Row>
-
-                            <Row>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>חריג טיפול</p>
-                                  <Input onChange={(e) => {
-                                    const harig_tipul = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul = harig_tipul }))
-                                  }}
-                                    value={p.harig_tipul} type="select" placeholder="חריג טיפול">
-                                    <option value={"בחר"}>{"בחר"}</option>
-                                    <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
-                                  </Input>
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>תאריך חריגת טיפול</p>
-                                  <Input onChange={(e) => {
-                                    const harig_tipul_date = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul_date = harig_tipul_date }))
-                                  }}
-                                    value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" />
-                                </div>
-                              </Col>
-                            </Row>
-
-                            <Row>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>תקלה מזדמנת</p>
-                                  <Input onChange={(e) => {
-                                    const takala_mizdamenet = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet = takala_mizdamenet }))
-                                  }}
-                                    value={p.takala_mizdamenet} type="select" placeholder="תקלה מזדמנת">
-                                    <option value={"בחר"}>{"בחר"}</option>
-                                    <option value={'קלה'}>{'קלה'}</option>
-                                    <option value={'בינונית'}>{'בינונית'}</option>
-                                    <option value={'קשה'}>{'קשה'}</option>
-                                  </Input>
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>תאריך תקלה מזמנת</p>
-                                  <Input onChange={(e) => {
-                                    const takala_mizdamenet_date = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet_date = takala_mizdamenet_date }))
-                                  }}
-                                    value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" />
-                                </div>
-                              </Col>
-                            </Row>
-
-                            <Row>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>עומד על ח"ח</p>
-                                  <Input onChange={(e) => {
-                                    const hh_stand = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].hh_stand = hh_stand }))
-                                  }}
-                                    value={p.hh_stand} type="select" placeholder={`עומד על ח"ח`}>
-                                    <option value={"בחר"}>{"בחר"}</option>
-                                    <option value={"כן"}>{"כן"}</option>
-                                    <option value={"לא"}>{"לא"}</option>
-                                  </Input>
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
-                                  <Input onChange={(e) => {
-                                    const missing_makat_1 = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_1 = missing_makat_1 }))
-                                  }}
-                                    value={p.missing_makat_1} type="string" placeholder={`מק"ט חסר`}>
-                                  </Input>
-                                </div>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
-                                  <Input onChange={(e) => {
-                                    const missing_makat_2 = e.target.value;
-                                    if (e.target.value != "בחר")
-                                      setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_2 = missing_makat_2 }))
-                                  }}
-                                    value={p.missing_makat_2} type="string" placeholder={`מק"ט חסר`}>
-                                  </Input>
-                                </div>
-                              </Col>
-                            </Row>
-
-                            <Row>
-                              <Col xs={12} md={8}>
-                              </Col>
-                              <Col xs={12} md={4}>
-                                <div>
-                                  <p style={{ margin: '0px', float: 'right' }}>כמות ימי אי זמינות: 5 ימים</p>
-                                </div>
-                              </Col>
-                            </Row>
+                            {p.type == 'tipul' ?
+                              <Row>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>סוג הטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const tipul = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul = tipul }))
+                                    }}
+                                      value={p.tipul} type="select" placeholder="סוג הטיפול">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>תאריך כניסה לטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const tipul_entry_date = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul_entry_date = tipul_entry_date }))
+                                    }}
+                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" />
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>מיקום הטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const mikum_tipul = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].mikum_tipul = mikum_tipul }))
+                                    }}
+                                      value={p.mikum_tipul} type="select" placeholder="מיקום הטיפול">
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"ביחידה"}>{"ביחידה"}</option>
+                                      <option value={"אגד ארצי"}>{"אגד ארצי"}</option>
+                                      <option value={`מש"א`}>{`מש"א`}</option>
+                                      <option value={"אחזקות חוץ"}>{"אחזקות חוץ"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                              </Row> : p.type == 'harig_tipul' ?
+                                <Row>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>חריג טיפול</p>
+                                      <Input onChange={(e) => {
+                                        const harig_tipul = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul = harig_tipul }))
+                                      }}
+                                        value={p.harig_tipul} type="select" placeholder="חריג טיפול">
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תאריך חריגת טיפול</p>
+                                      <Input onChange={(e) => {
+                                        const harig_tipul_date = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul_date = harig_tipul_date }))
+                                      }}
+                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" />
+                                    </div>
+                                  </Col>
+                                </Row> : p.type == 'takala_mizdamenet' ? <Row>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תקלה מזדמנת</p>
+                                      <Input onChange={(e) => {
+                                        const takala_mizdamenet = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet = takala_mizdamenet }))
+                                      }}
+                                        value={p.takala_mizdamenet} type="select" placeholder="תקלה מזדמנת">
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        <option value={'קלה'}>{'קלה'}</option>
+                                        <option value={'בינונית'}>{'בינונית'}</option>
+                                        <option value={'קשה'}>{'קשה'}</option>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תאריך תקלה מזמנת</p>
+                                      <Input onChange={(e) => {
+                                        const takala_mizdamenet_date = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet_date = takala_mizdamenet_date }))
+                                      }}
+                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" />
+                                    </div>
+                                  </Col>
+                                </Row> : p.type == 'hh_stand' ? <Row>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>עומד על ח"ח</p>
+                                      <Input onChange={(e) => {
+                                        const hh_stand = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].hh_stand = hh_stand }))
+                                      }}
+                                        value={p.hh_stand} type="select" placeholder={`עומד על ח"ח`}>
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        <option value={"כן"}>{"כן"}</option>
+                                        <option value={"לא"}>{"לא"}</option>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
+                                      <Input onChange={(e) => {
+                                        const missing_makat_1 = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_1 = missing_makat_1 }))
+                                      }}
+                                        value={p.missing_makat_1} type="string" placeholder={`מק"ט חסר`}>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
+                                      <Input onChange={(e) => {
+                                        const missing_makat_2 = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_2 = missing_makat_2 }))
+                                      }}
+                                        value={p.missing_makat_2} type="string" placeholder={`מק"ט חסר`}>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                </Row> : null}
 
                             <Button type="button" onClick={() => { setFinalSpecialKeytwo(currentSpec => currentSpec.filter(x => x.id !== p.id)) }}><img src={deletepic} height='20px'></img></Button>
                           </div>
@@ -690,6 +704,16 @@ const CarDataFormModal = (props) => {
                       </Input>
                     </Col>
                   </Row>
+
+                  {/* <Row>
+                    <Col xs={12} md={8}>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <div>
+                        <p style={{ margin: '0px', float: 'left' }}>כמות ימי אי זמינות: 5 ימים</p>
+                      </div>
+                    </Col>
+                  </Row> */}
                 </>
                 : null}
 
