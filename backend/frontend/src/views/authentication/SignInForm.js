@@ -22,7 +22,7 @@ import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
 
-import tafkidipedialogo from "assets/img/tafkidipedialogo.png";
+import logobazak2 from "assets/img/logobazak2.png";
 
 function Signin() {
   const [values, setValues] = useState({
@@ -127,7 +127,7 @@ function Signin() {
 
               <CardBody className="px-lg-5 py-lg-5">
                 <div className="text-center text-muted mb-4">
-                  <img src={tafkidipedialogo}></img>
+                  <img src={logobazak2}></img>
                 </div>
                 <div className="text-center text-muted mb-4">
                   <small>התחברות</small>
@@ -143,12 +143,12 @@ function Signin() {
                     <Row>
                       <Col>
                         <div className="text-center">
-                          <button onClick={clickSubmit} className="btn">התחבר</button>
+                          <button onClick={clickSubmit} className="btn-new-blue">התחבר</button>
                         </div>
                       </Col>
                       <Col>
                         <div className="text-center">
-                          <button onClick={() => { history.push(`/signup`) }} className="btn">הרשם</button>
+                          <button onClick={() => { history.push(`/signup`) }} className="btn-new-blue">הרשם</button>
                         </div>
                       </Col>
                     </Row>

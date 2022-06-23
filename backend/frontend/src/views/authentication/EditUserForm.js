@@ -26,7 +26,6 @@ import { generate } from 'shortid'
 import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
-import JobAnimatedMultiSelect from 'components/tafkidipedia/Select/JobAnimatedMultiSelect';
 
 const EditUserForm = ({ match }) => {
   const [data, setData] = useState({
@@ -398,7 +397,7 @@ const EditUserForm = ({ match }) => {
                   </FormGroup>
 
                   <div className="text-center">
-                    <button onClick={clickSubmit} className="btn">
+                    <button onClick={clickSubmit} className="btn-new-blue">
                       עדכן
                     </button>
                   </div>

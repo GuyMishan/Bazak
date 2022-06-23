@@ -82,13 +82,13 @@ function Sidebar() {
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
             {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>
               : <img src={Logo100_white} style={{ height: "100px" }}></img>}
-            <Button
+            <button
               onClick={clickSubmit}
-              className="btn"
+              className="btn-new-blue"
               style={{ width: '80%', marginTop: '15px' }}
             >
               התנתק
-            </Button>
+            </button>
           </div>
         </div>
       </div>

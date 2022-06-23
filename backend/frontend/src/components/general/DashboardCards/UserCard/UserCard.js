@@ -22,9 +22,6 @@ import { ThemeContext, themes } from "contexts/ThemeContext";
 
 import history from "../../../../history";
 
-import soldier from "assets/img/soldier.png";
-import tafkidipediashortlogo from "assets/img/tafkidipedialogo3.png";
-
 import UserCarousel from "./UserCarousel"
 
 const signout = (event) => {

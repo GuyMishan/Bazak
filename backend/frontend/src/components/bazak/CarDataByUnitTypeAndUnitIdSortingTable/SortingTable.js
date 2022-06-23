@@ -10,15 +10,17 @@ import deletepic from "assets/img/delete.png";
 import people from "assets/img/people.png";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { Button } from "reactstrap";
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
+import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
-
+  //data
+  const [originaldata, setOriginaldata] = useState([])
   const [data, setData] = useState([])
-
+  //filter
+  const [filter, setFilter] = useState([])
   //cardata form modal
   const [iscardataformopen, setIscardataformopen] = useState(false);
   const [cardataidformodal, setCardataidformodal] = useState(undefined);
@@ -106,12 +108,20 @@ const SortingTable = (props) => {
       let tempcardata = response.data[0];
 
       let tempdata = [...data];
+      let temporiginaldata = [...originaldata];
 
       for (let i = 0; i < tempdata.length; i++) {
         if (cardataidformodal == tempdata[i]._id) {
           tempdata[i] = { ...tempcardata };
         }
       }
+
+      for (let i = 0; i < temporiginaldata.length; i++) {
+        if (cardataidformodal == temporiginaldata[i]._id) {
+          temporiginaldata[i] = { ...tempcardata };
+        }
+      }
+      setOriginaldata(temporiginaldata)
       setData(tempdata)
     }
     else {
@@ -121,6 +131,7 @@ const SortingTable = (props) => {
 
   function init() {
     getCardDataByUnitTypeAndUnitId();
+    fixfilterunits();
   }
 
   function init2() {
@@ -134,24 +145,198 @@ const SortingTable = (props) => {
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
-    try {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
-        .then(response => {
-          setData(response.data)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
-    }
-    catch {
+    await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
+      .then(response => {
+        setOriginaldata(response.data)
+        setData(response.data)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+  }
 
+  const fixfilterunits = async () => {
+    let tempfilter = {};
+    if (props.unittype == 'pikod') {
+      tempfilter.pikod = props.unitid
+    }
+    else if (props.unittype == 'ogda') {
+      tempfilter.ogda = props.unitid
+      let response = await axios.get(`http://localhost:8000/api/ogda/${props.unitid}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'hativa') {
+      tempfilter.hativa = props.unitid
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${props.unitid}`,)
+      tempfilter.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'gdod') {
+      tempfilter.gdod = props.unitid
+      let response2 = await axios.get(`http://localhost:8000/api/gdod/${props.unitid}`,)
+      tempfilter.hativa = response2.data.hativa
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${tempfilter.hativa}`,)
+      tempfilter.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    setFilter(tempfilter);
+  }
+
+  const setfilterfunction = (evt) => {
+    if (evt.currentTarget.name == 'kshirot') {
+      if (filter.kshirotfilter) {
+        let tempkshirotfilter = [...filter.kshirotfilter]
+        const index = tempkshirotfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempkshirotfilter.splice(index, 1);
+        }
+        else {
+          tempkshirotfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, kshirotfilter: tempkshirotfilter })
+      }
+      else {
+        setFilter({ ...filter, kshirotfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'zminot') {
+      if (filter.zminotfilter) {
+        let tempzminotfilter = [...filter.zminotfilter]
+        const index = tempzminotfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempzminotfilter.splice(index, 1);
+        }
+        else {
+          tempzminotfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, zminotfilter: tempzminotfilter })
+      }
+      else {
+        setFilter({ ...filter, zminotfilter: [evt.currentTarget.value] })
+      }
     }
   }
+
+  function handleChange2(selectedOption, name) {
+    if (!(selectedOption.value == "בחר"))
+      setFilter({ ...filter, [name]: selectedOption.value });
+    else {
+      let tempfilter = { ...filter };
+      delete tempfilter[name];
+      setFilter(tempfilter);
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayFiltered1 = []; //filter kshirotfilter
+    if (filter.kshirotfilter && filter.kshirotfilter.length > 0) {
+      myArrayFiltered1 = tempdatabeforefilter.filter((el) => {
+        return filter.kshirotfilter.some((f) => {
+          return f === el.kshirot;
+        });
+      });
+    }
+    else {
+      myArrayFiltered1 = tempdatabeforefilter;
+    }
+
+    let myArrayFiltered2 = []; //filter zminotfilter
+    if (filter.zminotfilter && filter.zminotfilter.length > 0) {
+      myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+        return filter.zminotfilter.some((f) => {
+          return f === el.zminot;
+        });
+      });
+    }
+    else {
+      myArrayFiltered2 = myArrayFiltered1;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod) {
+      myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+        return filter.pikod === el.pikod;
+      });
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered2;
+    }
+
+    let myArrayFiltered4 = []; //filter ogda
+    if (filter.ogda) {
+      myArrayFiltered4 = myArrayFiltered3.filter((el) => {
+        return filter.ogda === el.ogda;
+      });
+    }
+    else {
+      myArrayFiltered4 = myArrayFiltered3;
+    }
+
+    let myArrayFiltered5 = []; //filter hativa
+    if (filter.hativa) {
+      myArrayFiltered5 = myArrayFiltered4.filter((el) => {
+        return filter.hativa === el.hativa;
+      });
+    }
+    else {
+      myArrayFiltered5 = myArrayFiltered4;
+    }
+
+    let myArrayFiltered6 = []; //filter gdod
+    if (filter.gdod) {
+      myArrayFiltered6 = myArrayFiltered5.filter((el) => {
+        return filter.gdod === el.gdod;
+      });
+    }
+    else {
+      myArrayFiltered6 = myArrayFiltered5;
+    }
+
+    let myArrayFiltered7 = []; //filter magadal
+    if (filter.magadal) {
+      myArrayFiltered7 = myArrayFiltered6.filter((el) => {
+        return filter.magadal === el.magadal;
+      });
+    }
+    else {
+      myArrayFiltered7 = myArrayFiltered6;
+    }
+
+    let myArrayFiltered8 = []; //filter magad
+    if (filter.magad) {
+      myArrayFiltered8 = myArrayFiltered7.filter((el) => {
+        return filter.magad === el.magad;
+      });
+    }
+    else {
+      myArrayFiltered8 = myArrayFiltered7;
+    }
+
+    let myArrayFiltered9 = []; //filter mkabaz
+    if (filter.mkabaz) {
+      myArrayFiltered9 = myArrayFiltered8.filter((el) => {
+        return filter.mkabaz === el.mkabaz;
+      });
+    }
+    else {
+      myArrayFiltered9 = myArrayFiltered8;
+    }
+    setData(myArrayFiltered9)
+  }
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [filter]);
+
 
   useEffect(() => {
     init();
     init2();
-    setPageSize(5);
+    setPageSize(20);
   }, []);
 
   const {
@@ -178,20 +363,24 @@ const SortingTable = (props) => {
 
   return (
     <>
+      {/*modals */}
       <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
       <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
-      <div style={{float:'right'}}>
-      <ReactHTMLTableToExcel
+      {/*filter */}
+      <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} />
+
+      <div style={{ float: 'right' }}>
+        <ReactHTMLTableToExcel
           id="test-table-xls-button"
           className="btn-green"
           table="table-to-xls"
           filename="קובץ - זמינות"
           sheet="קובץ - זמינות"
-          buttonText="הורד כקובץ אקסל" 
-          style={{float:'right'}}
-          />
+          buttonText="הורד כקובץ אקסל"
+          style={{ float: 'right' }}
+        />
       </div>
-        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{float:'right',marginRight:'10px'}}>הוסף צ'</button>
+      <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
         <table {...getTableProps()} id="table-to-xls">
@@ -298,7 +487,7 @@ const SortingTable = (props) => {
           >
             {[5, 10, 15, 20, 25].map(pageSize => (
               <option key={pageSize} value={pageSize}>
-                Show {pageSize}
+                הראה {pageSize}
               </option>
             ))}
           </select>

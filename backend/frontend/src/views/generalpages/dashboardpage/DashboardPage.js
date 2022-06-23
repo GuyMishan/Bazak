@@ -85,7 +85,7 @@ function DashboardPage({ match }) {
         <Col xs={12} md={6}>
         </Col>
         <Col xs={12} md={3}>
-          <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><Button>טבלת זמינות</Button></Link>
+          <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
         </Col>
       </Row>
     </div>

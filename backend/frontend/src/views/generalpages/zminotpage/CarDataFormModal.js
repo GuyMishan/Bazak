@@ -27,7 +27,7 @@ import history from 'history.js'
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
-import Select from 'components/general/Select/AnimatedMultiSelect'
+import Select from 'components/general/Select/AnimatedSelect'
 import deletepic from "assets/img/delete.png";
 
 const CarDataFormModal = (props) => {
@@ -225,6 +225,11 @@ const CarDataFormModal = (props) => {
       flag = false;
     }
 
+    if (((cardata.zminot == undefined) || (cardata.zminot == ""))|| ((cardata.kshirot == undefined) || (cardata.kshirot == ""))) {
+      ErrorReason += ",חובה להזין האם הכלי זמין/כשיר"
+      flag = false;
+    }
+
     if (flag == true) {
       if (props.cardataid != undefined) {
         UpdateCarData();
@@ -254,13 +259,24 @@ const CarDataFormModal = (props) => {
       else {
         tempcardata.tipuls = finalspecialkeytwo;
       }
-      let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata); //needs to check if tipuls/takala need to be emptied
+      let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata);
       toast.success(`צ' נוסף בהצלחה`);
       props.ToggleForModal();
     }
   }
 
   async function UpdateCarData() {
+    //create archivecardata
+    await axios.get(`http://localhost:8000/api/cardata/${props.cardataid}`)
+    .then(response => {
+      let tempcardata = response.data[0];
+      delete tempcardata._id;
+      let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    //update cardata
     var tempcardataid = props.cardataid;
     let tempcardata = { ...cardata }
     if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {

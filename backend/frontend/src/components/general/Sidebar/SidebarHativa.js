@@ -18,7 +18,7 @@ import {
 
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
-import tafkidipedialogo from "assets/img/tafkidipedialogo.png";
+import logobazak2 from "assets/img/logobazak2.png";
 
 import home from "assets/img/home3.png";
 import home_white from "assets/img/home3_white.png";
@@ -73,7 +73,7 @@ function SidebarHativa(props) {
   return (
     <>
       <div className="logo">
-        <img src={tafkidipedialogo}></img>
+        <img src={logobazak2}></img>
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
@@ -110,8 +110,8 @@ function SidebarHativa(props) {
           <NavLink to={`/unittreepage/hativa/${user.hativaid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
-                {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
-                  : <img src={table_white} style={{ height: "20px" }}></img>}
+                {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
+                  : <img src={shortlist_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>

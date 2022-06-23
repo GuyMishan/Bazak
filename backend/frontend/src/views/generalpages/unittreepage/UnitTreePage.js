@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, withRouter, Redirect } from "react-router-dom";
 import TreeMenu from 'react-simple-tree-menu';
 import '../../../../node_modules/react-simple-tree-menu/dist/main.css';
+import 'components/TreeCss.css' 
 
 // reactstrap components
 import {
@@ -266,7 +267,7 @@ function UnitTreePage({ match }) {
             <Container style={{ paddingTop: '80px' }}>
                 <Card>
                     <CardHeader style={{ direction: 'rtl' }}>
-                        <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>עץ כשירויות</CardTitle>{/*headline*/}
+                        <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'right' }}>עץ יחידות</CardTitle>{/*headline*/}
                     </CardHeader>
                     <CardBody>
                         <TreeMenu

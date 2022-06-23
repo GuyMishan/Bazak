@@ -27,7 +27,6 @@ import history from 'history.js'
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
-import Select from 'components/general/Select/AnimatedMultiSelect'
 import deletepic from "assets/img/delete.png";
 
 const CarDataFormModalDelete = (props) => {
@@ -48,21 +47,28 @@ const CarDataFormModalDelete = (props) => {
   }
 
   const clickSubmit = event => {
-    CheckFormData()
-  }
-
-  const CheckFormData = () => {//check for stuff isnt empty -> specially cartypes/units
     DeleteCarDatasUnits();
   }
 
   async function DeleteCarDatasUnits() {
+    //create archivecardata
+    await axios.get(`http://localhost:8000/api/cardata/${props.cardataid}`)
+    .then(response => {
+      let tempcardata = response.data[0];
+      delete tempcardata._id;
+      let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
+    })
+    .catch((error) => {
+      console.log(error);
+    })
+    //delete cardata units
     var tempcardataid = props.cardataid;
     let tempcardata = { ...cardata }
     tempcardata.gdod=null;
     tempcardata.hativa=null;
     tempcardata.ogda=null;
     tempcardata.pikod=null;
-    let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata) //needs to check if tipuls/takala need to be emptied
+    let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
     toast.success(`צ' נמחק בהצלחה`);
     props.ToggleForModal();
   }
@@ -98,7 +104,9 @@ const CarDataFormModalDelete = (props) => {
           <CardBody style={{ direction: 'rtl' }}>
             <Container>
               <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <button className="btn" onClick={clickSubmit}>מחק</button>
+                <h3>האם אתה בטוח שברצונך למחוק את הכלי מהיחידה?</h3>
+                <h3>נתוני הצ' לא ימחקו ויהיה ניתן לשייך אותו ליחידה בעתיד</h3>
+                <button className="btn-new-delete" onClick={clickSubmit}>מחק</button>
               </div>
             </Container>
           </CardBody>

@@ -6,7 +6,7 @@ import makeAnimated from 'react-select/animated';
 
 const animatedComponents = makeAnimated();
 
-export default function AnimatedMultiSelect(props) {
+export default function AnimatedSelect(props) {
     const [value, setValue] = useState([]);
     const [dataoptions, setDataOptions] = useState([]);
 
@@ -59,7 +59,7 @@ export default function AnimatedMultiSelect(props) {
             {({ changeTheme, theme }) => (
                 theme == "white-content" ?
                     <Select
-                        isMulti={true}
+                        isMulti={false}
                         closeMenuOnSelect={true}
                         components={animatedComponents}
                         options={dataoptions}
@@ -70,7 +70,7 @@ export default function AnimatedMultiSelect(props) {
                     /> :
                     <div style={{color:'white'}}>
                     <Select
-                        isMulti={true}
+                        isMulti={false}
                         closeMenuOnSelect={true}
                         components={animatedComponents}
                         options={dataoptions}

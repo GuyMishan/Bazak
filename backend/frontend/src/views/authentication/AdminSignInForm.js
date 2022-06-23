@@ -22,7 +22,7 @@ import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
 
-import tafkidipedialogo from "assets/img/tafkidipedialogo.png";
+import logobazak2 from "assets/img/logobazak2.png";
 
 function AdminSignInForm() {
   const [values, setValues] = useState({
@@ -103,7 +103,7 @@ function AdminSignInForm() {
 
               <CardBody className="px-lg-5 py-lg-5">
                 <div className="text-center text-muted mb-4">
-                  <img src={tafkidipedialogo}></img>
+                  <img src={logobazak2}></img>
                 </div>
                 <div className="text-center text-muted mb-4">
                   <small>התחברות</small>

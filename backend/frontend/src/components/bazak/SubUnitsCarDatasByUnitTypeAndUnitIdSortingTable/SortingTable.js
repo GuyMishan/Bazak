@@ -1,7 +1,5 @@
 import React, { useMemo, useState, useEffect } from "react";
-import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from "react-table";
 import { withRouter, Redirect, Link } from "react-router-dom";
-import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
@@ -11,7 +9,6 @@ import people from "assets/img/people.png";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import { Button } from "reactstrap";
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
-import Input from "reactstrap/lib/Input";
 
 const SortingTable = (props) => {
   const [data, setData] = useState([])
@@ -34,7 +31,7 @@ const SortingTable = (props) => {
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_magadals.length; k++) {
-          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0 };
+          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0, numberofcars_zamin: 0, numberofcars_kashir: 0 };
         }
       }
       for (let i = 0; i < temp_cardatas.length; i++) {
@@ -43,6 +40,8 @@ const SortingTable = (props) => {
             for (let k = 0; k < temp_data_arr[j].cardatas.length; k++) {
               if (temp_cardatas[i].magadal == temp_data_arr[j].cardatas[k].magadal._id) {
                 temp_data_arr[j].cardatas[k].numberofcars = temp_data_arr[j].cardatas[k].numberofcars + 1;
+                if (temp_cardatas[i].zminot == 'זמין') { temp_data_arr[j].cardatas[k].numberofcars_zamin = temp_data_arr[j].cardatas[k].numberofcars_zamin + 1; }
+                if (temp_cardatas[i].kshirot == 'כשיר') { temp_data_arr[j].cardatas[k].numberofcars_kashir = temp_data_arr[j].cardatas[k].numberofcars_kashir + 1; }
               }
             }
           }
@@ -57,7 +56,7 @@ const SortingTable = (props) => {
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_magadals.length; k++) {
-          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0 };
+          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0, numberofcars_zamin: 0, numberofcars_kashir: 0 };
         }
       }
       for (let i = 0; i < temp_cardatas.length; i++) {
@@ -66,6 +65,8 @@ const SortingTable = (props) => {
             for (let k = 0; k < temp_data_arr[j].cardatas.length; k++) {
               if (temp_cardatas[i].magadal == temp_data_arr[j].cardatas[k].magadal._id) {
                 temp_data_arr[j].cardatas[k].numberofcars = temp_data_arr[j].cardatas[k].numberofcars + 1;
+                if (temp_cardatas[i].zminot == 'זמין') { temp_data_arr[j].cardatas[k].numberofcars_zamin = temp_data_arr[j].cardatas[k].numberofcars_zamin + 1; }
+                if (temp_cardatas[i].kshirot == 'כשיר') { temp_data_arr[j].cardatas[k].numberofcars_kashir = temp_data_arr[j].cardatas[k].numberofcars_kashir + 1; }
               }
             }
           }
@@ -80,7 +81,7 @@ const SortingTable = (props) => {
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_magadals.length; k++) {
-          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0 };
+          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0, numberofcars_zamin: 0, numberofcars_kashir: 0 };
         }
       }
 
@@ -90,6 +91,8 @@ const SortingTable = (props) => {
             for (let k = 0; k < temp_data_arr[j].cardatas.length; k++) {
               if (temp_cardatas[i].magadal == temp_data_arr[j].cardatas[k].magadal._id) {
                 temp_data_arr[j].cardatas[k].numberofcars = temp_data_arr[j].cardatas[k].numberofcars + 1;
+                if (temp_cardatas[i].zminot == 'זמין') { temp_data_arr[j].cardatas[k].numberofcars_zamin = temp_data_arr[j].cardatas[k].numberofcars_zamin + 1; }
+                if (temp_cardatas[i].kshirot == 'כשיר') { temp_data_arr[j].cardatas[k].numberofcars_kashir = temp_data_arr[j].cardatas[k].numberofcars_kashir + 1; }
               }
             }
           }
@@ -104,7 +107,7 @@ const SortingTable = (props) => {
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_magadals.length; k++) {
-          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0 };
+          temp_data_arr[j].cardatas[k] = { magadal: temp_magadals[k], numberofcars: 0, numberofcars_zamin: 0, numberofcars_kashir: 0 };
         }
       }
 
@@ -114,6 +117,8 @@ const SortingTable = (props) => {
             for (let k = 0; k < temp_data_arr[j].cardatas.length; k++) {
               if (temp_cardatas[i].magadal == temp_data_arr[j].cardatas[k].magadal._id) {
                 temp_data_arr[j].cardatas[k].numberofcars = temp_data_arr[j].cardatas[k].numberofcars + 1;
+                if (temp_cardatas[i].zminot == 'זמין') { temp_data_arr[j].cardatas[k].numberofcars_zamin = temp_data_arr[j].cardatas[k].numberofcars_zamin + 1; }
+                if (temp_cardatas[i].kshirot == 'כשיר') { temp_data_arr[j].cardatas[k].numberofcars_kashir = temp_data_arr[j].cardatas[k].numberofcars_kashir + 1; }
               }
             }
           }
@@ -157,14 +162,24 @@ const SortingTable = (props) => {
           <tbody>
             {data.map((data, index) => {
               return (<tr>
-                {props.unittype == 'admin' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{textDecoration:'none',color:'inherit'}} to={`/subunitspage/pikod/${data.pikod._id}`}>{data.pikod.name}</Link></th>
-                  : props.unittype == 'pikod' && data.ogda ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{textDecoration:'none',color:'inherit'}} to={`/subunitspage/ogda/${data.ogda._id}`}>{data.ogda.name}</Link></th>
-                    : props.unittype == 'ogda' && data.hativa ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{textDecoration:'none',color:'inherit'}} to={`/subunitspage/hativa/${data.hativa._id}`}>{data.hativa.name}</Link></th>
-                      : props.unittype == 'hativa' && data.gdod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}>{data.gdod.name}</th>
-                        : null}
+                {props.unittype == 'admin' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/pikod/${data.pikod._id}`}>{data.pikod.name}</Link></th>
+                  : props.unittype == 'pikod' && data.ogda ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/ogda/${data.ogda._id}`}>{data.ogda.name}</Link></th>
+                    : props.unittype == 'ogda' && data.hativa ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/hativa/${data.hativa._id}`}>{data.hativa.name}</Link></th>
+                      : props.unittype == 'hativa' && data.gdod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/zminotpage/gdod/${data.gdod._id}`}>{data.gdod.name}</Link></th>
+                        : <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}></th>}
                 {data.cardatas ? data.cardatas.map(cardatas => {
                   return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
-                    {cardatas.numberofcars}
+                    {cardatas.numberofcars != 0 ?
+                      <p>
+                        {(cardatas.numberofcars_zamin / cardatas.numberofcars) * 100}% זמינות
+                        <br></br>
+                        {(cardatas.numberofcars_kashir / cardatas.numberofcars) * 100}% כשירות
+                        </p> :
+                      <p>
+                        0% זמינות
+                        <br></br>
+                        0% כשירות
+                        </p>}
                   </td>)
                 }) : null}
               </tr>)

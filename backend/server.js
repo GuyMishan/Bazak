@@ -54,6 +54,8 @@ app.use('/api',mkabazRoutes)
 //general routes
 const cardataRoutes = require("./routes/general/cardata");
 app.use('/api',cardataRoutes)
+const archivecardataRoutes = require("./routes/general/archivecardata");
+app.use('/api',archivecardataRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     //set static folder

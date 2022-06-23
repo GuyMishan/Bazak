@@ -1,0 +1,17 @@
+ .rstm-tree-item {
+  color: white;
+ }
+
+ .rstm-search{
+  background-color: inherit;
+  color: white;
+ }
+
+ .white-content .rstm-search{
+  background-color: inherit;
+  color: black;
+ }
+
+ .white-content .rstm-tree-item {
+  color: black;
+}

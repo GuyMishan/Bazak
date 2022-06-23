@@ -102,7 +102,7 @@ function Zminot_Magadal_DashboardCard(props) {
                     <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
                         root: {},
                         path: {
-                            stroke: `#9925be`,
+                            stroke: `#ff3064`,//9925be
                             strokeLinecap: 'butt',
                             transition: 'stroke-dashoffset 0.5s ease 0s',
                         },
@@ -113,7 +113,7 @@ function Zminot_Magadal_DashboardCard(props) {
                             transformOrigin: 'center center',
                         },
                         text: {
-                            fill: '#9925be',
+                            fill: '#ff3064',
                             fontSize: '18px',
                         },
                         background: {
