@@ -27,7 +27,7 @@ function Zminot_Magadal_DashboardCard(props) {
     const [cardata_by_magadal_harigtipul_grade, setCardata_by_magadal_harigtipul_grade] = useState(0)
     const [cardata_by_magadal_takalotmizdamnot_grade, setCardata_by_magadal_takalotmizdamnot_grade] = useState(0)
     const [cardata_by_magadal_hhstand_grade, setCardata_by_magadal_hhstand_grade] = useState(0)
-
+    //
     const [collapseOpen, setcollapseOpen] = useState(false);
 
     const toggleCollapse = (event) => {
@@ -99,39 +99,107 @@ function Zminot_Magadal_DashboardCard(props) {
             </CardHeader>
             <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
                 <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                    <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
-                        root: {},
-                        path: {
-                            stroke: `#ff3064`,//9925be
-                            strokeLinecap: 'butt',
-                            transition: 'stroke-dashoffset 0.5s ease 0s',
-                        },
-                        trail: {
-                            stroke: 'rgb(141 141 141 / 30%)',
-                            strokeLinecap: 'butt',
-                            transform: 'rotate(0.25turn)',
-                            transformOrigin: 'center center',
-                        },
-                        text: {
-                            fill: '#ff3064',
-                            fontSize: '18px',
-                        },
-                        background: {
-                            fill: '#3e98c7',
-                        },
-                    }} />
+                    {cardata_by_magadal_zamin_grade ?
+                        cardata_by_magadal_zamin_grade <= 60 ?
+                            <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
+                                root: {},
+                                path: {
+                                    stroke: `#ff2128`,
+                                    strokeLinecap: 'butt',
+                                    transition: 'stroke-dashoffset 0.5s ease 0s',
+                                },
+                                trail: {
+                                    stroke: 'rgb(141 141 141 / 30%)',
+                                    strokeLinecap: 'butt',
+                                    transform: 'rotate(0.25turn)',
+                                    transformOrigin: 'center center',
+                                },
+                                text: {
+                                    fill: '#ff2128',
+                                    fontSize: '18px',
+                                },
+                                background: {
+                                    fill: '#3e98c7',
+                                },
+                            }} />
+                            : cardata_by_magadal_zamin_grade <= 80 ?
+                                <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
+                                    root: {},
+                                    path: {
+                                        stroke: `#ffca3a`,
+                                        strokeLinecap: 'butt',
+                                        transition: 'stroke-dashoffset 0.5s ease 0s',
+                                    },
+                                    trail: {
+                                        stroke: 'rgb(141 141 141 / 30%)',
+                                        strokeLinecap: 'butt',
+                                        transform: 'rotate(0.25turn)',
+                                        transformOrigin: 'center center',
+                                    },
+                                    text: {
+                                        fill: '#ffca3a',
+                                        fontSize: '18px',
+                                    },
+                                    background: {
+                                        fill: '#3e98c7',
+                                    },
+                                }} />
+                                : cardata_by_magadal_zamin_grade <= 100 ?
+                                    <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
+                                        root: {},
+                                        path: {
+                                            stroke: `#8ac926`,
+                                            strokeLinecap: 'butt',
+                                            transition: 'stroke-dashoffset 0.5s ease 0s',
+                                        },
+                                        trail: {
+                                            stroke: 'rgb(141 141 141 / 30%)',
+                                            strokeLinecap: 'butt',
+                                            transform: 'rotate(0.25turn)',
+                                            transformOrigin: 'center center',
+                                        },
+                                        text: {
+                                            fill: '#8ac926',
+                                            fontSize: '18px',
+                                        },
+                                        background: {
+                                            fill: '#3e98c7',
+                                        },
+                                    }} />
+                                    : null
+                        : <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
+                            root: {},
+                            path: {
+                                stroke: `#ff2128`,
+                                strokeLinecap: 'butt',
+                                transition: 'stroke-dashoffset 0.5s ease 0s',
+                            },
+                            trail: {
+                                stroke: 'rgb(141 141 141 / 30%)',
+                                strokeLinecap: 'butt',
+                                transform: 'rotate(0.25turn)',
+                                transformOrigin: 'center center',
+                            },
+                            text: {
+                                fill: '#ff2128',
+                                fontSize: '18px',
+                            },
+                            background: {
+                                fill: '#3e98c7',
+                            },
+                        }} />}
                 </div>
 
                 {collapseOpen ?
                     <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
                         <h6>{props.magadal.name} בטיפול</h6>
-                        <Progress color="guypurple" value={cardata_by_magadal_intipul_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_intipul_grade.toFixed(0)}%</Progress>
+                        <Progress color="guyblue" value={cardata_by_magadal_intipul_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_intipul_grade.toFixed(0)}%</Progress>
                         <h6>{props.magadal.name} חריגי טיפול</h6>
-                        <Progress color="guypurple" value={cardata_by_magadal_harigtipul_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_harigtipul_grade.toFixed(0)}%</Progress>
+                        <Progress color="guyblue" value={cardata_by_magadal_harigtipul_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_harigtipul_grade.toFixed(0)}%</Progress>
                         <h6>{props.magadal.name} בתקלות מזדמנות</h6>
-                        <Progress color="guypurple" value={cardata_by_magadal_takalotmizdamnot_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_takalotmizdamnot_grade.toFixed(0)}%</Progress>
+                        <Progress color="guyblue" value={cardata_by_magadal_takalotmizdamnot_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_takalotmizdamnot_grade.toFixed(0)}%</Progress>
                         <h6>{props.magadal.name} עומדים על ח"ח</h6>
-                        <Progress color="guypurple" value={cardata_by_magadal_hhstand_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_hhstand_grade.toFixed(0)}%</Progress>
+                        <Progress color="guyblue" value={cardata_by_magadal_hhstand_grade} style={{ height: '10px', marginBottom: '8px' }}>{cardata_by_magadal_hhstand_grade.toFixed(0)}%</Progress>
                     </div>
                     : <CardFooter></CardFooter>}
             </CardBody>

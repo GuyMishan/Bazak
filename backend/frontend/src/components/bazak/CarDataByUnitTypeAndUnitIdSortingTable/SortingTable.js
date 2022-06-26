@@ -397,7 +397,8 @@ const SortingTable = (props) => {
                   </th>
                 ))}
                 <th></th>
-                <th></th>
+                {props.unittype != 'notype' ? <th></th>
+                  : null}
               </tr>
             ))}
 
@@ -442,7 +443,8 @@ const SortingTable = (props) => {
                       })
                     }
                     <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>{/*row.original._id=cardata._id*/}
+                    {props.unittype != 'notype' ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
+                      : null}
                     {/* {console.log(row)} */}
                   </tr>
                 )

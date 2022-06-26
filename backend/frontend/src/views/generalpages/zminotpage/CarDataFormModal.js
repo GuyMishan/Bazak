@@ -415,7 +415,7 @@ const CarDataFormModal = (props) => {
               </Row>
 
               <Row style={{ paddingTop: '10px' }}>
-                {((props.unittype == "admin")) ?
+                {((props.unittype == "admin") || (props.unittype == "notype")) ?
                   <>
                     {(!(cardata.ogda)) ?
                       <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -428,7 +428,7 @@ const CarDataFormModal = (props) => {
                       </Col>}
                   </> : null}
 
-                {((props.unittype == "admin") || (props.unittype == "pikod")) ?
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod")) ?
                   <>
                     {((cardata.pikod) && !(cardata.hativa)) ?
                       <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -441,7 +441,7 @@ const CarDataFormModal = (props) => {
                       </Col>}
                   </> : null}
 
-                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
                   <>
                     {((cardata.ogda) && !(cardata.gdod)) ?
                       <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -454,7 +454,7 @@ const CarDataFormModal = (props) => {
                       </Col>}
                   </> : null}
 
-                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
                   <>
                     {((cardata.hativa)) ?
                       <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>

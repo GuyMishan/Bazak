@@ -5095,8 +5095,17 @@ button.bg-warning:focus {
 .bg-danger {
   background-color: #fd5d93 !important; }
 
-.bg-guypurple {
-  background-color: #ff3064 !important; }
+.bg-guydanger {
+  background-color: #ff2128 !important; }
+
+.bg-guywarning {
+  background-color: #ffca3a !important; }
+
+.bg-guysuccess {
+  background-color: #8ac926 !important; }
+
+.bg-guyblue {
+  background-color: #525f7f !important; }
 
 a.bg-danger:hover, a.bg-danger:focus,
 button.bg-danger:hover,
