@@ -104,25 +104,53 @@ const SortingTable = (props) => {
 
   async function updatechangedcardata() {
     if (cardataidformodal != undefined) {
-      let response = await axios.get(`http://localhost:8000/api/cardata/${cardataidformodal}`)
-      let tempcardata = response.data[0];
+      if (props.unittype != 'notype') {
+        let response = await axios.get(`http://localhost:8000/api/cardata/${cardataidformodal}`)
+        let tempcardata = response.data[0];
 
-      let tempdata = [...data];
-      let temporiginaldata = [...originaldata];
+        let tempdata = [...data];
+        let temporiginaldata = [...originaldata];
 
-      for (let i = 0; i < tempdata.length; i++) {
-        if (cardataidformodal == tempdata[i]._id) {
-          tempdata[i] = { ...tempcardata };
+        for (let i = 0; i < tempdata.length; i++) {
+          if (cardataidformodal == tempdata[i]._id) {
+            tempdata[i] = { ...tempcardata };
+          }
         }
-      }
 
-      for (let i = 0; i < temporiginaldata.length; i++) {
-        if (cardataidformodal == temporiginaldata[i]._id) {
-          temporiginaldata[i] = { ...tempcardata };
+        for (let i = 0; i < temporiginaldata.length; i++) {
+          if (cardataidformodal == temporiginaldata[i]._id) {
+            temporiginaldata[i] = { ...tempcardata };
+          }
         }
+        setOriginaldata(temporiginaldata)
+        setData(tempdata)
       }
-      setOriginaldata(temporiginaldata)
-      setData(tempdata)
+      else {
+        let tempdata = [...data];
+        let temporiginaldata = [...originaldata];
+
+        let tempdeleteindex = 999;
+        let tempdeleteindexoriginal = 999;
+
+        for (let i = 0; i < tempdata.length; i++) {
+          if (cardataidformodal == tempdata[i]._id) {
+            tempdeleteindex = i;
+          }
+        }
+
+        for (let i = 0; i < temporiginaldata.length; i++) {
+          if (cardataidformodal == temporiginaldata[i]._id) {
+            //delete from arr
+            tempdeleteindexoriginal = i;
+          }
+        }
+
+        tempdata.splice(tempdeleteindex, 1);
+        temporiginaldata.splice(tempdeleteindexoriginal, 1);
+
+        setOriginaldata(temporiginaldata)
+        setData(tempdata)
+      }
     }
     else {
       init();

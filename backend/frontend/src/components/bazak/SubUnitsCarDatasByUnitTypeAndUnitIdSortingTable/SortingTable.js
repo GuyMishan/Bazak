@@ -171,14 +171,15 @@ const SortingTable = (props) => {
                   return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
                     {cardatas.numberofcars != 0 ?
                       <p>
-                        {(cardatas.numberofcars_zamin / cardatas.numberofcars) * 100}% זמינות
+                        {(cardatas.numberofcars_zamin / cardatas.numberofcars) * 100}%
                         <br></br>
-                        {(cardatas.numberofcars_kashir / cardatas.numberofcars) * 100}% כשירות
+                        {cardatas.numberofcars_zamin+ '/' +cardatas.numberofcars}
+                        {/* {(cardatas.numberofcars_kashir / cardatas.numberofcars) * 100}% כשירות */}
                         </p> :
                       <p>
-                        0% זמינות
-                        <br></br>
-                        0% כשירות
+                        X
+                        {/* <br></br> */}
+                        {/* 0% כשירות */}
                         </p>}
                   </td>)
                 }) : null}

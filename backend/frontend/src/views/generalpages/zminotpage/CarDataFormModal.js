@@ -188,8 +188,37 @@ const CarDataFormModal = (props) => {
 
   function handleChange(evt) {
     const value = evt.target.value;
-    if (value != "בחר")
-      setCarData({ ...cardata, [evt.target.name]: value });
+    if (value != "בחר") {
+      if (evt.target.name != 'carnumber') {
+        setCarData({ ...cardata, [evt.target.name]: value });
+      }
+      else {
+        CheckCarnumberAndSetFormdata(evt.target.value);
+      }
+    }
+  }
+
+  async function CheckCarnumberAndSetFormdata(carnumber) {
+    if (carnumber != '') {
+      let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${carnumber}`)
+      if (response.data.length > 0) {//צ' קיים במערכת
+        if ((!response.data[0].gdod) || (response.data[0].gdod == null) && (!response.data[0].hativa) || (response.data[0].hativa == null) && (!response.data[0].ogda) || (response.data[0].ogda == null) && (!response.data[0].pikod) || (response.data[0].pikod == null)) {
+          let tempcardata = response.data[0]
+          tempcardata.gdod = cardata.gdod;
+          tempcardata.hativa = cardata.hativa;
+          tempcardata.ogda = cardata.ogda;
+          tempcardata.pikod = cardata.pikod;
+        }
+        setCarData(response.data[0]);
+        toast.success("נתוני הצ' נטענו לטופס");
+      }
+      else {
+        setCarData({ ...cardata, carnumber: carnumber });
+      }
+    }
+    else {
+      setCarData({ ...cardata, carnumber: carnumber });
+    }
   }
 
   function handleChange2(selectedOption, name) {
@@ -225,7 +254,7 @@ const CarDataFormModal = (props) => {
       flag = false;
     }
 
-    if (((cardata.zminot == undefined) || (cardata.zminot == ""))|| ((cardata.kshirot == undefined) || (cardata.kshirot == ""))) {
+    if (((cardata.zminot == undefined) || (cardata.zminot == "")) || ((cardata.kshirot == undefined) || (cardata.kshirot == ""))) {
       ErrorReason += ",חובה להזין האם הכלי זמין/כשיר"
       flag = false;
     }
@@ -246,9 +275,38 @@ const CarDataFormModal = (props) => {
   async function CreateCarData() {
     let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
     if (response.data.length > 0) {
-      toast.error("צ' כבר קיים במערכת");
+      if ((!response.data[0].gdod) || (response.data[0].gdod == null) && (!response.data[0].hativa) || (response.data[0].hativa == null) && (!response.data[0].ogda) || (response.data[0].ogda == null) && (!response.data[0].pikod) || (response.data[0].pikod == null)) {
+        //create archivecardata
+        await axios.get(`http://localhost:8000/api/cardata/${response.data[0]._id}`)
+          .then(response => {
+            let tempcardata = response.data[0];
+            delete tempcardata._id;
+            let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+        //update cardata
+        var tempcardataid = response.data[0]._id;
+        let tempcardata = { ...cardata }
+        if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
+          tempcardata.tipuls = [];
+          tempcardata.takala_info = '';
+          tempcardata.expected_repair = '';
+        }
+        else {
+          tempcardata.tipuls = finalspecialkeytwo;
+        }
+        let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
+        toast.success(`צ' עודכן בהצלחה`);
+        props.ToggleForModal();
+      }
+      else {
+        toast.error("צ' כבר שייך ליחידה - לא ניתן לשנות יחידה");
+      }
     }
     else {
+      //create cardata
       let tempcardata = { ...cardata }
       if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
         tempcardata.tipuls = [];
@@ -268,14 +326,14 @@ const CarDataFormModal = (props) => {
   async function UpdateCarData() {
     //create archivecardata
     await axios.get(`http://localhost:8000/api/cardata/${props.cardataid}`)
-    .then(response => {
-      let tempcardata = response.data[0];
-      delete tempcardata._id;
-      let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
-    })
-    .catch((error) => {
-      console.log(error);
-    })
+      .then(response => {
+        let tempcardata = response.data[0];
+        delete tempcardata._id;
+        let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
     //update cardata
     var tempcardataid = props.cardataid;
     let tempcardata = { ...cardata }
@@ -287,7 +345,7 @@ const CarDataFormModal = (props) => {
     else {
       tempcardata.tipuls = finalspecialkeytwo;
     }
-    let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata) //needs to check if tipuls/takala need to be emptied
+    let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
     toast.success(`צ' עודכן בהצלחה`);
     props.ToggleForModal();
   }
@@ -355,10 +413,16 @@ const CarDataFormModal = (props) => {
           <CardBody style={{ direction: 'rtl' }}>
             <Container>
               <Row>
-                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                  <h6 style={{}}>צ'</h6>
-                  <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
-                </Col>
+                {props.cardataid ?
+                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                    <h6 style={{}}>צ'</h6>
+                    <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} disabled />
+                  </Col> :
+                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                    <h6 style={{}}>צ'</h6>
+                    <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
+                  </Col>}
+
                 {(!(cardata.magad)) ?
                   <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                     <h6>מאגד על</h6>

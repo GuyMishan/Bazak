@@ -37,13 +37,13 @@ function Zminot_Magadal_DashboardCard(props) {
     function init() {
         let temp_cardata_by_magadal = props.cardatas.filter(cardata => ((cardata.magadal == props.magadal._id)));
 
-        let temp_cardata_by_magadal_zamin = temp_cardata_by_magadal.filter(cardata => ((cardata.zminot == 'זמין') && (cardata.kshirot == 'כשיר')));
+        let temp_cardata_by_magadal_zamin = temp_cardata_by_magadal.filter(cardata => ((cardata.zminot == 'זמין')/* && (cardata.kshirot == 'כשיר')*/));
 
         let tempgarde = 0;
         if (temp_cardata_by_magadal_zamin.length > 0)
             tempgarde = (temp_cardata_by_magadal_zamin.length / temp_cardata_by_magadal.length) * 100;
         //
-        let temp_cardata_by_magadal_not_zamin = temp_cardata_by_magadal.filter(cardata => ((cardata.zminot != 'זמין') || (cardata.kshirot != 'לא כשיר')));
+        let temp_cardata_by_magadal_not_zamin = temp_cardata_by_magadal.filter(cardata => ((cardata.zminot != 'זמין')/* || (cardata.kshirot != 'כשיר')*/));
 
         let temp_cardata_by_magadal_intipul = [];
         let temp_cardata_by_magadal_harigtipul = [];
@@ -81,10 +81,10 @@ function Zminot_Magadal_DashboardCard(props) {
         setCardata_by_magadal_zamin_grade(tempgarde)
         //
         if (temp_cardata_by_magadal.length > 0) {
-            setCardata_by_magadal_intipul_grade((temp_cardata_by_magadal_intipul.length / temp_cardata_by_magadal.length) * 100);
-            setCardata_by_magadal_harigtipul_grade((temp_cardata_by_magadal_harigtipul.length / temp_cardata_by_magadal.length) * 100);
-            setCardata_by_magadal_takalotmizdamnot_grade((temp_cardata_by_magadal_takalotmizdamnot.length / temp_cardata_by_magadal.length) * 100);
-            setCardata_by_magadal_hhstand_grade((temp_cardata_by_magadal_hhstand.length / temp_cardata_by_magadal.length) * 100);
+            setCardata_by_magadal_intipul_grade((temp_cardata_by_magadal_intipul.length / temp_cardata_by_magadal_not_zamin.length) * 100);
+            setCardata_by_magadal_harigtipul_grade((temp_cardata_by_magadal_harigtipul.length / temp_cardata_by_magadal_not_zamin.length) * 100);
+            setCardata_by_magadal_takalotmizdamnot_grade((temp_cardata_by_magadal_takalotmizdamnot.length / temp_cardata_by_magadal_not_zamin.length) * 100);
+            setCardata_by_magadal_hhstand_grade((temp_cardata_by_magadal_hhstand.length / temp_cardata_by_magadal_not_zamin.length) * 100);
         }
     }
 
@@ -99,6 +99,7 @@ function Zminot_Magadal_DashboardCard(props) {
             </CardHeader>
             <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
                 <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
+                    <h3>heelllooo</h3>
                     {cardata_by_magadal_zamin_grade ?
                         cardata_by_magadal_zamin_grade <= 60 ?
                             <CircularProgressbar value={cardata_by_magadal_zamin_grade} text={`${cardata_by_magadal_zamin_grade.toFixed(0)}%`} styles={{
