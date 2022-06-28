@@ -138,7 +138,7 @@ const SortingTable = (props) => {
 
   return (
     <>
-      <div style={{ float: 'right' }}>
+      <div style={{ float: 'right', paddingBottom: '5px' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
           className="btn-green"
@@ -170,17 +170,25 @@ const SortingTable = (props) => {
                 {data.cardatas ? data.cardatas.map(cardatas => {
                   return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
                     {cardatas.numberofcars != 0 ?
-                      <p>
-                        {(cardatas.numberofcars_zamin / cardatas.numberofcars) * 100}%
-                        <br></br>
-                        {cardatas.numberofcars_zamin+ '/' +cardatas.numberofcars}
-                        {/* {(cardatas.numberofcars_kashir / cardatas.numberofcars) * 100}% כשירות */}
+                      ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 60 ?
+                        <p style={{ color: '#ff2128' }}>
+                          {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                          <br></br>
+                          {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
                         </p> :
-                      <p>
-                        X
-                        {/* <br></br> */}
-                        {/* 0% כשירות */}
-                        </p>}
+                        ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
+                          <p style={{ color: '#ffca3a' }}>
+                            {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                            <br></br>
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                          </p> :
+                          ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
+                            <p style={{ color: '#8ac926' }}>
+                              {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                              <br></br>
+                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                            </p> : null
+                      : <p>X</p>}
                   </td>)
                 }) : null}
               </tr>)

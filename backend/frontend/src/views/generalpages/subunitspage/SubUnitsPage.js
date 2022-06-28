@@ -19,9 +19,10 @@ import axios from 'axios';
 import { signin, authenticate, isAuthenticated } from 'auth/index';
 
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
-import SortingTable from 'components/bazak/SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
+import Zminot_SortingTable from 'components/bazak/Zminot_SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
+import Kshirot_SortingTable from 'components/bazak/Kshirot_SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
 
-function SubUnitsPage({ match }) {
+function SubUnitsPage({ match,theme }) {
   //flag - cuz theres a problem in sidbar nav
   const [flag, setFlag] = useState(false)
   //cardatas
@@ -54,7 +55,9 @@ function SubUnitsPage({ match }) {
   return (
     <div>
       <Row>
-        <SortingTable unittype={match.params.unittype} unitid={match.params.unitid} />
+        {theme == "white-content" ?
+          <Zminot_SortingTable unittype={match.params.unittype} unitid={match.params.unitid} />
+          : <Kshirot_SortingTable unittype={match.params.unittype} unitid={match.params.unitid} /> }
       </Row>
       <Row>
         <Col xs={12} md={3} style={{ textAlign: 'right' }}>

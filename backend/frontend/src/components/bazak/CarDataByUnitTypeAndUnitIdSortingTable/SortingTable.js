@@ -397,7 +397,7 @@ const SortingTable = (props) => {
       {/*filter */}
       <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} />
 
-      <div style={{ float: 'right' }}>
+      <div style={{ float: 'right', paddingBottom: '5px' }}>
         <ReactHTMLTableToExcel
           id="test-table-xls-button"
           className="btn-green"

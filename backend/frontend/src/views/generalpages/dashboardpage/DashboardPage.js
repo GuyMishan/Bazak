@@ -19,9 +19,10 @@ import axios from 'axios';
 import { signin, authenticate, isAuthenticated } from 'auth/index';
 
 import Zminot_Magadal_DashboardCard from './Zminot_Magadal_DashboardCard';
+import Kshirot_Magadal_DashboardCard from './Kshirot_Magadal_DashboardCard';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
 
-function DashboardPage({ match }) {
+function DashboardPage({ match, theme }) {
   //flag - cuz theres a problem in sidbar nav
   const [flag, setFlag] = useState(false)
   //cardatas
@@ -68,15 +69,25 @@ function DashboardPage({ match }) {
   return (
     <div>
       <Row>
-        {magadals.map((magadal, i) => (
-          magadal ?
-            <>
-              <Col xs={12} md={3}>
-                <Zminot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
-              </Col>
-            </>
-            : null
-        ))}
+        {theme == "white-content" ?
+          magadals.map((magadal, i) => (
+            magadal ?
+              <>
+                <Col xs={12} md={3}>
+                  <Zminot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
+                </Col>
+              </>
+              : null
+          )) : magadals.map((magadal, i) => (
+            magadal ?
+              <>
+                <Col xs={12} md={3}>
+                  <Kshirot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
+                </Col>
+              </>
+              : null
+          ))}
+
       </Row>
       <Row>
         <Col xs={12} md={3} style={{ textAlign: 'right' }}>

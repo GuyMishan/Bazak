@@ -259,6 +259,13 @@ const CarDataFormModal = (props) => {
       flag = false;
     }
 
+    if ((cardata.zminot == 'לא זמין') || (cardata.kshirot == 'לא כשיר')) {
+      if(finalspecialkeytwo.length==0){
+        ErrorReason += "חובה להזין את סיבת אי-הזמינות/אי-הכשירות"
+        flag = false;
+      }
+    }
+
     if (flag == true) {
       if (props.cardataid != undefined) {
         UpdateCarData();
@@ -308,11 +315,11 @@ const CarDataFormModal = (props) => {
     else {
       //create cardata
       let tempcardata = { ...cardata }
+      delete tempcardata._id;
       if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
         tempcardata.tipuls = [];
         delete tempcardata.takala_info;
         delete tempcardata.expected_repair;
-
       }
       else {
         tempcardata.tipuls = finalspecialkeytwo;
