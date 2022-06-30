@@ -8,7 +8,7 @@ router.post('/signup', signup);
 router.post('/signin', signin);
 router.get('/signout', signout);
 
-router.get('/passportuser', async (req, res) => {
+router.get('/passportauth', async (req, res) => {
     try {
         res.send({
             stam: req.user,

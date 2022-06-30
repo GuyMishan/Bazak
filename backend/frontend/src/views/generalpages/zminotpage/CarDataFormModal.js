@@ -260,7 +260,7 @@ const CarDataFormModal = (props) => {
     }
 
     if ((cardata.zminot == 'לא זמין') || (cardata.kshirot == 'לא כשיר')) {
-      if(finalspecialkeytwo.length==0){
+      if (finalspecialkeytwo.length == 0) {
         ErrorReason += "חובה להזין את סיבת אי-הזמינות/אי-הכשירות"
         flag = false;
       }
@@ -635,7 +635,12 @@ const CarDataFormModal = (props) => {
                                     }}
                                       value={p.tipul} type="select" placeholder="סוג הטיפול">
                                       <option value={"בחר"}>{"בחר"}</option>
-                                      <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
+                                      <option value={'רישוי שנתי'}>{'רישוי שנתי'}</option>
+                                      <option value={'חצי תקופתי'}>{'חצי תקופתי'}</option>
+                                      <option value={'תקופתי מורחב'}>{'תקופתי מורחב'}</option>
+                                      <option value={'תקופתי'}>{'תקופתי'}</option>
+                                      <option value={'טיפול שבועי'}>{'טיפול שבועי'}</option>
+                                      <option value={'טיפול חודשי'}>{'טיפול חודשי'}</option>
                                     </Input>
                                   </div>
                                 </Col>
@@ -679,7 +684,12 @@ const CarDataFormModal = (props) => {
                                       }}
                                         value={p.harig_tipul} type="select" placeholder="חריג טיפול">
                                         <option value={"בחר"}>{"בחר"}</option>
-                                        <option value={'טיפול שנתי'}>{'טיפול שנתי'}</option>
+                                        <option value={'רישוי שנתי'}>{'רישוי שנתי'}</option>
+                                        <option value={'חצי תקופתי'}>{'חצי תקופתי'}</option>
+                                        <option value={'תקופתי מורחב'}>{'תקופתי מורחב'}</option>
+                                        <option value={'תקופתי'}>{'תקופתי'}</option>
+                                        <option value={'טיפול שבועי'}>{'טיפול שבועי'}</option>
+                                        <option value={'טיפול חודשי'}>{'טיפול חודשי'}</option>
                                       </Input>
                                     </div>
                                   </Col>
@@ -752,13 +762,13 @@ const CarDataFormModal = (props) => {
                                   </Col>
                                   <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
+                                      <p style={{ margin: '0px', float: 'right' }}>כמות</p>
                                       <Input onChange={(e) => {
                                         const missing_makat_2 = e.target.value;
                                         if (e.target.value != "בחר")
                                           setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_2 = missing_makat_2 }))
                                       }}
-                                        value={p.missing_makat_2} type="string" placeholder={`מק"ט חסר`}>
+                                        value={p.missing_makat_2} type="string" placeholder={`כמות`}>
                                       </Input>
                                     </div>
                                   </Col>
