@@ -95,80 +95,20 @@ function Zminot_Magadal_DashboardCard(props) {
     }, [])
 
     return (
-        <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
-            <CardHeader>
-                <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.magadal.name}</h3>
-            </CardHeader>
-            <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
-                <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                    {(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 60 ?
-                        <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
-                            {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
-                                root: {},
-                                path: {
-                                    stroke: `#ff2128`,
-                                    strokeLinecap: 'butt',
-                                    transition: 'stroke-dashoffset 0.5s ease 0s',
-                                },
-                                trail: {
-                                    stroke: 'rgb(141 141 141 / 30%)',
-                                    strokeLinecap: 'butt',
-                                    transform: 'rotate(0.25turn)',
-                                    transformOrigin: 'center center',
-                                },
-                                text: {
-                                    fill: '#ff2128',
-                                    fontSize: '18px',
-                                },
-                                background: {
-                                    fill: '#3e98c7',
-                                },
-                            }}>
-                                <div>
-                                    <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
-                                </div>
-                                <div style={{ fontSize: 12, marginTop: -2 }}>
-                                    <h5 style={{ margin: '0px' }}>{cardata_by_magadal_zamin + '/' + cardata_by_magadal}</h5>
-                                </div>
-                            </CircularProgressbarWithChildren>}
-                        </ProgressProvider>
-                        : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 80 ?
-                            <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
-                                {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
-                                    root: {},
-                                    path: {
-                                        stroke: `#ffca3a`,
-                                        strokeLinecap: 'butt',
-                                        transition: 'stroke-dashoffset 0.5s ease 0s',
-                                    },
-                                    trail: {
-                                        stroke: 'rgb(141 141 141 / 30%)',
-                                        strokeLinecap: 'butt',
-                                        transform: 'rotate(0.25turn)',
-                                        transformOrigin: 'center center',
-                                    },
-                                    text: {
-                                        fill: '#ffca3a',
-                                        fontSize: '18px',
-                                    },
-                                    background: {
-                                        fill: '#3e98c7',
-                                    },
-                                }}>
-                                    <div>
-                                        <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
-                                    </div>
-                                    <div style={{ fontSize: 12, marginTop: -2 }}>
-                                        <h5 style={{ margin: '0px' }}>{cardata_by_magadal_zamin + '/' + cardata_by_magadal}</h5>
-                                    </div>
-                                </CircularProgressbarWithChildren>}
-                            </ProgressProvider>
-                            : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 100 ?
+        cardata_by_magadal != 0 ?
+            <Col xs={12} md={3}>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                    <CardHeader>
+                        <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.magadal.name}</h3>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
+                        <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
+                            {(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 60 ?
                                 <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
                                     {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                         root: {},
                                         path: {
-                                            stroke: `#8ac926`,
+                                            stroke: `#ff2128`,
                                             strokeLinecap: 'butt',
                                             transition: 'stroke-dashoffset 0.5s ease 0s',
                                         },
@@ -179,7 +119,7 @@ function Zminot_Magadal_DashboardCard(props) {
                                             transformOrigin: 'center center',
                                         },
                                         text: {
-                                            fill: '#8ac926',
+                                            fill: '#ff2128',
                                             fontSize: '18px',
                                         },
                                         background: {
@@ -194,23 +134,86 @@ function Zminot_Magadal_DashboardCard(props) {
                                         </div>
                                     </CircularProgressbarWithChildren>}
                                 </ProgressProvider>
-                                : null}
-                </div>
+                                : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 80 ?
+                                    <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
+                                        {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
+                                            root: {},
+                                            path: {
+                                                stroke: `#ffca3a`,
+                                                strokeLinecap: 'butt',
+                                                transition: 'stroke-dashoffset 0.5s ease 0s',
+                                            },
+                                            trail: {
+                                                stroke: 'rgb(141 141 141 / 30%)',
+                                                strokeLinecap: 'butt',
+                                                transform: 'rotate(0.25turn)',
+                                                transformOrigin: 'center center',
+                                            },
+                                            text: {
+                                                fill: '#ffca3a',
+                                                fontSize: '18px',
+                                            },
+                                            background: {
+                                                fill: '#3e98c7',
+                                            },
+                                        }}>
+                                            <div>
+                                                <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
+                                            </div>
+                                            <div style={{ fontSize: 12, marginTop: -2 }}>
+                                                <h5 style={{ margin: '0px' }}>{cardata_by_magadal_zamin + '/' + cardata_by_magadal}</h5>
+                                            </div>
+                                        </CircularProgressbarWithChildren>}
+                                    </ProgressProvider>
+                                    : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 100 ?
+                                        <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
+                                            {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
+                                                root: {},
+                                                path: {
+                                                    stroke: `#8ac926`,
+                                                    strokeLinecap: 'butt',
+                                                    transition: 'stroke-dashoffset 0.5s ease 0s',
+                                                },
+                                                trail: {
+                                                    stroke: 'rgb(141 141 141 / 30%)',
+                                                    strokeLinecap: 'butt',
+                                                    transform: 'rotate(0.25turn)',
+                                                    transformOrigin: 'center center',
+                                                },
+                                                text: {
+                                                    fill: '#8ac926',
+                                                    fontSize: '18px',
+                                                },
+                                                background: {
+                                                    fill: '#3e98c7',
+                                                },
+                                            }}>
+                                                <div>
+                                                    <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
+                                                </div>
+                                                <div style={{ fontSize: 12, marginTop: -2 }}>
+                                                    <h5 style={{ margin: '0px' }}>{cardata_by_magadal_zamin + '/' + cardata_by_magadal}</h5>
+                                                </div>
+                                            </CircularProgressbarWithChildren>}
+                                        </ProgressProvider>
+                                        : null}
+                        </div>
 
-                {collapseOpen ?
-                    <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                        <h6>{props.magadal.name} בטיפול: {cardata_by_magadal_intipul}</h6>
-                        <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_intipul / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_intipul / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
-                        <h6>{props.magadal.name} חריגי טיפול:  {cardata_by_magadal_harigtipul}</h6>
-                        <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_harigtipul / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_harigtipul / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
-                        <h6>{props.magadal.name} בתקלות מזדמנות: {cardata_by_magadal_takalotmizdamnot}</h6>
-                        <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_takalotmizdamnot / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_takalotmizdamnot / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
-                        <h6>{props.magadal.name} עומדים על ח"ח: {cardata_by_magadal_hhstand}</h6>
-                        <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_hhstand / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_hhstand / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
-                    </div>
-                    : null}
-            </CardBody>
-        </Card>
+                        {collapseOpen ?
+                            <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
+                                <h6>{props.magadal.name} בטיפול: {cardata_by_magadal_intipul}</h6>
+                                <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_intipul / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_intipul / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.magadal.name} חריגי טיפול:  {cardata_by_magadal_harigtipul}</h6>
+                                <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_harigtipul / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_harigtipul / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.magadal.name} בתקלות מזדמנות: {cardata_by_magadal_takalotmizdamnot}</h6>
+                                <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_takalotmizdamnot / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_takalotmizdamnot / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.magadal.name} עומדים על ח"ח: {cardata_by_magadal_hhstand}</h6>
+                                <Progress color="guyblue" value={(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_hhstand / cardata_by_magadal_not_zamin) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_magadal_not_zamin != 0 ? ((cardata_by_magadal_hhstand / cardata_by_magadal_not_zamin) * 100) : 0).toFixed(0)}%</Progress>
+                            </div>
+                            : null}
+                    </CardBody>
+                </Card>
+            </Col> : null
     );
 }
 

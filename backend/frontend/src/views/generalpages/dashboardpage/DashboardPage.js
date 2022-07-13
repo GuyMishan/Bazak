@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import axios from 'axios';
 import { signin, authenticate, isAuthenticated } from 'auth/index';
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 import Zminot_Magadal_DashboardCard from './Zminot_Magadal_DashboardCard';
 import Kshirot_Magadal_DashboardCard from './Kshirot_Magadal_DashboardCard';
@@ -27,10 +28,10 @@ function DashboardPage({ match, theme }) {
   const [flag, setFlag] = useState(false)
   //cardatas
   const [cardatas, setCardatas] = useState([])
-
   const [magadals, setMagadals] = useState([]);
-  //cardatas
-
+  //spinner
+  const [isdataloaded, setIsdataloaded] = useState(false);
+  
   async function init() {
     await getCardDataByUnitTypeAndUnitId();
     await getMagadals();
@@ -41,6 +42,7 @@ function DashboardPage({ match, theme }) {
     await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${match.params.unittype}/${match.params.unitid}`)
       .then(response => {
         setCardatas(response.data)
+        setIsdataloaded(true)
       })
       .catch((error) => {
         console.log(error);
@@ -67,39 +69,35 @@ function DashboardPage({ match, theme }) {
   }, [match])
 
   return (
-    <div>
-      <Row>
-        {theme == "white-content" ?
-          magadals.map((magadal, i) => (
-            magadal ?
-              <>
-                <Col xs={12} md={3}>
-                  <Zminot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
-                </Col>
-              </>
-              : null
-          )) : magadals.map((magadal, i) => (
-            magadal ?
-              <>
-                <Col xs={12} md={3}>
-                  <Kshirot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
-                </Col>
-              </>
-              : null
-          ))}
-
-      </Row>
-      <Row>
-        <Col xs={12} md={3} style={{ textAlign: 'right' }}>
-          <LatestUpdateDateComponent cardatas={cardatas} />
-        </Col>
-        <Col xs={12} md={6}>
-        </Col>
-        <Col xs={12} md={3}>
-          <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
-        </Col>
-      </Row>
-    </div>
+    cardatas.length == 0 && !isdataloaded ?
+      <div style={{ width: '50%',marginTop:'30%'}}>
+        <PropagateLoader color={'#ff4650'} loading={true} size={25} />
+      </div>
+      :
+      <div>
+        <Row>
+          {theme == "white-content" ?
+            magadals.map((magadal, i) => (
+              magadal ?
+                <Zminot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
+                : null
+            )) : magadals.map((magadal, i) => (
+              magadal ?
+                <Kshirot_Magadal_DashboardCard magadal={magadal} cardatas={cardatas} />
+                : null
+            ))}
+        </Row>
+        <Row>
+          <Col xs={12} md={3} style={{ textAlign: 'right' }}>
+            <LatestUpdateDateComponent cardatas={cardatas} />
+          </Col>
+          <Col xs={12} md={6}>
+          </Col>
+          <Col xs={12} md={3}>
+            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
+          </Col>
+        </Row>
+      </div>
   );
 }
 

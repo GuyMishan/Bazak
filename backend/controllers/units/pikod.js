@@ -11,7 +11,7 @@ exports.findById = async(req, res) => {
  }
 
 exports.find = (req, res) => {
-  Pikod.find()
+  Pikod.find().sort({index: 1})
     .then((pikods) => res.json(pikods))
     .catch((err) => res.status(400).json("Error: " + err));
 };

@@ -11,7 +11,7 @@ exports.read = async (req, res) => {
 }
 
 exports.find = (req, res) => {
-  Mkabaz.find()
+  Mkabaz.find().sort({index: 1})
     .then((mkabaz) => res.json(mkabaz))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -41,7 +41,7 @@ exports.update = (req, res) => {
 }
 
 exports.mkabazsbymagad = (req, res) => {
-  Mkabaz.find({ magad: req.params.magadid })
+  Mkabaz.find({ magad: req.params.magadid }).sort({index: 1})
     .then((mkabaz) => res.json(mkabaz))
     .catch((err) => res.status(400).json("Error: " + err));
 };

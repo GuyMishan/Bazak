@@ -8,6 +8,7 @@ import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import people from "assets/img/people.png";
+import PropagateLoader from "react-spinners/PropagateLoader";
 
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
@@ -36,6 +37,8 @@ const SortingTable = (props) => {
   const [mkabazs, setMkabazs] = useState([]);
   const [magads, setMagads] = useState([]);
   const [magadals, setMagadals] = useState([]);
+  //spinner
+  const [isdataloaded, setIsdataloaded] = useState(false);
 
   const loadPikods = async () => {
     let response = await axios.get("http://localhost:8000/api/pikod",)
@@ -177,6 +180,7 @@ const SortingTable = (props) => {
       .then(response => {
         setOriginaldata(response.data)
         setData(response.data)
+        setIsdataloaded(true)
       })
       .catch((error) => {
         console.log(error);
@@ -390,6 +394,11 @@ const SortingTable = (props) => {
     useGlobalFilter, useFilters, useSortBy, usePagination);
 
   return (
+    data.length == 0 && !isdataloaded ?
+    <div style={{ width: '50%', marginTop: '30%' }}>
+        <PropagateLoader color={'#ff4650'} loading={true} size={25} />
+    </div>
+    :
     <>
       {/*modals */}
       <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />

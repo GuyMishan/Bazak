@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, withRouter, Redirect } from "react-router-dom";
 import TreeMenu from 'react-simple-tree-menu';
 import '../../../../node_modules/react-simple-tree-menu/dist/main.css';
-import 'components/TreeCss.css' 
+import 'components/TreeCss.css'
 
 // reactstrap components
 import {
@@ -13,10 +13,15 @@ import {
     Container,
 } from "reactstrap";
 import axios from 'axios';
+import PropagateLoader from "react-spinners/PropagateLoader";
 import history from '../../../history'
 
 function UnitTreePage({ match }) {
+    //treedata
     const [treedata, setTreeData] = useState([]);
+    //spinner
+    const [isdataloaded, setIsdataloaded] = useState(false);
+
 
     async function loadAdminData() {
         let response1 = await axios.get("http://localhost:8000/api/pikod",)
@@ -112,6 +117,7 @@ function UnitTreePage({ match }) {
             finalarr.push(temppikodobj);
         }
         setTreeData(finalarr);
+        setIsdataloaded(true);
     }
 
     const PikodtipulsToTreeData = (ogdasarr, hativasarr, gdodsarr) => {
@@ -151,6 +157,7 @@ function UnitTreePage({ match }) {
             finalarr.push(tempogdaobj);
         }
         setTreeData(finalarr);
+        setIsdataloaded(true);
     }
 
     const OgdatipulsToTreeData = (hativasarr, gdodsarr) => {
@@ -178,6 +185,7 @@ function UnitTreePage({ match }) {
             finalarr.push(temphativaobj);
         }
         setTreeData(finalarr);
+        setIsdataloaded(true);
     }
 
     const HativatipulsToTreeData = (gdodsarr) => {
@@ -193,13 +201,13 @@ function UnitTreePage({ match }) {
             finalarr.push(tempgdodobj);
         }
         setTreeData(finalarr);
+        setIsdataloaded(true);
     }
     /*end of data */
 
     function handleTreeClick(event) {
         var idstr = event.key; //idstr = _id
-        if(match.params.unittype== 'admin')
-        {
+        if (match.params.unittype == 'admin') {
             if (event.type == "pikod") {
                 history.push(`/dashboard/pikod/${idstr}`);
             }
@@ -216,8 +224,7 @@ function UnitTreePage({ match }) {
                 history.push(`/dashboard/gdod/${gdodidstr}`);
             }
         }
-        else if(match.params.unittype== 'pikod')
-        {
+        else if (match.params.unittype == 'pikod') {
             if (event.type == "ogda") {
                 var ogdaidstr = idstr;
                 history.push(`/dashboard/ogda/${ogdaidstr}`);
@@ -231,8 +238,7 @@ function UnitTreePage({ match }) {
                 history.push(`/dashboard/gdod/${gdodidstr}`);
             }
         }
-        else if(match.params.unittype== 'ogda')
-        {
+        else if (match.params.unittype == 'ogda') {
             if (event.type == "hativa") {
                 var hativaidstr = idstr;
                 history.push(`/dashboard/hativa/${hativaidstr}`);
@@ -242,8 +248,7 @@ function UnitTreePage({ match }) {
                 history.push(`/dashboard/gdod/${gdodidstr}`);
             }
         }
-        else if(match.params.unittype== 'hativa')
-        {
+        else if (match.params.unittype == 'hativa') {
             if (event.type == "gdod") {
                 var gdodidstr = idstr;
                 history.push(`/dashboard/gdod/${gdodidstr}`);
@@ -263,7 +268,11 @@ function UnitTreePage({ match }) {
     }, [])
 
     return (
-        <>
+        treedata.length == 0 && !isdataloaded ?
+            <div style={{ width: '50%', marginTop: '30%' }}>
+                <PropagateLoader color={'#ff4650'} loading={true} size={25} />
+            </div>
+            :
             <Container style={{ paddingTop: '80px' }}>
                 <Card>
                     <CardHeader style={{ direction: 'rtl' }}>
@@ -282,7 +291,6 @@ function UnitTreePage({ match }) {
                     </CardBody>
                 </Card>
             </Container>
-        </>
     );
 }
 export default withRouter(UnitTreePage);

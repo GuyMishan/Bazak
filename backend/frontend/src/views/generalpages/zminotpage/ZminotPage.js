@@ -36,10 +36,10 @@ function ZminotPage({ match }) {
     if (flag)
       window.location.reload(true);
   }, [match])
-  
+
   return (
     <>
-      <CarDataByUnitTypeAndUnitIdSortingTable unittype={match.params.unittype} unitid={match.params.unitid}/>
+      <CarDataByUnitTypeAndUnitIdSortingTable unittype={match.params.unittype} unitid={match.params.unitid} />     {/*spinner in table*/}
     </>
   );
 }

@@ -10,7 +10,7 @@ exports.findById = async(req, res) => {
  }
 
 exports.find = (req, res) => {
-  Ogda.find()
+  Ogda.find().sort({index: 1})
     .then((ogda) => res.json(ogda))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -60,7 +60,7 @@ exports.updatehativas = (req, res) => {
 }
 
 exports.ogdasbypikodid = (req, res) => {
-  Ogda.find({ pikod: req.body.pikod })
+  Ogda.find({ pikod: req.body.pikod }).sort({index: 1})
     .then(orders => res.json(orders))
     .catch(err => res.status(400).json('Error: ' + err));;
   // console.log(req.body);

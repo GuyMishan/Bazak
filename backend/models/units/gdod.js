@@ -6,6 +6,7 @@ const gdodSchema = new mongoose.Schema({
     _id:{type:String},
     name:{type:String},
     hativa:{type:String},
+    index:{type:Number},
 });
 
 const Gdod = mongoose.model('Gdod', gdodSchema);

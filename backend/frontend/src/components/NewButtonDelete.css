@@ -13,27 +13,27 @@
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
     color: #ffffff;
-    background-color: #ffc8b3;
-    border-color: #ffc8b3;
+    background-color: #ffb699;
+    border-color: #ffb699;
     box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08); }
     .btn-new-delete:hover {
       color: #ffffff;
-      background-color: #ffe8df;
-      border-color: #ffe8df; }
+      background-color: #ffc7b0;
+      border-color: #ffc7b0; }
     .btn-new-delete:focus, .btn-new-delete.focus {
       color: #ffffff;
-      background-color: #ffe8df;
-      border-color: #ffe8df;
+      background-color: #ffc7b0;
+      border-color: #ffc7b0;
       box-shadow: 0 4px 6px rgba(50, 50, 93, 0.11), 0 1px 3px rgba(0, 0, 0, 0.08), 0 0 0 0 rgba(38, 244, 204, 0.5); }
     .btn-new-delete.disabled, .btn-new-delete:disabled {
       color: #ffffff;
-      background-color: #ffc8b3;
-      border-color: #ffc8b3; }
+      background-color: #ffb699;
+      border-color: #ffb699; }
     .btn-new-delete:not(:disabled):not(.disabled):active, .btn-new-delete:not(:disabled):not(.disabled).active,
     .show > .btn-new-delete.dropdown-toggle {
       color: #ffffff;
-      background-color: #ffe8df;
-      border-color: #ffe8df; }
+      background-color: #ffc7b0;
+      border-color: #ffc7b0; }
       .btn-new-delete:not(:disabled):not(.disabled):active:focus, .btn-new-delete:not(:disabled):not(.disabled).active:focus,
       .show > .btn-new-delete.dropdown-toggle:focus {
-        box-shadow: 0 0 0 0 #ffc8b3; }
+        box-shadow: 0 0 0 0 #ffb699; }

@@ -9,7 +9,7 @@ exports.findById = async(req, res) => {
   
  }
 exports.find = (req, res) => {
-    Hativa.find()
+    Hativa.find().sort({index: 1})
     .then((hativa) => res.json(hativa))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -80,7 +80,7 @@ exports.updateallmataghistoryarray = (req, res) => {
 }
 
 exports.hativasbyogdaid = (req, res) => {
-  Hativa.find({ogda: req.body.ogda})
+  Hativa.find({ogda: req.body.ogda}).sort({index: 1})
     .then(orders => res.json(orders))
     .catch(err => res.status(400).json('Error: ' + err));;
   // console.log(req.body);

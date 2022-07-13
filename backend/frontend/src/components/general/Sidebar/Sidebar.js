@@ -89,6 +89,14 @@ function Sidebar() {
             >
               התנתק
             </button>
+            <a href="http://216.1.1.11:8008/presentation">
+              <button
+                className="btn-new-delete"
+                style={{ width: '80%', marginTop: '15px' }}
+              >
+                חזרה לשולחן הטנ"א שלי
+              </button>
+            </a>
           </div>
         </div>
       </div>

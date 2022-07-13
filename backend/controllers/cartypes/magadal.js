@@ -11,7 +11,7 @@ exports.read = async (req, res) => {
 }
 
 exports.find = (req, res) => {
-  Magadal.find()
+  Magadal.find().sort({index: 1})
     .then((magadal) => res.json(magadal))
     .catch((err) => res.status(400).json("Error: " + err));
 };

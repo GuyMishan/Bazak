@@ -12,7 +12,7 @@ exports.findById = async(req, res) => {
 
 
 exports.find = (req, res) => {
-    Gdod.find()
+    Gdod.find().sort({index: 1})
     .then((gdod) => res.json(gdod))
     .catch((err) => res.status(400).json("Error: " + err));
 };
@@ -97,7 +97,7 @@ exports.updatealltraininghistoryarray = (req, res) => {
 }
 
 exports.gdodsbyhativaid = (req, res) => {
-  Gdod.find({hativa: req.body.hativa})
+  Gdod.find({hativa: req.body.hativa}).sort({index: 1})
     .then(orders => res.json(orders))
     .catch(err => res.status(400).json('Error: ' + err));;
   // console.log(req.body);
