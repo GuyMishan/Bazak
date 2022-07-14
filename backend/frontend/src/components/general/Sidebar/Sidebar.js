@@ -50,7 +50,7 @@ function Sidebar() {
   const clickSubmit = (event) => {
     event.preventDefault();
     signout().then((response) => {
-      history.push(`/signin`);
+      history.push(`/adminsignin`);
     });
   };
 
@@ -82,13 +82,15 @@ function Sidebar() {
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
             {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>
               : <img src={Logo100_white} style={{ height: "100px" }}></img>}
-            <button
-              onClick={clickSubmit}
-              className="btn-new-blue"
-              style={{ width: '80%', marginTop: '15px' }}
-            >
-              התנתק
-            </button>
+            {user.role === "0" ?
+              <button
+                onClick={clickSubmit}
+                className="btn-new-blue"
+                style={{ width: '80%', marginTop: '15px' }}
+              >
+                התנתק
+              </button>
+              : null}
             <a href="http://216.1.1.11:8008/presentation">
               <button
                 className="btn-new-delete"

@@ -176,7 +176,8 @@ const SortingTable = (props) => {
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
-    await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
+    if(props.ismushbat=="false"){
+      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
       .then(response => {
         setOriginaldata(response.data)
         setData(response.data)
@@ -185,6 +186,18 @@ const SortingTable = (props) => {
       .catch((error) => {
         console.log(error);
       })
+    }
+    else{
+      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid_mushbat/${props.unittype}/${props.unitid}`)
+      .then(response => {
+        setOriginaldata(response.data)
+        setData(response.data)
+        setIsdataloaded(true)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+    }
   }
 
   const fixfilterunits = async () => {
@@ -369,7 +382,7 @@ const SortingTable = (props) => {
     init();
     init2();
     setPageSize(20);
-  }, []);
+  }, [props]);
 
   const {
     getTableProps,
@@ -449,32 +462,32 @@ const SortingTable = (props) => {
                     {
                       row.cells.map(cell => {
                         if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz")) {
-                          return <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                          return <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
                           if (cell.column.id == "latest_recalibration_date") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '150px' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "pikod") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "ogda") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "hativa") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "gdod") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "magadal") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "magad") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "mkabaz") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                         }
                       })
@@ -529,6 +542,9 @@ const SortingTable = (props) => {
                 הראה {pageSize}
               </option>
             ))}
+            <option key={data.length} value={data.length}>
+                הראה הכל
+              </option>
           </select>
         </div>
       </div>

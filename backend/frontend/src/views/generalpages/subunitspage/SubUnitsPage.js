@@ -24,8 +24,6 @@ import Zminot_SortingTable from 'components/bazak/Zminot_SubUnitsCarDatasByUnitT
 import Kshirot_SortingTable from 'components/bazak/Kshirot_SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
 
 function SubUnitsPage({ match, theme }) {
-  //flag - cuz theres a problem in sidbar nav
-  const [flag, setFlag] = useState(false)
   //cardatas
   const [cardatas, setCardatas] = useState([])
   //spinner
@@ -33,7 +31,6 @@ function SubUnitsPage({ match, theme }) {
 
   async function init() {
     await getCardDataByUnitTypeAndUnitId();
-    setFlag(true);
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
@@ -49,11 +46,6 @@ function SubUnitsPage({ match, theme }) {
 
   useEffect(() => {
     init();
-  }, [match])
-
-  useEffect(() => {
-    if (flag)
-      window.location.reload(true);
   }, [match])
 
   return (

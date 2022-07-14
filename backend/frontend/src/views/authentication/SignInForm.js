@@ -27,14 +27,13 @@ import logobazak2 from "assets/img/logobazak2.png";
 function Signin() {
   const [values, setValues] = useState({
     personalnumber: '',
-    password: '',
     errortype: '',
     error: false,
     successmsg: false,
     loading: false,
     redirectToReferrer: false,
   })
-  const { personalnumber, password, error, loading, redirectToReferrer } = values
+  const { personalnumber, loading, redirectToReferrer } = values
 
   const { user } = isAuthenticated()
 
@@ -45,7 +44,7 @@ function Signin() {
   const clickSubmit = (event) => {
     //event.preventDefault()
     setValues({ ...values, loading: true, successmsg: false, error: false })
-    axios.post(`http://localhost:8000/api/signin`, { personalnumber, password })
+    axios.post(`http://localhost:8000/api/signin`, { personalnumber })
       .then(res => {
         authenticate(res.data)
         setValues({ ...values, loading: false, error: false, redirectToReferrer: true })
@@ -59,10 +58,11 @@ function Signin() {
     axios.get(`http://localhost:8000/auth/passportauth`)
       .then(response => {
         console.log(response.data);
-        setValues({ ...values, personalnumber:response.data.stam._json.cn, password: response.data.stam._json.cn})
+        setValues({ ...values, personalnumber:response.data.stam._json.cn})
       })
       .catch(error => {
         console.log(error);
+        history.push(`/signup`);
       })
   }
 
@@ -110,12 +110,8 @@ function Signin() {
     passport();
   }, [])
 
-  // useEffect(() => {
-  //   clickSubmit();
-  // }, [])
-
   useEffect(() => {
-    setValues({ ...values, password: values.personalnumber });
+    clickSubmit();
   }, [values.personalnumber])
 
   const signInForm = () => (

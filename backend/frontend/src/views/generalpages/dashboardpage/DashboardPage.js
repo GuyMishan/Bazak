@@ -24,8 +24,6 @@ import Kshirot_Magadal_DashboardCard from './Kshirot_Magadal_DashboardCard';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
 
 function DashboardPage({ match, theme }) {
-  //flag - cuz theres a problem in sidbar nav
-  const [flag, setFlag] = useState(false)
   //cardatas
   const [cardatas, setCardatas] = useState([])
   const [magadals, setMagadals] = useState([]);
@@ -35,7 +33,7 @@ function DashboardPage({ match, theme }) {
   async function init() {
     await getCardDataByUnitTypeAndUnitId();
     await getMagadals();
-    setFlag(true);
+    // setFlag(true);
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
@@ -61,11 +59,6 @@ function DashboardPage({ match, theme }) {
 
   useEffect(() => {
     init();
-  }, [match])
-
-  useEffect(() => {
-    if (flag)
-      window.location.reload(true);
   }, [match])
 
   return (

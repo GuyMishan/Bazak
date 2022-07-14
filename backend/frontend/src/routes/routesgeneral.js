@@ -38,7 +38,7 @@ const routesgeneral =
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
             <LoggedinRoute path="/dashboard/:unittype/:unitid" exact component={DashboardPage} />
             <LoggedinRoute path="/subunitspage/:unittype/:unitid" exact component={SubUnitsPage} />
-            <LoggedinRoute path="/zminotpage/:unittype/:unitid" exact component={ZminotPage} />
+            <LoggedinRoute path="/zminotpage/:unittype/:unitid/:ismushbat" exact component={ZminotPage} />
             <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
@@ -46,6 +46,7 @@ const routesgeneral =
             <Route path="/exceluploadusers" exact component={Exceluploadusers} />
             <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
+            {/* <Redirect from="/" to="/signin" /> */}
         </>
     )
 

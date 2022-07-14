@@ -48,14 +48,17 @@ function WorkplanNavbar(props) {
             {theme == "white-content" ?
               setcolorhr("lightGray")
               : setcolorhr("white")}
-            <Navbar style={{ display: 'block', height: '60px', backgroundColor: color,boxShadow:"none",top: '0',paddingBottom:'0px',marginRight:'60px',position: 'sticky'}}>
+            <Navbar style={{ display: 'block', height: '60px', backgroundColor: color, boxShadow: "none", top: '0', paddingBottom: '0px', marginRight: '60px', position: 'sticky' }}>
               <Row>
-                <Col xs={12} md={4}>
-                <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color}/>
+                <Col xs={12} md={5}>
+                  <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color} />
                   {/* <img src={Logoeged} height='50px'></img> */}
                 </Col>
-                <Col xs={12} md={4}>
-
+                <Col xs={12} md={3}>
+                  {theme == "white-content" ?
+                    <h3 style={{ fontWeight: 'bold' }}>זמינות האמל"ח</h3>
+                    : <h3 style={{ fontWeight: 'bold' }}>כשירות האמל"ח</h3>
+                  }
                 </Col>
                 <Col xs={12} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {/* <ToggleDarkModeButton /> */}
@@ -63,7 +66,7 @@ function WorkplanNavbar(props) {
                 </Col>
               </Row>
             </Navbar>
-            <hr style={{margin:'0px' , borderTop: `1px solid ${colorhr}`}}/>
+            <hr style={{ margin: '0px', borderTop: `1px solid ${colorhr}` }} />
           </>
 
         )}

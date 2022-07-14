@@ -26,13 +26,13 @@ import { generate } from 'shortid'
 import axios from 'axios';
 import history from 'history.js'
 import { toast } from "react-toastify";
+import Select from 'components/general/Select/AnimatedSelect'
 
 const EditUserForm = ({ match }) => {
   const [data, setData] = useState({
     name: "",
     lastname: "",
     personalnumber: "",
-    password: "",
     role: "",
     gdodid: "",
     hativaid: "",
@@ -100,6 +100,14 @@ const EditUserForm = ({ match }) => {
     setData({ ...data, [evt.target.name]: value });
   }
 
+  function handleChange2(selectedOption, name) {
+    if (!(selectedOption.value == "בחר"))
+      setData({ ...data, [name]: selectedOption.value });
+    else {
+      setData({ ...data, [name]: "" });
+    }
+  }
+
   const clickSubmit = (event) => {
     CheckSignUpForm(event);
   };
@@ -119,10 +127,6 @@ const EditUserForm = ({ match }) => {
     if (data.personalnumber == "") {
       flag = false;
       ErrorReason += "מס אישי ריק \n";
-    }
-    if (data.password == "") {
-      flag = false;
-      ErrorReason += "סיסמא ריקה \n";
     }
     if (data.role == "") {
       flag = false;
@@ -198,7 +202,6 @@ const EditUserForm = ({ match }) => {
     const user = {
       name: data.name,
       lastname: data.lastname,
-      password: data.password,
       role: data.role,
       validated: data.validated,
       personalnumber: data.personalnumber,
@@ -237,10 +240,6 @@ const EditUserForm = ({ match }) => {
     loadOgdas();
     loadPikods();
   }, []);
-
-  useEffect(() => {
-    setData({ ...data, password: data.personalnumber });
-  }, [data.personalnumber])
 
   return (
     <div className="">
@@ -283,10 +282,6 @@ const EditUserForm = ({ match }) => {
                     />
                   </FormGroup>
 
-                  {/*<FormGroup>
-                    <Input placeholder="סיסמא" name="password" type="password" value={data.password} onChange={handleChange} />
-                  </FormGroup>*/}
-
                   <div style={{ textAlign: "right", paddingTop: "10px" }}>
                     הרשאה
                   </div>
@@ -313,18 +308,8 @@ const EditUserForm = ({ match }) => {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         גדוד
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="gdodid"
-                          value={data.gdodid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>גדוד</option>
-                          {gdods.map((gdod, index) => (
-                            <option value={gdod._id}>{gdod.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={gdods} handleChange2={handleChange2} name={'gdodid'} val={data.gdodid ? data.gdodid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "2" ? (
@@ -332,18 +317,8 @@ const EditUserForm = ({ match }) => {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         חטיבה
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="hativaid"
-                          value={data.hativaid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>חטיבה</option>
-                          {hativas.map((hativa, index) => (
-                            <option value={hativa._id}>{hativa.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={hativas} handleChange2={handleChange2} name={'hativaid'} val={data.hativaid ? data.hativaid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "3" ? (
@@ -351,18 +326,8 @@ const EditUserForm = ({ match }) => {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         אוגדה
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="ogdaid"
-                          value={data.ogdaid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>אוגדה</option>
-                          {ogdas.map((ogda, index) => (
-                            <option value={ogda._id}>{ogda.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={ogdas} handleChange2={handleChange2} name={'ogdaid'} val={data.ogdaid ? data.ogdaid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "4" ? (
@@ -370,18 +335,8 @@ const EditUserForm = ({ match }) => {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         פיקוד
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="pikodid"
-                          value={data.pikodid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>פיקוד</option>
-                          {pikods.map((pikod, index) => (
-                            <option value={pikod._id}>{pikod.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={pikods} handleChange2={handleChange2} name={'pikodid'} val={data.pikodid ? data.pikodid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "" ? (

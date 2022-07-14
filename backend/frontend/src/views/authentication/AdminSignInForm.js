@@ -93,10 +93,6 @@ function AdminSignInForm() {
   )
 
   useEffect(() => {
-    clickSubmit();
-  }, [])
-
-  useEffect(() => {
     setValues({ ...values, password: values.personalnumber });
   }, [values.personalnumber])
 
@@ -128,12 +124,12 @@ function AdminSignInForm() {
                     <Row>
                       <Col>
                         <div className="text-center">
-                          <button onClick={clickSubmit} className="btn">התחבר</button>
+                          <button onClick={clickSubmit} className="btn-new-blue">התחבר</button>
                         </div>
                       </Col>
                       <Col>
                         <div className="text-center">
-                          <button onClick={() => { history.push(`/signup`) }} className="btn">הרשם</button>
+                          <button onClick={() => { history.push(`/signup`) }} className="btn-new-blue">הרשם</button>
                         </div>
                       </Col>
                     </Row>

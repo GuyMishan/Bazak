@@ -92,7 +92,7 @@ function Zminot_Magadal_DashboardCard(props) {
 
     useEffect(() => {
         init();
-    }, [])
+    }, [props])
 
     return (
         cardata_by_magadal != 0 ?
@@ -103,7 +103,7 @@ function Zminot_Magadal_DashboardCard(props) {
                     </CardHeader>
                     <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
                         <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                            {(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 60 ?
+                            {(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) < 60 ?
                                 <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
                                     {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                         root: {},
@@ -134,7 +134,7 @@ function Zminot_Magadal_DashboardCard(props) {
                                         </div>
                                     </CircularProgressbarWithChildren>}
                                 </ProgressProvider>
-                                : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) <= 80 ?
+                                : (cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0) < 80 ?
                                     <ProgressProvider valueStart={0} valueEnd={(cardata_by_magadal != 0 ? ((cardata_by_magadal_zamin / cardata_by_magadal) * 100) : 0)}>
                                         {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                             root: {},

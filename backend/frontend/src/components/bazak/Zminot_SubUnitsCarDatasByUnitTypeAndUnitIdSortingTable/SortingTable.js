@@ -134,7 +134,7 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     init();
-  }, []);
+  }, [props]);
 
   return (
     <>

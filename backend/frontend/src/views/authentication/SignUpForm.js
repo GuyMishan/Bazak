@@ -16,16 +16,15 @@ import {
   Col,
 } from "reactstrap";
 import axios from "axios";
-import ToggleButton from "react-toggle-button";
 import history from 'history.js'
 import { toast } from "react-toastify";
+import Select from 'components/general/Select/AnimatedSelect'
 
 export default function SignUpForm() {
   const [data, setData] = useState({
     name: "",
     lastname: "",
     personalnumber: "",
-    password: "",
     role: "",
     gdodid: "",
     hativaid: "",
@@ -93,6 +92,14 @@ export default function SignUpForm() {
     setData({ ...data, [evt.target.name]: value });
   }
 
+  function handleChange2(selectedOption, name) {
+    if (!(selectedOption.value == "בחר"))
+      setData({ ...data, [name]: selectedOption.value });
+    else {
+      setData({ ...data, [name]: "" });
+    }
+  }
+
   const clickSubmit = (event) => {
     CheckSignUpForm(event);
   };
@@ -112,10 +119,6 @@ export default function SignUpForm() {
     if (data.personalnumber == "") {
       flag = false;
       ErrorReason += "מס אישי ריק \n";
-    }
-    if (data.password == "") {
-      flag = false;
-      ErrorReason += "סיסמא ריקה \n";
     }
     if (data.role == "") {
       flag = false;
@@ -192,7 +195,6 @@ export default function SignUpForm() {
     const user = {
       name: data.name,
       lastname: data.lastname,
-      password: data.password,
       role: data.role,
       personalnumber: data.personalnumber,
       gdodid: data.gdodid,
@@ -257,10 +259,6 @@ export default function SignUpForm() {
     loadPikods();
   }, []);
 
-  useEffect(() => {
-    setData({ ...data, password: data.personalnumber });
-  }, [data.personalnumber]);
-
   const signUpForm = () => (
     <>
       <Container className="" dir='rtl'>
@@ -302,10 +300,6 @@ export default function SignUpForm() {
                     />
                   </FormGroup>
 
-                  {/*<FormGroup>
-                    <Input placeholder="סיסמא" name="password" type="password" value={data.password} onChange={handleChange} />
-                  </FormGroup>*/}
-
                   <div style={{ textAlign: "right", paddingTop: "10px" }}>
                     הרשאה
                   </div>
@@ -332,18 +326,8 @@ export default function SignUpForm() {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         גדוד
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="gdodid"
-                          value={data.gdodid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>גדוד</option>
-                          {gdods.map((gdod, index) => (
-                            <option value={gdod._id}>{gdod.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={gdods} handleChange2={handleChange2} name={'gdodid'} val={data.gdodid ? data.gdodid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "2" ? (
@@ -351,18 +335,8 @@ export default function SignUpForm() {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         חטיבה
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="hativaid"
-                          value={data.hativaid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>חטיבה</option>
-                          {hativas.map((hativa, index) => (
-                            <option value={hativa._id}>{hativa.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={hativas} handleChange2={handleChange2} name={'hativaid'} val={data.hativaid ? data.hativaid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "3" ? (
@@ -370,18 +344,8 @@ export default function SignUpForm() {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         אוגדה
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="ogdaid"
-                          value={data.ogdaid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>אוגדה</option>
-                          {ogdas.map((ogda, index) => (
-                            <option value={ogda._id}>{ogda.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={ogdas} handleChange2={handleChange2} name={'ogdaid'} val={data.ogdaid ? data.ogdaid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "4" ? (
@@ -389,18 +353,8 @@ export default function SignUpForm() {
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         פיקוד
                       </div>
-                      <FormGroup dir="rtl">
-                        <Input
-                          type="select"
-                          name="pikodid"
-                          value={data.pikodid}
-                          onChange={handleChange}
-                        >
-                          <option value={""}>פיקוד</option>
-                          {pikods.map((pikod, index) => (
-                            <option value={pikod._id}>{pikod.name}</option>
-                          ))}
-                        </Input>
+                      <FormGroup dir="rtl" style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <Select data={pikods} handleChange2={handleChange2} name={'pikodid'} val={data.pikodid ? data.pikodid : undefined} />
                       </FormGroup>
                     </>
                   ) : data.role === "" ? (
