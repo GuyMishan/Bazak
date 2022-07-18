@@ -34,23 +34,15 @@ const CarDataFilter = (props) => {
     const [ogdas, setOgdas] = useState([]);
     const [pikods, setPikods] = useState([]);
     //cartypes
+    const [makats, setMakats] = useState([]);
     const [mkabazs, setMkabazs] = useState([]);
     const [magads, setMagads] = useState([]);
     const [magadals, setMagadals] = useState([]);
+    //
     const [collapseOpen, setcollapseOpen] = React.useState(false);
     const toggleCollapse = () => {
         setcollapseOpen(!collapseOpen);
     };
-
-    // const isDuplicate = (data, obj) => {
-    //     let flag = false;
-    //     for (let i = 0; i < data.length; i++) {
-    //         if (data[i]._id == obj._id) {
-    //             flag = true
-    //         }
-    //     }
-    //     return flag;
-    // }
 
     const getKshirots = async () => {
         let tempkshirots = [];
@@ -103,6 +95,21 @@ const CarDataFilter = (props) => {
               console.log(error);
             })
           setMkabazs(tempmagadmkabazs);
+        }
+      }
+
+      const getMakats = async (mkabazid) => {
+        let tempmkabazmakats = [];
+        if (mkabazid != undefined) {
+          await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazid}`)
+            .then(response => {
+              for (let j = 0; j < response.data.length; j++)
+                tempmkabazmakats.push(response.data[j])
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+          setMakats(tempmkabazmakats);
         }
       }
 
@@ -187,6 +194,11 @@ const CarDataFilter = (props) => {
         getMkabazs(props.filter.magad);
       }, [props.filter.magad]);
 
+      useEffect(() => {
+        setMakats([]);
+        getMakats(props.filter.mkabaz);
+      }, [props.filter.mkabaz]);
+
     useEffect(() => {
         init();
     }, []);
@@ -226,7 +238,7 @@ const CarDataFilter = (props) => {
                             }) : null}
                         </Col>
                         <Col xs={12} md={8} style={{ textAlign: 'right' }}>
-                            <Row style={{ paddingTop: '10px' }}>
+                            <Row style={{ paddingTop: '10px',marginBottom:'15px' }}>
                                 {((props.unittype == "admin")) ?
                                     <>
                                         {(!(props.filter.ogda)) ?
@@ -279,7 +291,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
                             </Row>
-                            <Row>
+                            <Row style={{marginBottom:'15px'}}>
                                 {(!(props.filter.magad)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד על</h6>
@@ -300,7 +312,7 @@ const CarDataFilter = (props) => {
                                         <Select data={magads} handleChange2={props.handleChange2} name={'magad'} val={props.filter.magad ? props.filter.magad : undefined} isDisabled={true} />
                                     </Col>}
 
-                                {((props.filter.magad)) ?
+                                {((props.filter.magad)&& !(props.filter.makat)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מקבץ</h6>
                                         <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} />
@@ -308,6 +320,16 @@ const CarDataFilter = (props) => {
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מקבץ</h6>
                                         <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} isDisabled={true} />
+                                    </Col>}
+
+                                    {((props.filter.mkabaz)) ?
+                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                        <h6>מק"ט</h6>
+                                        <Select data={makats} handleChange2={props.handleChange2} name={'makat'} val={props.filter.makat ? props.filter.makat : undefined} />
+                                    </Col> :
+                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                        <h6>מק"ט</h6>
+                                        <Select data={makats} handleChange2={props.handleChange2} name={'makat'} val={props.filter.makat ? props.filter.makat : undefined} isDisabled={true} />
                                     </Col>}
                             </Row>
                         </Col>

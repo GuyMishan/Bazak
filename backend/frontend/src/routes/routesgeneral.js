@@ -17,6 +17,7 @@ import DashboardPage from "views/generalpages/dashboardpage/DashboardPage";
 import SubUnitsPage from "views/generalpages/subunitspage/SubUnitsPage";
 import ZminotPage from "views/generalpages/zminotpage/ZminotPage";
 import UnitTreePage from "views/generalpages/unittreepage/UnitTreePage";
+import AboutPage from "views/generalpages/aboutpage/AboutPage";
 //excel routes
 import Exceluploadusers from "views/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
@@ -36,10 +37,11 @@ const routesgeneral =
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
-            <LoggedinRoute path="/dashboard/:unittype/:unitid" exact component={DashboardPage} />
-            <LoggedinRoute path="/subunitspage/:unittype/:unitid" exact component={SubUnitsPage} />
+            <LoggedinRoute path="/dashboard/:unittype/:unitid/:cartype/:carid" exact component={DashboardPage} />
+            <LoggedinRoute path="/subunitspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsPage} />
             <LoggedinRoute path="/zminotpage/:unittype/:unitid/:ismushbat" exact component={ZminotPage} />
             <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
+            <LoggedinRoute path="/about" exact component={AboutPage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}

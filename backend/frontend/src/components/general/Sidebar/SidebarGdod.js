@@ -35,6 +35,9 @@ import editusers_white from "assets/img/editusers_white.png";
 import shortlist from "assets/img/shortlist.png";
 import shortlist_white from "assets/img/shortlist_white.png";
 
+import info from "assets/img/info.png";
+import info_white from "assets/img/info_white.png";
+
 import { signout } from "auth/index";
 import history from "../../../history";
 
@@ -77,7 +80,7 @@ function SidebarGdod(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to={`/dashboard/gdod/${user.gdodid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/dashboard/gdod/${user.gdodid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -131,6 +134,21 @@ function SidebarGdod(props) {
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   כלים מושבתים
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to="/about" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={info} style={{ height: "20px" }}></img>
+                  : <img src={info_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  אודות המערכת
                 </h4>
               </Col>
             </Row>

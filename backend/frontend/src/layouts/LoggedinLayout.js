@@ -2,9 +2,9 @@ import React from "react";
 
 // core components
 import Sidebar from "components/general/Sidebar/Sidebar.js";
-import WorkplanNavbar from "components/general/Navbars/WorkplanNavbar.js";
 import { BackgroundColorContext } from "contexts/BackgroundColorContext";
 import { ThemeContext } from "contexts/ThemeContext";
+import BazakNavbar from "components/general/Navbars/BazakNavbar/BazakNavbar";
 
 function LoggedinLayout({ component: Component, ...rest }) {
     // on this page, we need on the body tag the classes .rtl and .menu-on-right
@@ -17,7 +17,7 @@ function LoggedinLayout({ component: Component, ...rest }) {
                     <div className="wrapper">
                         <Sidebar rtlActive theme={theme}/>
                         <div className="main-panel">
-                            <WorkplanNavbar theme={theme}/>
+                            <BazakNavbar theme={theme}/>
                             <div className="content" style={{ direction: 'rtl' }}>
                                 <Component {...rest} theme={theme}/>
                             </div>

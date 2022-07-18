@@ -20,8 +20,7 @@ import { signin, authenticate, isAuthenticated } from 'auth/index';
 import PropagateLoader from "react-spinners/PropagateLoader";
 
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
-import Zminot_SortingTable from 'components/bazak/Zminot_SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
-import Kshirot_SortingTable from 'components/bazak/Kshirot_SubUnitsCarDatasByUnitTypeAndUnitIdSortingTable/SortingTable';
+import SortingTable from 'components/bazak/SubUnitsCarDataSortingTable/SortingTable';
 
 function SubUnitsPage({ match, theme }) {
   //cardatas
@@ -56,9 +55,7 @@ function SubUnitsPage({ match, theme }) {
       :
       <div>
         <Row>
-          {theme == "white-content" ?
-            <Zminot_SortingTable unittype={match.params.unittype} unitid={match.params.unitid} />
-            : <Kshirot_SortingTable unittype={match.params.unittype} unitid={match.params.unitid} />}
+          <SortingTable theme={theme} match={match} unittype={match.params.unittype} unitid={match.params.unitid} cardatas={cardatas} />
         </Row>
         <Row>
           <Col xs={12} md={3} style={{ textAlign: 'right' }}>
@@ -67,7 +64,7 @@ function SubUnitsPage({ match, theme }) {
           <Col xs={12} md={6}>
           </Col>
           <Col xs={12} md={3}>
-            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
+            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
           </Col>
         </Row>
       </div>

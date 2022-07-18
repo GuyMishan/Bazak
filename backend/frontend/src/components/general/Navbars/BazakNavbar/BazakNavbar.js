@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
-// nodejs library that concatenates classes
-import classNames from "classnames";
-import { isAuthenticated } from '../../../auth/index';
+import React, { useEffect, useState } from 'react'
+
+import { Link, withRouter, Redirect } from "react-router-dom";
+
+import { isAuthenticated } from '../../../../auth/index';
 // reactstrap components
 import {
   Button,
@@ -24,15 +25,12 @@ import {
   ModalHeader,
 } from "reactstrap";
 
-import ToggleDarkModeButton from './UserProfileDropdownMenu/ToggleDarkModeButton'
-
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
-import Logoeged from 'assets/img/logotene2.png';
+import UserProfileCircle from '../UserProfileCircle/UserProfileCircle'
+import BazakNavbarTitle from '../BazakNavbarTitle/BazakNavbarTitle';
 
-import UserProfileCircle from './UserProfileCircle/UserProfileCircle'
-
-function WorkplanNavbar(props) {
+function BazakNavbar(props) {
   const [colorhr, setcolorhr] = useState("transparent");
   const [color, setcolor] = useState("transparent");
   const { user } = isAuthenticated()
@@ -50,18 +48,13 @@ function WorkplanNavbar(props) {
               : setcolorhr("white")}
             <Navbar style={{ display: 'block', height: '60px', backgroundColor: color, boxShadow: "none", top: '0', paddingBottom: '0px', marginRight: '60px', position: 'sticky' }}>
               <Row>
-                <Col xs={12} md={5}>
+                <Col xs={12} md={4}>
                   <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color} />
-                  {/* <img src={Logoeged} height='50px'></img> */}
                 </Col>
-                <Col xs={12} md={3}>
-                  {theme == "white-content" ?
-                    <h3 style={{ fontWeight: 'bold' }}>זמינות האמל"ח</h3>
-                    : <h3 style={{ fontWeight: 'bold' }}>כשירות האמל"ח</h3>
-                  }
+                <Col xs={12} md={4}>
+                  <BazakNavbarTitle theme={theme}/>
                 </Col>
                 <Col xs={12} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  {/* <ToggleDarkModeButton /> */}
                   <h3 style={{ fontWeight: 'bold', paddingLeft: '30px' }}> שלום, {user.name + ' ' + user.lastname}</h3>
                 </Col>
               </Row>
@@ -75,4 +68,4 @@ function WorkplanNavbar(props) {
   );
 }
 
-export default WorkplanNavbar;
+export default withRouter(BazakNavbar);

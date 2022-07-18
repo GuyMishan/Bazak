@@ -34,6 +34,7 @@ const SortingTable = (props) => {
   const [ogdas, setOgdas] = useState([]);
   const [pikods, setPikods] = useState([]);
   //cartypes
+  const [makats, setMakats] = useState([]);
   const [mkabazs, setMkabazs] = useState([]);
   const [magads, setMagads] = useState([]);
   const [magadals, setMagadals] = useState([]);
@@ -73,6 +74,11 @@ const SortingTable = (props) => {
   const loadMkabazs = async () => {
     let response = await axios.get("http://localhost:8000/api/mkabaz",)
     setMkabazs(response.data);
+  }
+
+  const loadMakats = async () => {
+    let response = await axios.get("http://localhost:8000/api/makat",)
+    setMakats(response.data);
   }
 
   function Toggle(evt) {
@@ -173,6 +179,7 @@ const SortingTable = (props) => {
     loadMagadals();
     loadMagads();
     loadMkabazs();
+    loadMakats();
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
@@ -370,7 +377,17 @@ const SortingTable = (props) => {
     else {
       myArrayFiltered9 = myArrayFiltered8;
     }
-    setData(myArrayFiltered9)
+
+    let myArrayFiltered10 = []; //filter makat
+    if (filter.makat) {
+      myArrayFiltered10 = myArrayFiltered9.filter((el) => {
+        return filter.makat === el.makat;
+      });
+    }
+    else {
+      myArrayFiltered10 = myArrayFiltered9;
+    }
+    setData(myArrayFiltered10)
   }
 
   useEffect(() => {
@@ -461,12 +478,12 @@ const SortingTable = (props) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz")) {
+                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz")&& (cell.column.id != "makat")&& (cell.column.id != "makat_description")) {
                           return <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
                           if (cell.column.id == "latest_recalibration_date") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '150px',maxWidth:'150px',overflow:'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                           if (cell.column.id == "pikod") {
                             return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
@@ -488,6 +505,12 @@ const SortingTable = (props) => {
                           }
                           if (cell.column.id == "mkabaz") {
                             return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "makat") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
+                          }
+                          if (cell.column.id == "makat_description") {
+                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.description : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
                           }
                         }
                       })

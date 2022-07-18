@@ -40,6 +40,7 @@ const CarDataFormModal = (props) => {
   const [ogdas, setOgdas] = useState([]);
   const [pikods, setPikods] = useState([]);
   //cartypes
+  const [makats, setMakats] = useState([]);
   const [mkabazs, setMkabazs] = useState([]);
   const [magads, setMagads] = useState([]);
   const [magadals, setMagadals] = useState([]);
@@ -87,16 +88,6 @@ const CarDataFormModal = (props) => {
     setCarData(tempcardata);
   }
 
-  // const getTipultypes = async () => {
-  //   await axios.get("http://localhost:8000/api/tipultype")
-  //     .then(response => {
-  //       setTipultypes(response.data);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     })
-  // }
-
   const getMagadals = async () => {
     await axios.get(`http://localhost:8000/api/magadal`)
       .then(response => {
@@ -134,6 +125,21 @@ const CarDataFormModal = (props) => {
           console.log(error);
         })
       setMkabazs(tempmagadmkabazs);
+    }
+  }
+
+  const getMakats = async (mkabazid) => {
+    let tempmkabazmakats = [];
+    if (mkabazid != undefined) {
+      await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazid}`)
+        .then(response => {
+          for (let j = 0; j < response.data.length; j++)
+            tempmkabazmakats.push(response.data[j])
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+      setMakats(tempmkabazmakats);
     }
   }
 
@@ -249,7 +255,7 @@ const CarDataFormModal = (props) => {
       flag = false;
     }
 
-    if (((cardata.magadal == undefined) || (cardata.magadal == "")) || ((cardata.magad == undefined) || (cardata.magad == "")) || ((cardata.mkabaz == undefined) || (cardata.mkabaz == ""))) {
+    if (((cardata.magadal == undefined) || (cardata.magadal == "")) || ((cardata.magad == undefined) || (cardata.magad == "")) || ((cardata.mkabaz == undefined) || (cardata.mkabaz == "")) || ((cardata.makat == undefined) || (cardata.makat == ""))) {
       ErrorReason += ", פרטי סוג הכלי לא מלאים"
       flag = false;
     }
@@ -395,6 +401,11 @@ const CarDataFormModal = (props) => {
   }, [cardata.magad]);
 
   useEffect(() => {
+    setMakats([]);
+    getMakats(cardata.mkabaz);
+  }, [cardata.mkabaz]);
+
+  useEffect(() => {
     if (props.isOpen == true)
       init();
     else {
@@ -430,6 +441,22 @@ const CarDataFormModal = (props) => {
                     <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
                   </Col>}
 
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>משפחה</h6>
+                  <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} />
+                </Col>
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>סטאטוס הכלי</h6>
+                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange}>
+                    <option value={"בחר"}>{"בחר"}</option>
+                    <option value={"פעיל"}>{"פעיל"}</option>
+                    <option value={"מושבת"}>{"מושבת"}</option>
+                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
+                  </Input>
+                </Col>
+              </Row>
+
+              <Row>
                 {(!(cardata.magad)) ?
                   <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                     <h6>מאגד על</h6>
@@ -450,7 +477,7 @@ const CarDataFormModal = (props) => {
                     <Select data={magads} handleChange2={handleChange2} name={'magad'} val={cardata.magad ? cardata.magad : undefined} isDisabled={true} />
                   </Col>}
 
-                {((cardata.magad)) ?
+                {((cardata.magad) && !(cardata.makat)) ?
                   <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                     <h6>מקבץ</h6>
                     <Select data={mkabazs} handleChange2={handleChange2} name={'mkabaz'} val={cardata.mkabaz ? cardata.mkabaz : undefined} />
@@ -459,30 +486,24 @@ const CarDataFormModal = (props) => {
                     <h6>מקבץ</h6>
                     <Select data={mkabazs} handleChange2={handleChange2} name={'mkabaz'} val={cardata.mkabaz ? cardata.mkabaz : undefined} isDisabled={true} />
                   </Col>}
-              </Row>
 
-              <Row>
-                <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מק"ט</div>
-                  <Input placeholder={`מק"ט`} type="string" name="makat" value={cardata.makat} onChange={handleChange} />
-                </Col>
-                <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>תיאור מק"ט</div>
-                  <Input placeholder={`תיאור מק"ט`} type="string" name="makat_description" value={cardata.makat_description} onChange={handleChange} />
-                </Col>
-                <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>משפחה</div>
-                  <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} />
-                </Col>
-                <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס הכלי</div>
-                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange}>
-                    <option value={"בחר"}>{"בחר"}</option>
-                    <option value={"פעיל"}>{"פעיל"}</option>
-                    <option value={"מושבת"}>{"מושבת"}</option>
-                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
-                  </Input>
-                </Col>
+                {((cardata.mkabaz)) ?
+                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                    <h6>מק"ט</h6>
+                    <Select data={makats} handleChange2={handleChange2} name={'makat'} val={cardata.makat ? cardata.makat : undefined} />
+                  </Col> :
+                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                    <h6>מק"ט</h6>
+                    <Select data={makats} handleChange2={handleChange2} name={'makat'} val={cardata.makat ? cardata.makat : undefined} isDisabled={true} />
+                  </Col>}
+
+                {((cardata.makat)) ?
+                  <Col style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                    {makats.map((makat, index) => (makat._id == cardata.makat ? makat.description : null))}
+                  </Col> :
+                  <Col style={{ display: 'flex', justifyContent: 'center', alignContent: 'center', alignItems: 'center' }}>
+                  </Col>}
+
               </Row>
 
               <Row style={{ paddingTop: '10px' }}>
@@ -733,22 +754,7 @@ const CarDataFormModal = (props) => {
                                     </div>
                                   </Col>
                                 </Row> : p.type == 'hh_stand' ? <Row>
-                                  <Col xs={12} md={4}>
-                                    <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>עומד על ח"ח</p>
-                                      <Input onChange={(e) => {
-                                        const hh_stand = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].hh_stand = hh_stand }))
-                                      }}
-                                        value={p.hh_stand} type="select" placeholder={`עומד על ח"ח`}>
-                                        <option value={"בחר"}>{"בחר"}</option>
-                                        <option value={"כן"}>{"כן"}</option>
-                                        <option value={"לא"}>{"לא"}</option>
-                                      </Input>
-                                    </div>
-                                  </Col>
-                                  <Col xs={12} md={4}>
+                                  <Col xs={12} md={6}>
                                     <div>
                                       <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
                                       <Input onChange={(e) => {
@@ -760,7 +766,7 @@ const CarDataFormModal = (props) => {
                                       </Input>
                                     </div>
                                   </Col>
-                                  <Col xs={12} md={4}>
+                                  <Col xs={12} md={6}>
                                     <div>
                                       <p style={{ margin: '0px', float: 'right' }}>כמות</p>
                                       <Input onChange={(e) => {

@@ -160,7 +160,7 @@ const SortingTable = ({ match }) => {
                        
                       })
                     }
-                    {console.log(row.original._id)}
+                    {/* {console.log(row.original._id)} */}
                     <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <Link to={`/edituser/${row.original._id}`}><button className="btn-new">עדכן</button></Link> </div> </td>{/*row.original._id=user._id*/}
                     <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}> <button className="btn-new-delete" onClick={() => UserDelete(row.original._id)}>מחק</button></div></td>
                   </tr>

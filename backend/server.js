@@ -48,9 +48,11 @@ app.use('/api',pikodRoutes)
 const magadalRoutes = require("./routes/cartypes/magadal");
 const magadRoutes = require("./routes/cartypes/magad");
 const mkabazRoutes = require("./routes/cartypes/mkabaz");
+const makatRoutes = require("./routes/cartypes/makat");
 app.use('/api',magadalRoutes)
 app.use('/api',magadRoutes)
 app.use('/api',mkabazRoutes)
+app.use('/api',makatRoutes)
 //general routes
 const cardataRoutes = require("./routes/general/cardata");
 app.use('/api',cardataRoutes)

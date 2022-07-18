@@ -8,9 +8,9 @@ const cardataSchema = new mongoose.Schema({
     mkabaz: { type: String }, //object
     magad: { type: String }, //object
     magadal: { type: String }, //object
+    makat: { type: String }, //object
+    makat_description: { type: String }, //unused
     //
-    makat: { type: String },
-    makat_description: { type: String },
     family: { type: String },
     //units
     gdod: { type: String }, //object
