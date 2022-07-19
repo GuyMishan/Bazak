@@ -209,49 +209,49 @@ function UnitTreePage({ match }) {
         var idstr = event.key; //idstr = _id
         if (match.params.unittype == 'admin') {
             if (event.type == "pikod") {
-                history.push(`/dashboard/pikod/${idstr}`);
+                history.push(`/dashboard/pikod/${idstr}/magadal/0`);
             }
             if (event.type == "ogda") {
                 var ogdaidstr = idstr.split('/')[1];
-                history.push(`/dashboard/ogda/${ogdaidstr}`);
+                history.push(`/dashboard/ogda/${ogdaidstr}/magadal/0`);
             }
             if (event.type == "hativa") {
                 var hativaidstr = idstr.split('/')[2];
-                history.push(`/dashboard/hativa/${hativaidstr}`);
+                history.push(`/dashboard/hativa/${hativaidstr}/magadal/0`);
             }
             if (event.type == "gdod") {
                 var gdodidstr = idstr.split('/')[3];
-                history.push(`/dashboard/gdod/${gdodidstr}`);
+                history.push(`/dashboard/gdod/${gdodidstr}/magadal/0`);
             }
         }
         else if (match.params.unittype == 'pikod') {
             if (event.type == "ogda") {
                 var ogdaidstr = idstr;
-                history.push(`/dashboard/ogda/${ogdaidstr}`);
+                history.push(`/dashboard/ogda/${ogdaidstr}/magadal/0`);
             }
             if (event.type == "hativa") {
                 var hativaidstr = idstr.split('/')[1];
-                history.push(`/dashboard/hativa/${hativaidstr}`);
+                history.push(`/dashboard/hativa/${hativaidstr}/magadal/0`);
             }
             if (event.type == "gdod") {
                 var gdodidstr = idstr.split('/')[2];
-                history.push(`/dashboard/gdod/${gdodidstr}`);
+                history.push(`/dashboard/gdod/${gdodidstr}/magadal/0`);
             }
         }
         else if (match.params.unittype == 'ogda') {
             if (event.type == "hativa") {
                 var hativaidstr = idstr;
-                history.push(`/dashboard/hativa/${hativaidstr}`);
+                history.push(`/dashboard/hativa/${hativaidstr}/magadal/0`);
             }
             if (event.type == "gdod") {
                 var gdodidstr = idstr.split('/')[1];
-                history.push(`/dashboard/gdod/${gdodidstr}`);
+                history.push(`/dashboard/gdod/${gdodidstr}/magadal/0`);
             }
         }
         else if (match.params.unittype == 'hativa') {
             if (event.type == "gdod") {
                 var gdodidstr = idstr;
-                history.push(`/dashboard/gdod/${gdodidstr}`);
+                history.push(`/dashboard/gdod/${gdodidstr}/magadal/0`);
             }
         }
     }

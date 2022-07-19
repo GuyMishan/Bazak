@@ -132,22 +132,22 @@ function DashboardCard(props) { //instate - zamin/kashir
     return (
         cardata_by_cartype != 0 ?
             <Col xs={12} md={3}>
-                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px'}}>
                     <CardHeader style={{padding:'0px'}}>
                     <div style={{textAlign:'right'}}>
                         {props.theme == "white-content" ?
-                            props.match.params.cartype == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/magad/${props.cartype._id}`}><img src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>זמינות {props.cartype.name}</h3></>
-                                : props.match.params.cartype == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${props.cartype._id}`}><img src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>זמינות {props.cartype.name}</h3></>
+                            props.match.params.cartype == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/magad/${props.cartype._id}`}><img style={{cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>זמינות {props.cartype.name}</h3></>
+                                : props.match.params.cartype == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${props.cartype._id}`}><img style={{cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>זמינות {props.cartype.name}</h3></>
                                     : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.cartype.name}</h3>
 
-                            : props.match.params.cartype == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/magad/${props.cartype._id}`}><img src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>כשירות {props.cartype.name}</h3></>
-                                : props.match.params.cartype == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${props.cartype._id}`}><img src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>כשירות {props.cartype.name}</h3></>
+                            : props.match.params.cartype == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/magad/${props.cartype._id}`}><img style={{cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>כשירות {props.cartype.name}</h3></>
+                                : props.match.params.cartype == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/dashboard/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${props.cartype._id}`}><img style={{cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px',marginBottom:'0px' }}>כשירות {props.cartype.name}</h3></>
                                     : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.cartype.name}</h3>
                         }
                         </div>
 
                     </CardHeader>
-                    <CardBody style={{ textAlign: 'center', margin: 'auto' }}>
+                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer'  }} onClick={(e) => toggleCollapse(e)}>
                         <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
                             {(cardata_by_cartype != 0 ? ((cardata_by_cartype_instate / cardata_by_cartype) * 100) : 0) < 60 ?
                                 <ProgressProvider valueStart={0} valueEnd={(cardata_by_cartype != 0 ? ((cardata_by_cartype_instate / cardata_by_cartype) * 100) : 0)}>

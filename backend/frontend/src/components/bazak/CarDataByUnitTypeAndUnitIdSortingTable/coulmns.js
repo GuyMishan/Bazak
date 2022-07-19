@@ -100,4 +100,9 @@ export const COLUMNS = [
         accessor: 'latest_recalibration_date',
         Filter: ColumnFilter
     },
+    {
+        Header: 'סיבות אי-זמינות',
+        accessor: 'tipuls',
+        Filter: ColumnFilter
+    },
 ]

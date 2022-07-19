@@ -14,6 +14,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
+import DownLoadToExcel from "./DownLoadToExcel";
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -183,27 +184,27 @@ const SortingTable = (props) => {
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
-    if(props.ismushbat=="false"){
+    if (props.ismushbat == "false") {
       await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
-      .then(response => {
-        setOriginaldata(response.data)
-        setData(response.data)
-        setIsdataloaded(true)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+        .then(response => {
+          setOriginaldata(response.data)
+          setData(response.data)
+          setIsdataloaded(true)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     }
-    else{
+    else {
       await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid_mushbat/${props.unittype}/${props.unitid}`)
-      .then(response => {
-        setOriginaldata(response.data)
-        setData(response.data)
-        setIsdataloaded(true)
-      })
-      .catch((error) => {
-        console.log(error);
-      })
+        .then(response => {
+          setOriginaldata(response.data)
+          setData(response.data)
+          setIsdataloaded(true)
+        })
+        .catch((error) => {
+          console.log(error);
+        })
     }
   }
 
@@ -425,153 +426,170 @@ const SortingTable = (props) => {
 
   return (
     data.length == 0 && !isdataloaded ?
-    <div style={{ width: '50%', marginTop: '30%' }}>
+      <div style={{ width: '50%', marginTop: '30%' }}>
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
-    </div>
-    :
-    <>
-      {/*modals */}
-      <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
-      <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
-      {/*filter */}
-      <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} />
-
-      <div style={{ float: 'right', paddingBottom: '5px' }}>
-        <ReactHTMLTableToExcel
-          id="test-table-xls-button"
-          className="btn-green"
-          table="table-to-xls"
-          filename="קובץ - זמינות"
-          sheet="קובץ - זמינות"
-          buttonText="הורד כקובץ אקסל"
-          style={{ float: 'right' }}
-        />
       </div>
-      <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
-      <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-      <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()} id="table-to-xls">
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th  >
-                    <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
-                    <div>{column.canFilter ? column.render('Filter') : null}</div>
-                    <div>
-                      {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
-                    </div>
-                  </th>
-                ))}
-                <th></th>
-                {props.unittype != 'notype' ? <th></th>
-                  : null}
-              </tr>
-            ))}
+      :
+      <>
+        {/*modals */}
+        <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
+        <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
+        {/*filter */}
+        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} />
 
-          </thead>
-          <tbody {...getTableBodyProps()}>
-            {
-              page.map(row => {
-                prepareRow(row)
-                return (
-                  <tr {...row.getRowProps()}>
-                    {
-                      row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz")&& (cell.column.id != "makat")&& (cell.column.id != "makat_description")) {
-                          return <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
-                        }
-                        else {
-                          if (cell.column.id == "latest_recalibration_date") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '150px',maxWidth:'150px',overflow:'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "pikod") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "ogda") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "hativa") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "gdod") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "magadal") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "magad") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "mkabaz") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "makat") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat.name : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                          if (cell.column.id == "makat_description") {
-                            return cell.value ? <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.description : null))}</td> : <td style={{ width: `${100 / 22}%`, minWidth: '50px',maxWidth:'100px',overflow:'auto' }} {...cell.getCellProps()}></td>
-                          }
-                        }
-                      })
-                    }
-                    <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
-                    {props.unittype != 'notype' ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
-                      : null}
-                    {/* {console.log(row)} */}
-                  </tr>
-                )
-              })
-            }
-          </tbody>
-        </table>
-        <div className="pagination">
+        <div style={{ float: 'right', paddingBottom: '5px' }}>
+          {/* <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="btn-green"
+            table="table-to-xls"
+            filename="קובץ - זמינות"
+            sheet="קובץ - זמינות"
+            buttonText="הורד כקובץ אקסל"
+            style={{ float: 'right' }}
+          /> */}
+          <DownLoadToExcel data={data}/>
+        </div>
+        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
+        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+        <div className="table-responsive" style={{ overflow: 'auto' }}>
+          <table {...getTableProps()} id="table-to-xls">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th  >
+                      <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
+                      <div>{column.canFilter ? column.render('Filter') : null}</div>
+                      <div>
+                        {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
+                      </div>
+                    </th>
+                  ))}
+                  <th></th>
+                  {props.unittype != 'notype' ? <th></th>
+                    : null}
+                </tr>
+              ))}
 
-          <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-            {'<'}
-          </button>{' '}
-          <button onClick={() => nextPage()} disabled={!canNextPage}>
-            {'>'}
-          </button>{' '}
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {
+                page.map(row => {
+                  prepareRow(row)
+                  return (
+                    <tr {...row.getRowProps()}>
+                      {
+                        row.cells.map(cell => {
+                          if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz") && (cell.column.id != "makat") && (cell.column.id != "makat_description") && (cell.column.id != "tipuls")) {
+                            return <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                          }
+                          else {
+                            if (cell.column.id == "latest_recalibration_date") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "pikod") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "ogda") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "hativa") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "gdod") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "magadal") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "magad") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "mkabaz") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "makat") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat.name : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "makat_description") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.description : null))}</td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                            if (cell.column.id == "tipuls") {
+                              return cell.value ? <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
+                                {/* {cell.value.map((tipul, index) => <p>{tipul.type}</p>)} */}
+                                {/* {cell.value.filter(function(item, pos) {return cell.value.indexOf(item.type) == pos;}).map((tipul, index) => <p>{tipul.type}</p>)} */}
+                                {cell.value.filter((value, index, self) =>
+                                  index === self.findIndex((t) => (
+                                    t.type === value.type
+                                  ))
+                                ).map((tipul, index) => 
+                                  tipul.type == 'tipul' ? <p>טיפול</p> :
+                                  tipul.type == 'harig_tipul' ? <p>חריג טיפול</p> :
+                                    tipul.type == 'takala_mizdamenet' ? <p>תקלה מזדמנת</p> :
+                                      tipul.type == 'hh_stand' ? <p>עומד על ח"ח</p> : <p></p>
+                                )}
+                              </td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
+                          }
+                        })
+                      }
+                      <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
+                      {props.unittype != 'notype' ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
+                        : null}
+                      {/* {console.log(row)} */}
+                    </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+          <div className="pagination">
 
-          <span>
-            עמוד{' '}
-            <strong>
-              {pageIndex + 1} מתוך {pageOptions.length}
-            </strong>{' '}
-          </span>
-          <span>
-            | חפש עמוד:{' '}
-            <input
+            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+              {'<'}
+            </button>{' '}
+            <button onClick={() => nextPage()} disabled={!canNextPage}>
+              {'>'}
+            </button>{' '}
 
-              type="number"
-              defaultValue={pageIndex + 1}
+            <span>
+              עמוד{' '}
+              <strong>
+                {pageIndex + 1} מתוך {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span>
+              | חפש עמוד:{' '}
+              <input
+
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={e => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0
+                  gotoPage(page)
+                }}
+                style={{ width: '100px', borderRadius: '10px' }}
+              />
+            </span>{' '}
+            <select
+              style={{ borderRadius: '10px' }}
+              value={pageSize}
               onChange={e => {
-                const page = e.target.value ? Number(e.target.value) - 1 : 0
-                gotoPage(page)
+                setPageSize(Number(e.target.value))
               }}
-              style={{ width: '100px', borderRadius: '10px' }}
-            />
-          </span>{' '}
-          <select
-            style={{ borderRadius: '10px' }}
-            value={pageSize}
-            onChange={e => {
-              setPageSize(Number(e.target.value))
-            }}
-          >
-            {[5, 10, 15, 20, 25].map(pageSize => (
-              <option key={pageSize} value={pageSize}>
-                הראה {pageSize}
-              </option>
-            ))}
-            <option key={data.length} value={data.length}>
+            >
+              {[5, 10, 15, 20, 25].map(pageSize => (
+                <option key={pageSize} value={pageSize}>
+                  הראה {pageSize}
+                </option>
+              ))}
+              <option key={data.length} value={data.length}>
                 הראה הכל
               </option>
-          </select>
+            </select>
+          </div>
         </div>
-      </div>
-    </>
+      </>
   );
 }
 export default withRouter(SortingTable);;

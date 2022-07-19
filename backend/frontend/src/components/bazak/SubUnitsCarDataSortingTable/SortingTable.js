@@ -248,30 +248,55 @@ const SortingTable = (props) => {
                     : props.unittype == 'ogda' && data.hativa ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/hativa/${data.hativa._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.hativa.name}</Link></th>
                       : props.unittype == 'hativa' && data.gdod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/zminotpage/gdod/${data.gdod._id}/false`}>{data.gdod.name}</Link></th>
                         : <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}></th>}
-                {data.cardatas ? data.cardatas.map(cardatas => {
-                  return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
-                    {cardatas.numberofcars != 0 ?
-                      ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 60 ?
-                        <p style={{ color: '#ff2128' }}>
-                          {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
-                          <br></br>
-                          {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
-                        </p> :
-                        ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
-                          <p style={{ color: '#ffca3a' }}>
+                {props.theme == 'white-content' ?
+                  data.cardatas ? data.cardatas.map(cardatas => {
+                    return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+                      {cardatas.numberofcars != 0 ?
+                        ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 60 ?
+                          <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
                             {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
                           </p> :
-                          ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
-                            <p style={{ color: '#8ac926' }}>
+                          ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
+                            <p style={{ color: '#ffca3a' }}>
                               {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                               <br></br>
                               {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
-                            </p> : null
-                      : <p>X</p>}
-                  </td>)
-                }) : null}
+                            </p> :
+                            ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
+                              <p style={{ color: '#8ac926' }}>
+                                {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
+                                <br></br>
+                                {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
+                              </p> : null
+                        : <p>X</p>}
+                    </td>)
+                  }) : null
+                  : data.cardatas ? data.cardatas.map(cardatas => {
+                    return (<td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+                      {cardatas.numberofcars != 0 ?
+                        ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 60 ?
+                          <p style={{ color: '#ff2128' }}>
+                            {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                            <br></br>
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                          </p> :
+                          ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
+                            <p style={{ color: '#ffca3a' }}>
+                              {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                              <br></br>
+                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                            </p> :
+                            ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
+                              <p style={{ color: '#8ac926' }}>
+                                {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
+                                <br></br>
+                                {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                              </p> : null
+                        : <p>X</p>}
+                    </td>)
+                  }) : null}
               </tr>)
             })}
           </tbody>
