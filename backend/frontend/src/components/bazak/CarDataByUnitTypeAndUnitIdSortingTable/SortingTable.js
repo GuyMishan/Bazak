@@ -14,7 +14,7 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
-import DownLoadToExcel from "./DownLoadToExcel";
+import DownloadExcelModal from "./DownloadExcelModal";
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -29,6 +29,8 @@ const SortingTable = (props) => {
   //cardata form modal delete
   const [iscardataformdeleteopen, setIscardataformdeleteopen] = useState(false);
   const [cardataidfordeletemodal, setCardataidfordeletemodal] = useState(undefined);
+  //downloadexcel modal
+  const [isdownloadexcelopen, setIsdownloadexcelopen] = useState(false);
   //units
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
@@ -110,6 +112,14 @@ const SortingTable = (props) => {
   function ToggleForModalDelete(evt) {
     setIscardataformdeleteopen(!iscardataformdeleteopen);
     updatechangedcardata(); // update table..
+  }
+
+  function ToggleExcel(evt) {
+    setIsdownloadexcelopen(!isdownloadexcelopen);
+  }
+
+  function ToggleForModalExcel(evt) {
+    setIsdownloadexcelopen(!isdownloadexcelopen);
   }
 
   async function updatechangedcardata() {
@@ -432,6 +442,7 @@ const SortingTable = (props) => {
       :
       <>
         {/*modals */}
+        <DownloadExcelModal isOpen={isdownloadexcelopen} Toggle={ToggleExcel} ToggleForModal={ToggleForModalExcel} data={data} />
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
         {/*filter */}
@@ -447,7 +458,7 @@ const SortingTable = (props) => {
             buttonText="הורד כקובץ אקסל"
             style={{ float: 'right' }}
           /> */}
-          <DownLoadToExcel data={data}/>
+          <button className="btn-new-blue" onClick={ToggleExcel}>הורד כקובץ אקסל</button>
         </div>
         <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
@@ -522,11 +533,11 @@ const SortingTable = (props) => {
                                   index === self.findIndex((t) => (
                                     t.type === value.type
                                   ))
-                                ).map((tipul, index) => 
+                                ).map((tipul, index) =>
                                   tipul.type == 'tipul' ? <p>טיפול</p> :
-                                  tipul.type == 'harig_tipul' ? <p>חריג טיפול</p> :
-                                    tipul.type == 'takala_mizdamenet' ? <p>תקלה מזדמנת</p> :
-                                      tipul.type == 'hh_stand' ? <p>עומד על ח"ח</p> : <p></p>
+                                    tipul.type == 'harig_tipul' ? <p>חריג טיפול</p> :
+                                      tipul.type == 'takala_mizdamenet' ? <p>תקלה מזדמנת</p> :
+                                        tipul.type == 'hh_stand' ? <p>עומד על ח"ח</p> : <p></p>
                                 )}
                               </td> : <td style={{ width: `${100 / 23}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }

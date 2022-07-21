@@ -202,6 +202,20 @@ const SortingTable = (props) => {
         }
       }
     }
+
+    for (let i = 0; i < temp_temp_data_arr.length; i++) {
+      let is_unit_needed = false;
+      for (let j = 0; j < temp_temp_data_arr[i].cardatas.length; j++) {
+        if (temp_temp_data_arr[i].cardatas[j].numberofcars != 0) {
+          is_unit_needed = true;
+        }
+      }
+      if (is_unit_needed == false) {
+        temp_temp_data_arr.splice(i, 1);
+
+      }
+    }
+
     setCartypes(temp_temp_cartypes);
     setData(temp_temp_data_arr);
   }
