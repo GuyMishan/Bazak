@@ -24,6 +24,7 @@ import {
 } from "reactstrap";
 import axios from 'axios';
 import history from 'history.js'
+import { signin, authenticate, isAuthenticated } from 'auth/index';
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
@@ -31,6 +32,7 @@ import Select from 'components/general/Select/AnimatedSelect'
 import deletepic from "assets/img/delete.png";
 
 const CarDataFormModal = (props) => {
+  const { user } = isAuthenticated()
   //cardata
   const [cardata, setCarData] = useState({})
   const [finalspecialkeytwo, setFinalSpecialKeytwo] = useState([])
@@ -831,9 +833,10 @@ const CarDataFormModal = (props) => {
                 </Col>
               </Row>
 
-              <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                <button className="btn" onClick={clickSubmit}>עדכן</button>
-              </div>
+              {user.role == '0' || user.role == '1' ?
+                <div style={{ textAlign: 'center', paddingTop: '20px' }}>
+                  <button className="btn" onClick={clickSubmit}>עדכן</button>
+                </div> : null}
             </Container>
           </CardBody>
         </Card>
