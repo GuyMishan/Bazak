@@ -60,58 +60,58 @@ const CarDataFilter = (props) => {
 
     const getMagadals = async () => {
         await axios.get(`http://localhost:8000/api/magadal`)
-          .then(response => {
-            setMagadals(response.data)
-          })
-          .catch((error) => {
-            console.log(error);
-          })
-      }
-    
-      const getMagads = async (magadalid) => {
+            .then(response => {
+                setMagadals(response.data)
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
+    const getMagads = async (magadalid) => {
         let tempmagadalsmagads = [];
         if (magadalid != undefined) {
-          await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalid}`)
-            .then(response => {
-              for (let j = 0; j < response.data.length; j++)
-                tempmagadalsmagads.push(response.data[j])
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-          setMagads(tempmagadalsmagads);
+            await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalid}`)
+                .then(response => {
+                    for (let j = 0; j < response.data.length; j++)
+                        tempmagadalsmagads.push(response.data[j])
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            setMagads(tempmagadalsmagads);
         }
-      }
-    
-      const getMkabazs = async (magadid) => {
+    }
+
+    const getMkabazs = async (magadid) => {
         let tempmagadmkabazs = [];
         if (magadid != undefined) {
-          await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadid}`)
-            .then(response => {
-              for (let j = 0; j < response.data.length; j++)
-                tempmagadmkabazs.push(response.data[j])
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-          setMkabazs(tempmagadmkabazs);
+            await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadid}`)
+                .then(response => {
+                    for (let j = 0; j < response.data.length; j++)
+                        tempmagadmkabazs.push(response.data[j])
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            setMkabazs(tempmagadmkabazs);
         }
-      }
+    }
 
-      const getMakats = async (mkabazid) => {
+    const getMakats = async (mkabazid) => {
         let tempmkabazmakats = [];
         if (mkabazid != undefined) {
-          await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazid}`)
-            .then(response => {
-              for (let j = 0; j < response.data.length; j++)
-                tempmkabazmakats.push(response.data[j])
-            })
-            .catch((error) => {
-              console.log(error);
-            })
-          setMakats(tempmkabazmakats);
+            await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazid}`)
+                .then(response => {
+                    for (let j = 0; j < response.data.length; j++)
+                        tempmkabazmakats.push(response.data[j])
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+            setMakats(tempmkabazmakats);
         }
-      }
+    }
 
     const loadPikods = async () => {
         await axios.get("http://localhost:8000/api/pikod",)
@@ -187,17 +187,17 @@ const CarDataFilter = (props) => {
     useEffect(() => {
         setMagads([]);
         getMagads(props.filter.magadal);
-      }, [props.filter.magadal]);
-    
-      useEffect(() => {
+    }, [props.filter.magadal]);
+
+    useEffect(() => {
         setMkabazs([]);
         getMkabazs(props.filter.magad);
-      }, [props.filter.magad]);
+    }, [props.filter.magad]);
 
-      useEffect(() => {
+    useEffect(() => {
         setMakats([]);
         getMakats(props.filter.mkabaz);
-      }, [props.filter.mkabaz]);
+    }, [props.filter.mkabaz]);
 
     useEffect(() => {
         init();
@@ -238,7 +238,7 @@ const CarDataFilter = (props) => {
                             }) : null}
                         </Col>
                         <Col xs={12} md={8} style={{ textAlign: 'right' }}>
-                            <Row style={{ paddingTop: '10px',marginBottom:'15px' }}>
+                            <Row style={{ paddingTop: '10px', marginBottom: '15px' }}>
                                 {((props.unittype == "admin")) ?
                                     <>
                                         {(!(props.filter.ogda)) ?
@@ -291,7 +291,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
                             </Row>
-                            <Row style={{marginBottom:'15px'}}>
+                            <Row style={{ marginBottom: '15px' }}>
                                 {(!(props.filter.magad)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד על</h6>
@@ -312,7 +312,7 @@ const CarDataFilter = (props) => {
                                         <Select data={magads} handleChange2={props.handleChange2} name={'magad'} val={props.filter.magad ? props.filter.magad : undefined} isDisabled={true} />
                                     </Col>}
 
-                                {((props.filter.magad)&& !(props.filter.makat)) ?
+                                {((props.filter.magad) && !(props.filter.makat)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מקבץ</h6>
                                         <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} />
@@ -322,7 +322,7 @@ const CarDataFilter = (props) => {
                                         <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} isDisabled={true} />
                                     </Col>}
 
-                                    {((props.filter.mkabaz)) ?
+                                {((props.filter.mkabaz)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מק"ט</h6>
                                         <Select data={makats} handleChange2={props.handleChange2} name={'makat'} val={props.filter.makat ? props.filter.makat : undefined} />
@@ -334,6 +334,21 @@ const CarDataFilter = (props) => {
                             </Row>
                         </Col>
                     </Row>
+
+                    <div>
+                        <Row>
+                            {props.allColumns.map(column => (
+                                <Col xs={12} md={2}>
+                                    <div key={column.id}>
+                                        <label>
+                                            <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+                                            {column.Header}
+                                        </label>
+                                    </div>
+                                </Col>
+                            ))}
+                        </Row>
+                    </div>
                 </Card >
             </Collapse>
         </div>

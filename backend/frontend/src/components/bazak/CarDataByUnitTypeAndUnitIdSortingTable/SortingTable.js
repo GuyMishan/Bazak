@@ -180,6 +180,7 @@ const SortingTable = (props) => {
   function init() {
     getCardDataByUnitTypeAndUnitId();
     fixfilterunits();
+    ReadLocalStorage();
   }
 
   function init2() {
@@ -401,16 +402,16 @@ const SortingTable = (props) => {
     setData(myArrayFiltered10)
   }
 
-  useEffect(() => {
-    applyfiltersontodata()
-  }, [filter]);
+  function ReadLocalStorage() {
+    if (localStorage.getItem('zminot_page_hidden_columns')) {
+    } else {
+      localStorage.setItem('zminot_page_hidden_columns', JSON.stringify([]));
+    }
+  }
 
-
-  useEffect(() => {
-    init();
-    init2();
-    setPageSize(20);
-  }, [props]);
+  function FixLocalStorageHeaders() {
+    localStorage.setItem('zminot_page_hidden_columns', JSON.stringify(hiddenColumns));
+  }
 
   const {
     getTableProps,
@@ -419,6 +420,7 @@ const SortingTable = (props) => {
     footerGroups,
     page,
     prepareRow,
+    allColumns,
     canPreviousPage,
     canNextPage,
     pageOptions,
@@ -427,12 +429,26 @@ const SortingTable = (props) => {
     nextPage,
     previousPage,
     setPageSize,
-    state: { pageIndex, pageSize, globalFilter },
+    state: { pageIndex, pageSize, globalFilter, hiddenColumns },
     setGlobalFilter,
   } = useTable({
-    columns, data, initialState: { pageIndex: 0 },
+    columns, data, initialState: { pageIndex: 0, hiddenColumns: localStorage.getItem('zminot_page_hidden_columns') ? JSON.parse(localStorage.getItem('zminot_page_hidden_columns')) : [] },
   },
     useGlobalFilter, useFilters, useSortBy, usePagination);
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [filter]);
+
+  useEffect(() => {
+    init();
+    init2();
+    setPageSize(20);
+  }, [props]);
+
+  useEffect(() => {
+    FixLocalStorageHeaders();
+  }, [hiddenColumns]);
 
   return (
     data.length == 0 && !isdataloaded ?
@@ -446,7 +462,7 @@ const SortingTable = (props) => {
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
         {/*filter */}
-        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} />
+        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} allColumns={allColumns} />
 
         <div style={{ float: 'right', paddingBottom: '5px' }}>
           {/* <ReactHTMLTableToExcel

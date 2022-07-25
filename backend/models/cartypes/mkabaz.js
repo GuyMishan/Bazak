@@ -7,6 +7,7 @@ const mkabazSchema = new mongoose.Schema({
     name:{type:String},
     magad:{type:String},
     index:{type:Number},
+    main_group:{type:String},
 });
 
 const Mkabaz = mongoose.model('Mkabaz', mkabazSchema);
