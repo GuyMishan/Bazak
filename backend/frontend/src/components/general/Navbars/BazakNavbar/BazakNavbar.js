@@ -52,10 +52,12 @@ function BazakNavbar(props) {
                   <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color} />
                 </Col>
                 <Col xs={12} md={4}>
-                  <BazakNavbarTitle theme={theme}/>
+                  <BazakNavbarTitle theme={theme} />
                 </Col>
                 <Col xs={12} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                  <h3 style={{ fontWeight: 'bold', paddingLeft: '30px' }}> שלום, {user.name + ' ' + user.lastname}</h3>
+                  {theme == "white-content" ?
+                    <h3 style={{ fontWeight: 'bold', paddingLeft: '30px', color: 'rgb(54,78,104)' }}> שלום, {user.name + ' ' + user.lastname}</h3>
+                    : <h3 style={{ fontWeight: 'bold', paddingLeft: '30px', color: 'hsla(0,0%,100%,.8)' }}> שלום, {user.name + ' ' + user.lastname}</h3>}
                 </Col>
               </Row>
             </Navbar>

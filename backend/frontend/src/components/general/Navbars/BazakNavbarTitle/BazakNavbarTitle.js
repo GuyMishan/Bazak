@@ -34,8 +34,8 @@ function BazakNavbarTitle(props) {
     return (
         text ?
             props.theme == "white-content" ?
-                <h3 style={{ fontWeight: 'bold' }}>זמינות האמל"ח - {text}</h3>
-                : <h3 style={{ fontWeight: 'bold' }}>כשירות האמל"ח - {text}</h3>
+                <h2 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {text}</h2>
+                : <h2 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {text}</h2>
             : null
     );
 }

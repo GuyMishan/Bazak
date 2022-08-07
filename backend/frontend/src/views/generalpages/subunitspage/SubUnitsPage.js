@@ -29,6 +29,7 @@ function SubUnitsPage({ match, theme }) {
   const [isdataloaded, setIsdataloaded] = useState(false);
 
   async function init() {
+    setIsdataloaded(false);
     await getCardDataByUnitTypeAndUnitId();
   }
 
@@ -48,7 +49,7 @@ function SubUnitsPage({ match, theme }) {
   }, [match])
 
   return (
-    cardatas.length == 0 && !isdataloaded ?
+    cardatas.length == 0 || !isdataloaded ?
       <div style={{ width: '50%', marginTop: '30%' }}>
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>

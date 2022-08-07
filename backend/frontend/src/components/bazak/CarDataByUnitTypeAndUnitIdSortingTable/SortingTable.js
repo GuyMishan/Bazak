@@ -178,6 +178,7 @@ const SortingTable = (props) => {
   }
 
   function init() {
+    setIsdataloaded(false);
     getCardDataByUnitTypeAndUnitId();
     fixfilterunits();
     ReadLocalStorage();
@@ -451,7 +452,7 @@ const SortingTable = (props) => {
   }, [hiddenColumns]);
 
   return (
-    data.length == 0 && !isdataloaded ?
+    data.length == 0 || !isdataloaded ?
       <div style={{ width: '50%', marginTop: '30%' }}>
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
@@ -536,10 +537,10 @@ const SortingTable = (props) => {
                               return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat._id : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat_description") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.description : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return row.original.makat ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "tipuls") {
                               return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
