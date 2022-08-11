@@ -203,7 +203,7 @@ const SortingTable = (props) => {
       }
     }
 
-    for (let i = 0; i < temp_temp_data_arr.length; i++) {
+    for (let i = temp_temp_data_arr.length-1; i >= 0; i--) {
       let is_unit_needed = false;
       for (let j = 0; j < temp_temp_data_arr[i].cardatas.length; j++) {
         if (temp_temp_data_arr[i].cardatas[j].numberofcars != 0) {
@@ -212,7 +212,6 @@ const SortingTable = (props) => {
       }
       if (is_unit_needed == false) {
         temp_temp_data_arr.splice(i, 1);
-
       }
     }
 

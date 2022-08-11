@@ -284,9 +284,24 @@ const SortingTable = (props) => {
     }
   }
 
-  function handleChange2(selectedOption, name) {
-    if (!(selectedOption.value == "בחר"))
-      setFilter({ ...filter, [name]: selectedOption.value });
+  // function handleChange2(selectedOption, name) {
+  //   if (!(selectedOption.value == "בחר"))
+  //     setFilter({ ...filter, [name]: selectedOption.value });
+  //   else {
+  //     let tempfilter = { ...filter };
+  //     delete tempfilter[name];
+  //     setFilter(tempfilter);
+  //   }
+  // }
+
+  function handleChange8(selectedOption, name) {
+    if (!(selectedOption.value == "בחר")) {
+      let tempvalues = [];
+      for (let i = 0; i < selectedOption.length; i++) {
+        tempvalues.push(selectedOption[i].value);
+      }
+      setFilter({ ...filter, [name]: tempvalues });
+    }
     else {
       let tempfilter = { ...filter };
       delete tempfilter[name];
@@ -322,80 +337,64 @@ const SortingTable = (props) => {
     }
 
     let myArrayFiltered3 = []; //filter pikod
-    if (filter.pikod) {
-      myArrayFiltered3 = myArrayFiltered2.filter((el) => {
-        return filter.pikod === el.pikod;
-      });
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered2.filter(item => filter.pikod.includes(item.pikod));
     }
     else {
       myArrayFiltered3 = myArrayFiltered2;
     }
 
     let myArrayFiltered4 = []; //filter ogda
-    if (filter.ogda) {
-      myArrayFiltered4 = myArrayFiltered3.filter((el) => {
-        return filter.ogda === el.ogda;
-      });
+    if (filter.ogda && filter.ogda.length > 0) {
+      myArrayFiltered4 = myArrayFiltered3.filter(item => filter.ogda.includes(item.ogda));
     }
     else {
       myArrayFiltered4 = myArrayFiltered3;
     }
 
     let myArrayFiltered5 = []; //filter hativa
-    if (filter.hativa) {
-      myArrayFiltered5 = myArrayFiltered4.filter((el) => {
-        return filter.hativa === el.hativa;
-      });
+    if (filter.hativa && filter.hativa.length > 0) {
+      myArrayFiltered5 = myArrayFiltered4.filter(item => filter.hativa.includes(item.hativa));
     }
     else {
       myArrayFiltered5 = myArrayFiltered4;
     }
 
     let myArrayFiltered6 = []; //filter gdod
-    if (filter.gdod) {
-      myArrayFiltered6 = myArrayFiltered5.filter((el) => {
-        return filter.gdod === el.gdod;
-      });
+    if (filter.gdod && filter.gdod.length > 0) {
+      myArrayFiltered6 = myArrayFiltered5.filter(item => filter.gdod.includes(item.gdod));
     }
     else {
       myArrayFiltered6 = myArrayFiltered5;
     }
 
     let myArrayFiltered7 = []; //filter magadal
-    if (filter.magadal) {
-      myArrayFiltered7 = myArrayFiltered6.filter((el) => {
-        return filter.magadal === el.magadal;
-      });
+    if (filter.magadal && filter.magadal.length > 0) {
+      myArrayFiltered7 = myArrayFiltered6.filter(item => filter.magadal.includes(item.magadal));
     }
     else {
       myArrayFiltered7 = myArrayFiltered6;
     }
 
     let myArrayFiltered8 = []; //filter magad
-    if (filter.magad) {
-      myArrayFiltered8 = myArrayFiltered7.filter((el) => {
-        return filter.magad === el.magad;
-      });
+    if (filter.magad && filter.magad.length > 0) {
+      myArrayFiltered8 = myArrayFiltered7.filter(item => filter.magad.includes(item.magad));
     }
     else {
       myArrayFiltered8 = myArrayFiltered7;
     }
 
     let myArrayFiltered9 = []; //filter mkabaz
-    if (filter.mkabaz) {
-      myArrayFiltered9 = myArrayFiltered8.filter((el) => {
-        return filter.mkabaz === el.mkabaz;
-      });
+    if (filter.mkabaz && filter.mkabaz.length > 0) {
+      myArrayFiltered9 = myArrayFiltered8.filter(item => filter.mkabaz.includes(item.mkabaz));
     }
     else {
       myArrayFiltered9 = myArrayFiltered8;
     }
 
     let myArrayFiltered10 = []; //filter makat
-    if (filter.makat) {
-      myArrayFiltered10 = myArrayFiltered9.filter((el) => {
-        return filter.makat === el.makat;
-      });
+    if (filter.makat && filter.makat.length > 0) {
+      myArrayFiltered10 = myArrayFiltered9.filter(item => filter.makat.includes(item.makat));
     }
     else {
       myArrayFiltered10 = myArrayFiltered9;
@@ -452,7 +451,7 @@ const SortingTable = (props) => {
   }, [hiddenColumns]);
 
   return (
-    data.length == 0 || !isdataloaded ?
+    !isdataloaded ?
       <div style={{ width: '50%', marginTop: '30%' }}>
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
@@ -463,7 +462,7 @@ const SortingTable = (props) => {
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
         {/*filter */}
-        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} handleChange2={handleChange2} allColumns={allColumns} />
+        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} /*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
 
         <div style={{ float: 'right', paddingBottom: '5px' }}>
           {/* <ReactHTMLTableToExcel
@@ -509,41 +508,41 @@ const SortingTable = (props) => {
                       {
                         row.cells.map(cell => {
                           if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "latest_recalibration_date") && (cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "magadal") && (cell.column.id != "magad") && (cell.column.id != "mkabaz") && (cell.column.id != "makat") && (cell.column.id != "makat_description") && (cell.column.id != "tipuls")) {
-                            return <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                            return <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                           }
                           else {
                             if (cell.column.id == "latest_recalibration_date") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "pikod") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "ogda") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "hativa") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "gdod") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "magadal") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "magad") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "mkabaz") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat._id : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat._id : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat_description") {
-                              return row.original.makat ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.name : null))}</td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return row.original.makat ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "tipuls") {
-                              return cell.value ? <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
                                 {/* {cell.value.map((tipul, index) => <p>{tipul.type}</p>)} */}
                                 {/* {cell.value.filter(function(item, pos) {return cell.value.indexOf(item.type) == pos;}).map((tipul, index) => <p>{tipul.type}</p>)} */}
                                 {cell.value.filter((value, index, self) =>
@@ -556,7 +555,7 @@ const SortingTable = (props) => {
                                       tipul.type == 'takala_mizdamenet' ? <p>תקלה מזדמנת</p> :
                                         tipul.type == 'hh_stand' ? <p>עומד על ח"ח</p> : <p></p>
                                 )}
-                              </td> : <td style={{ width: `${100 / (23-hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              </td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                           }
                         })

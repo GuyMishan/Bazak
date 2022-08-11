@@ -105,7 +105,7 @@ function DashboardPage({ match, theme }) {
   }, [match])
 
   return (
-    cardatas.length == 0 || !isdataloaded ?
+    !isdataloaded ?
       <div style={{ width: '50%', marginTop: '30%' }}>
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>

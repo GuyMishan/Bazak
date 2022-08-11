@@ -23,6 +23,7 @@ import {
 } from "reactstrap";
 import axios from 'axios'
 import Select from 'components/general/Select/AnimatedSelect'
+import MultiSelect from 'components/general/Select/AnimatedMultiSelect'
 
 const CarDataFilter = (props) => {
     const [zminots, setZminots] = useState([])
@@ -68,49 +69,55 @@ const CarDataFilter = (props) => {
             })
     }
 
-    const getMagads = async (magadalid) => {
+    const getMagads = async (magadalids) => {
         let tempmagadalsmagads = [];
-        if (magadalid != undefined) {
-            await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalid}`)
-                .then(response => {
-                    for (let j = 0; j < response.data.length; j++)
-                        tempmagadalsmagads.push(response.data[j])
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-            setMagads(tempmagadalsmagads);
+        if (magadalids != undefined && magadalids.length > 0) {
+            for (let i = 0; i < magadalids.length; i++) {
+                await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${magadalids[i]}`)
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            tempmagadalsmagads.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
         }
+        setMagads(tempmagadalsmagads);
     }
 
-    const getMkabazs = async (magadid) => {
-        let tempmagadmkabazs = [];
-        if (magadid != undefined) {
-            await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadid}`)
-                .then(response => {
-                    for (let j = 0; j < response.data.length; j++)
-                        tempmagadmkabazs.push(response.data[j])
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-            setMkabazs(tempmagadmkabazs);
+    const getMkabazs = async (magadids) => {
+        let tempmagadsmkabazs = [];
+        if (magadids != undefined && magadids.length > 0) {
+            for (let i = 0; i < magadids.length; i++) {
+                await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${magadids[i]}`)
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            tempmagadsmkabazs.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
         }
+        setMkabazs(tempmagadsmkabazs);
     }
 
-    const getMakats = async (mkabazid) => {
-        let tempmkabazmakats = [];
-        if (mkabazid != undefined) {
-            await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazid}`)
-                .then(response => {
-                    for (let j = 0; j < response.data.length; j++)
-                        tempmkabazmakats.push(response.data[j])
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-            setMakats(tempmkabazmakats);
+    const getMakats = async (mkabazids) => {
+        let tempmkabazsmakats = [];
+        if (mkabazids != undefined && mkabazids.length > 0) {
+            for (let i = 0; i < mkabazids.length; i++) {
+                await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${mkabazids[i]}`)
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            tempmkabazsmakats.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
         }
+        setMakats(tempmkabazsmakats);
     }
 
     const loadPikods = async () => {
@@ -123,42 +130,54 @@ const CarDataFilter = (props) => {
             })
     }
 
-    const loadOgdas = async (pikodid) => {
-        let temppikodogdas = [];
-        await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: pikodid })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    temppikodogdas.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        setOgdas(temppikodogdas);
+    const loadOgdas = async (pikodids) => {
+        let temppikodsogdas = [];
+        if (pikodids != undefined && pikodids.length > 0) {
+            for (let i = 0; i < pikodids.length; i++) {
+                await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: pikodids[i] })
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            temppikodsogdas.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
+        }
+        setOgdas(temppikodsogdas);
     }
 
-    const loadHativas = async (ogdaid) => {
-        let tempogdahativas = [];
-        await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaid })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    tempogdahativas.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-        setHativas(tempogdahativas);
+    const loadHativas = async (ogdaids) => {
+        let tempogdashativas = [];
+        if (ogdaids != undefined && ogdaids.length > 0) {
+            for (let i = 0; i < ogdaids.length; i++) {
+                await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaids[i] })
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            tempogdashativas.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
+        }
+        setHativas(tempogdashativas);
     }
 
-    const loadGdods = async (hativaid) => {
+    const loadGdods = async (hativaids) => {
         let temphativasgdods = [];
-        await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaid })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    temphativasgdods.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
+        if (hativaids != undefined && hativaids.length > 0) {
+            for (let i = 0; i < hativaids.length; i++) {
+                await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaids[i] })
+                    .then(response => {
+                        for (let j = 0; j < response.data.length; j++)
+                            temphativasgdods.push(response.data[j])
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    })
+            }
+        }
         setGdods(temphativasgdods);
     }
 
@@ -241,95 +260,95 @@ const CarDataFilter = (props) => {
                             <Row style={{ paddingTop: '10px', marginBottom: '15px' }}>
                                 {((props.unittype == "admin")) ?
                                     <>
-                                        {(!(props.filter.ogda)) ?
+                                        {(!(props.filter.ogda) || !(props.filter.ogda.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>פיקוד</h6>
-                                                <Select data={pikods} handleChange2={props.handleChange2} name={'pikod'} val={props.filter.pikod ? props.filter.pikod : undefined} />
+                                                <MultiSelect data={pikods} handleChange2={props.handleChange8} name={'pikod'} />
                                             </Col> :
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>פיקוד</h6>
-                                                <Select data={pikods} handleChange2={props.handleChange2} name={'pikod'} val={props.filter.pikod ? props.filter.pikod : undefined} isDisabled={true} />
+                                                <MultiSelect data={pikods} handleChange2={props.handleChange8} name={'pikod'} isDisabled={true} />
                                             </Col>}
                                     </> : null}
 
                                 {((props.unittype == "admin") || (props.unittype == "pikod")) ?
                                     <>
-                                        {((props.filter.pikod) && !(props.filter.hativa)) ?
+                                        {((props.filter.pikod) && (props.filter.pikod.length > 0) && (!(props.filter.hativa) || !(props.filter.hativa.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>אוגדה</h6>
-                                                <Select data={ogdas} handleChange2={props.handleChange2} name={'ogda'} val={props.filter.ogda ? props.filter.ogda : undefined} />
+                                                <MultiSelect data={ogdas} handleChange2={props.handleChange8} name={'ogda'} />
                                             </Col> :
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>אוגדה</h6>
-                                                <Select data={ogdas} handleChange2={props.handleChange2} name={'ogda'} val={props.filter.ogda ? props.filter.ogda : undefined} isDisabled={true} />
+                                                <MultiSelect data={ogdas} handleChange2={props.handleChange8} name={'ogda'} isDisabled={true} />
                                             </Col>}
                                     </> : null}
 
                                 {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
                                     <>
-                                        {((props.filter.ogda) && !(props.filter.gdod)) ?
+                                        {((props.filter.ogda) && (props.filter.ogda.length > 0) && (!(props.filter.gdod) || !(props.filter.gdod.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>חטיבה</h6>
-                                                <Select data={hativas} handleChange2={props.handleChange2} name={'hativa'} val={props.filter.hativa ? props.filter.hativa : undefined} />
+                                                <MultiSelect data={hativas} handleChange2={props.handleChange8} name={'hativa'} />
                                             </Col> :
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>חטיבה</h6>
-                                                <Select data={hativas} handleChange2={props.handleChange2} name={'hativa'} val={props.filter.hativa ? props.filter.hativa : undefined} isDisabled={true} />
+                                                <MultiSelect data={hativas} handleChange2={props.handleChange8} name={'hativa'} isDisabled={true} />
                                             </Col>}
                                     </> : null}
 
                                 {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
                                     <>
-                                        {((props.filter.hativa)) ?
+                                        {((props.filter.hativa) && (props.filter.hativa.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>גדוד</h6>
-                                                <Select data={gdods} handleChange2={props.handleChange2} name={'gdod'} val={props.filter.gdod ? props.filter.gdod : undefined} />
+                                                <MultiSelect data={gdods} handleChange2={props.handleChange8} name={'gdod'} />
                                             </Col> :
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                                 <h6>גדוד</h6>
-                                                <Select data={gdods} handleChange2={props.handleChange2} name={'gdod'} val={props.filter.gdod ? props.filter.gdod : undefined} isDisabled={true} />
+                                                <MultiSelect data={gdods} handleChange2={props.handleChange8} name={'gdod'} isDisabled={true} />
                                             </Col>}
                                     </> : null}
                             </Row>
                             <Row style={{ marginBottom: '15px' }}>
-                                {(!(props.filter.magad)) ?
+                                {(!(props.filter.magad) || !(props.filter.magad.length > 0)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד על</h6>
-                                        <Select data={magadals} handleChange2={props.handleChange2} name={'magadal'} val={props.filter.magadal ? props.filter.magadal : undefined} />
+                                        <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} />
                                     </Col> :
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד על</h6>
-                                        <Select data={magadals} handleChange2={props.handleChange2} name={'magadal'} val={props.filter.magadal ? props.filter.magadal : undefined} isDisabled={true} />
+                                        <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} isDisabled={true} />
                                     </Col>}
 
-                                {((props.filter.magadal) && !(props.filter.mkabaz)) ?
+                                {((props.filter.magadal) && (props.filter.magadal.length > 0) && (!(props.filter.mkabaz) || !(props.filter.mkabaz.length > 0))) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד</h6>
-                                        <Select data={magads} handleChange2={props.handleChange2} name={'magad'} val={props.filter.magad ? props.filter.magad : undefined} />
+                                        <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} />
                                     </Col> :
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מאגד</h6>
-                                        <Select data={magads} handleChange2={props.handleChange2} name={'magad'} val={props.filter.magad ? props.filter.magad : undefined} isDisabled={true} />
+                                        <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} isDisabled={true} />
                                     </Col>}
 
-                                {((props.filter.magad) && !(props.filter.makat)) ?
+                                {((props.filter.magad) && (props.filter.magad.length > 0) && (!(props.filter.makat) || !(props.filter.makat.length > 0))) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מקבץ</h6>
-                                        <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} />
+                                        <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} />
                                     </Col> :
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מקבץ</h6>
-                                        <Select data={mkabazs} handleChange2={props.handleChange2} name={'mkabaz'} val={props.filter.mkabaz ? props.filter.mkabaz : undefined} isDisabled={true} />
+                                        <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} isDisabled={true} />
                                     </Col>}
 
-                                {((props.filter.mkabaz)) ?
+                                {((props.filter.mkabaz) && (props.filter.mkabaz.length > 0) && (props.filter.mkabaz.length > 0)) ?
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מק"ט</h6>
-                                        <Select data={makats} handleChange2={props.handleChange2} name={'makat'} val={props.filter.makat ? props.filter.makat : undefined} />
+                                        <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} />
                                     </Col> :
                                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                         <h6>מק"ט</h6>
-                                        <Select data={makats} handleChange2={props.handleChange2} name={'makat'} val={props.filter.makat ? props.filter.makat : undefined} isDisabled={true} />
+                                        <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} isDisabled={true} />
                                     </Col>}
                             </Row>
                         </Col>

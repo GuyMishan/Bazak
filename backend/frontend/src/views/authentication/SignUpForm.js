@@ -43,6 +43,18 @@ export default function SignUpForm() {
   const [ogdas, setOgdas] = useState([]);
   const [pikods, setPikods] = useState([]);
 
+  const passport = event => {
+    axios.get(`http://localhost:8000/auth/passportauth`)
+      .then(response => {
+        console.log(response.data);
+        setData({ ...data, personalnumber:response.data.stam._json.cn})
+      })
+      .catch(error => {
+        console.log(error);
+        history.push(`/signup`);
+      })
+  }
+
   const loadGdods = () => {
     axios
       .get("http://localhost:8000/api/gdod")
@@ -160,6 +172,7 @@ export default function SignUpForm() {
 
   const FixUser = (event) => {
     event.preventDefault();
+    //check and fix roles
     if (data.role === "0") {
       delete data.gdodid;
       delete data.hativaid;
@@ -186,6 +199,28 @@ export default function SignUpForm() {
       delete data.hativaid;
       delete data.ogdaid;
     }
+    //check and fix personalnumber
+    let c = data.personalnumber.charAt(0);
+    if (c >= '0' && c <= '9') {
+      // it is a number
+      let temppersonalnumber = data.personalnumber;
+      temppersonalnumber = 's' + temppersonalnumber;
+      data.personalnumber = temppersonalnumber;
+    } else {
+      // it isn't
+      if (c == c.toUpperCase()) {
+        //UpperCase Letter -Make Lowercase
+        let tempc=c.toLowerCase();
+        let temppersonalnumber = data.personalnumber;
+        temppersonalnumber = temppersonalnumber.substring(1);
+        temppersonalnumber = tempc + temppersonalnumber;
+        data.personalnumber = temppersonalnumber;
+      }
+      if (c == c.toLowerCase()) {
+        //LowerCase Letter - All Good
+      }
+    }
+
     SignUp(event);
   };
 
@@ -253,6 +288,7 @@ export default function SignUpForm() {
   );
 
   useEffect(() => {
+    passport();
     loadGdods();
     loadHativas();
     loadOgdas();
