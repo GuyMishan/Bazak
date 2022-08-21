@@ -46,6 +46,8 @@ const CarDataFormModal = (props) => {
   const [mkabazs, setMkabazs] = useState([]);
   const [magads, setMagads] = useState([]);
   const [magadals, setMagadals] = useState([]);
+  //new 18.8.22
+  const [isgdodsadir, setIsgdodsadir] = useState(true);
 
   const loadcardata = async () => {
     await axios.get(`http://localhost:8000/api/cardata/${props.cardataid}`)
@@ -55,6 +57,19 @@ const CarDataFormModal = (props) => {
           tempcardata.latest_recalibration_date = tempcardata.latest_recalibration_date.slice(0, 10);
         setCarData(tempcardata);
         setFinalSpecialKeytwo(tempcardata.tipuls);
+        //new 18.8.22
+        axios.get(`http://localhost:8000/api/gdod/${tempcardata.gdod}`)
+          .then(response => {
+            if (/*response.data.sadir &&*/ response.data.sadir == 'לא סדיר') {
+              setIsgdodsadir(false)
+            }
+            else {
+              setIsgdodsadir(true)
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
       })
       .catch((error) => {
         console.log(error);
@@ -415,6 +430,25 @@ const CarDataFormModal = (props) => {
       setFinalSpecialKeytwo([])
     }
   }, [props.isOpen])
+
+  //new 18.8.22
+
+  useEffect(() => {
+    if (cardata.gdod && cardata.gdod != undefined && cardata.gdod != null) {
+      axios.get(`http://localhost:8000/api/gdod/${cardata.gdod}`)
+        .then(response => {
+          if (/*response.data.sadir && */response.data.sadir == 'לא סדיר') {
+            setIsgdodsadir(false)
+          }
+          else {
+            setIsgdodsadir(true)
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        })
+    }
+  }, [cardata.gdod]);
 
   return (
     <Modal
@@ -833,7 +867,7 @@ const CarDataFormModal = (props) => {
                 </Col>
               </Row>
 
-              {user.role == '0' || user.role == '1' ?
+              {user.role == '0' || user.role == '1' || isgdodsadir == false ?
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn" onClick={clickSubmit}>עדכן</button>
                 </div> : null}

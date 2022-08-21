@@ -4,19 +4,38 @@ import { withRouter, Redirect, Link } from "react-router-dom";
 import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
-import style from 'components/Table.css' 
+import style from 'components/Table.css'
+import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
+ //units
+ const [gdods, setGdods] = useState([]);
+ const [hativas, setHativas] = useState([]);
+ const [ogdas, setOgdas] = useState([]);
+ const [pikods, setPikods] = useState([]);
 
-  useEffect(() => {
-    (async () => {
-      const result = await axios.get("http://localhost:8000/api/usersnotvalidated");
-      setData(result.data);
-    })();
-  }, []);
+ const loadPikods = async () => {
+   let response = await axios.get("http://localhost:8000/api/pikod",)
+   setPikods(response.data);
+ }
+
+ const loadOgdas = async () => {
+   let response = await axios.get("http://localhost:8000/api/ogda",)
+   setOgdas(response.data);
+ }
+
+ const loadHativas = async () => {
+   let response = await axios.get("http://localhost:8000/api/hativa",)
+   setHativas(response.data);
+ }
+
+ const loadGdods = async () => {
+   let response = await axios.get("http://localhost:8000/api/gdod",)
+   setGdods(response.data);
+ }
 
   const UserDelete = UserId => {
     axios.post(`http://localhost:8000/api/user/remove/${UserId}`)
@@ -37,6 +56,17 @@ const SortingTable = ({ match }) => {
         console.log(error);
       })
   }
+
+  useEffect(() => {
+    (async () => {
+      await loadPikods();
+      await loadOgdas();
+      await loadHativas();
+      await loadGdods();
+      const result = await axios.get("http://localhost:8000/api/usersnotvalidated");
+      setData(result.data);
+    })();
+  }, []);
 
   const {
     getTableProps,
@@ -65,10 +95,20 @@ const SortingTable = ({ match }) => {
 
   return (
     <>
-
+      <div style={{ float: 'right', paddingBottom: '5px' }}>
+        <ReactHTMLTableToExcel
+          id="test-table-xls-button"
+          className="btn-green"
+          table="table-to-xls-users-not"
+          filename="קובץ - משתמשי מערכת"
+          sheet="קובץ - משתמשי מערכת"
+          buttonText="הורד כקובץ אקסל"
+          style={{ float: 'right' }}
+        />
+      </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table {...getTableProps()}>
+        <table id="table-to-xls-users-not"  {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
@@ -95,7 +135,7 @@ const SortingTable = ({ match }) => {
                   <tr {...row.getRowProps()}>
                     {
                       row.cells.map(cell => {
-                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "role") && (cell.column.id != "workplan")&& (cell.column.id != "zminot")&& (cell.column.id != "kshirot")&& (cell.column.id != "adam")) {
+                        if ((cell.column.id != "createdAt") && (cell.column.id != "updatedAt") && (cell.column.id != "role") && (cell.column.id != "unit")) {
                           return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                         }
                         else {
@@ -117,40 +157,17 @@ const SortingTable = ({ match }) => {
                             if (cell.value == '4')
                               return <td>משתמש פיקוד</td>
                           }
-                          if (cell.column.id == "workplan") {
-                            if (cell.value == "0")
-                            return <td>רשאי</td>
-                            if (cell.value == "1")
-                              return <td>צפייה</td>
-                              if (cell.value == "2")
-                              return <td>לא רשאי</td>
-                          }
-                          if (cell.column.id == "kshirot") {
-                            if (cell.value == "0")
-                            return <td>רשאי</td>
-                            if (cell.value == "1")
-                              return <td>צפייה</td>
-                              if (cell.value == "2")
-                              return <td>לא רשאי</td>
-
-                          }
-                          if (cell.column.id == "zminot") {
-                            if (cell.value == "0")
-                            return <td>רשאי</td>
-                            if (cell.value == "1")
-                              return <td>צפייה</td>
-                              if (cell.value == "2")
-                              return <td>לא רשאי</td>
-                          }
-                         
-                          if (cell.column.id == "adam") {
-                            if (cell.value == "0")
-                            return <td>רשאי</td>
-                            if (cell.value == "1")
-                              return <td>צפייה</td>
-                              if (cell.value == "2")
-                              return <td>לא רשאי</td>
-
+                          if (cell.column.id == "unit") {
+                            if (row.original.role == '0')
+                              return <td></td>
+                            if (row.original.role == '1')
+                              return row.original.gdodid ? <td {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == row.original.gdodid ? gdod.name : null))}</td> : <td {...cell.getCellProps()}></td>
+                            if (row.original.role == '2')
+                              return row.original.hativaid ? <td {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == row.original.hativaid ? hativa.name : null))}</td> : <td {...cell.getCellProps()}></td>
+                            if (row.original.role == '3')
+                              return row.original.ogdaid ? <td {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == row.original.ogdaid ? ogda.name : null))}</td> : <td {...cell.getCellProps()}></td>
+                            if (row.original.role == '4')
+                              return row.original.pikodid ? <td {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == row.original.pikodid ? pikod.name : null))}</td> : <td {...cell.getCellProps()}></td>
                           }
                         }
                       })

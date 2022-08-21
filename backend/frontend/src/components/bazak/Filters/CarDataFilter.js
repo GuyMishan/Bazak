@@ -131,10 +131,14 @@ const CarDataFilter = (props) => {
     }
 
     const loadOgdas = async (pikodids) => {
+        let temppikodids = pikodids;
+        if (temppikodids != undefined && !temppikodids.isArray) {
+            temppikodids = [pikodids]
+        }
         let temppikodsogdas = [];
-        if (pikodids != undefined && pikodids.length > 0) {
-            for (let i = 0; i < pikodids.length; i++) {
-                await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: pikodids[i] })
+        if (temppikodids != undefined && temppikodids.length > 0) {
+            for (let i = 0; i < temppikodids.length; i++) {
+                await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: temppikodids[i] })
                     .then(response => {
                         for (let j = 0; j < response.data.length; j++)
                             temppikodsogdas.push(response.data[j])
@@ -148,10 +152,14 @@ const CarDataFilter = (props) => {
     }
 
     const loadHativas = async (ogdaids) => {
+        let tempogdaids = ogdaids;
+        if (tempogdaids != undefined && !tempogdaids.isArray) {
+            tempogdaids = [ogdaids]
+        }
         let tempogdashativas = [];
-        if (ogdaids != undefined && ogdaids.length > 0) {
-            for (let i = 0; i < ogdaids.length; i++) {
-                await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaids[i] })
+        if (tempogdaids != undefined && tempogdaids.length > 0) {
+            for (let i = 0; i < tempogdaids.length; i++) {
+                await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: tempogdaids[i] })
                     .then(response => {
                         for (let j = 0; j < response.data.length; j++)
                             tempogdashativas.push(response.data[j])
@@ -165,10 +173,14 @@ const CarDataFilter = (props) => {
     }
 
     const loadGdods = async (hativaids) => {
+        let temphativaids = hativaids;
+        if (temphativaids != undefined && !temphativaids.isArray) {
+            temphativaids = [hativaids]
+        }
         let temphativasgdods = [];
-        if (hativaids != undefined && hativaids.length > 0) {
-            for (let i = 0; i < hativaids.length; i++) {
-                await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaids[i] })
+        if (temphativaids != undefined && temphativaids.length > 0) {
+            for (let i = 0; i < temphativaids.length; i++) {
+                await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: temphativaids[i] })
                     .then(response => {
                         for (let j = 0; j < response.data.length; j++)
                             temphativasgdods.push(response.data[j])
@@ -185,7 +197,25 @@ const CarDataFilter = (props) => {
         getKshirots();
         getZminots();
         getMagadals();
-        loadPikods();
+        // loadPikods();
+        switch (props.unittype) {
+            case 'admin':
+                loadPikods();
+                break;
+            case 'pikod':
+                loadOgdas(props.unitid);
+                break;
+            case 'ogda':
+                loadHativas(props.unitid);
+                break;
+            case 'hativa':
+                loadGdods(props.unitid);
+                break;
+            case 'gdod':
+                break;
+            default:
+                break;
+        }
     }
 
     useEffect(() => {

@@ -31,10 +31,15 @@ function LatestUpdateDateComponent(props) {
     setDate(maxdate.toISOString().slice(0, 10).split("-").reverse().join("/"));
   }
 
+  // useEffect(() => {
+  //   if (props.cardatas.length > 0)
+  //     init();
+  // }, [props.cardatas])
+
   useEffect(() => {
-    if (props.cardatas.length > 0)
+    if (props.isdataloaded == true)
       init();
-  }, [props.cardatas])
+  }, [props.isdataloaded])
 
   return (
     <div>

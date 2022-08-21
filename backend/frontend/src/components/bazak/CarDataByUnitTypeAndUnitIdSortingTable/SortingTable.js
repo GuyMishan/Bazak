@@ -43,6 +43,7 @@ const SortingTable = (props) => {
   const [magadals, setMagadals] = useState([]);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
+  const XLSX = require('xlsx')
 
   const loadPikods = async () => {
     let response = await axios.get("http://localhost:8000/api/pikod",)
@@ -413,6 +414,89 @@ const SortingTable = (props) => {
     localStorage.setItem('zminot_page_hidden_columns', JSON.stringify(hiddenColumns));
   }
 
+  function FixDataAndExportToExcel() {
+    let tempdata_to_excel = [];
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].tipuls.length != 0) {
+        for (let j = 0; j < data[i].tipuls.length; j++) {
+          let tempcardata = { ...data[i] };
+          if (tempcardata.tipuls[j].type == 'tipul') {
+            tempcardata.tipul = tempcardata.tipuls[j].tipul;
+            tempcardata.tipul_entry_date = tempcardata.tipuls[j].tipul_entry_date ? tempcardata.tipuls[j].tipul_entry_date.split("-").reverse().join("-") : null;
+            tempcardata.mikum_tipul = tempcardata.tipuls[j].mikum_tipul;
+          }
+          else if (tempcardata.tipuls[j].type == 'harig_tipul') {
+            tempcardata.harig_tipul = tempcardata.tipuls[j].harig_tipul;
+            tempcardata.harig_tipul_date = tempcardata.tipuls[j].harig_tipul_date ? tempcardata.tipuls[j].harig_tipul_date.split("-").reverse().join("-") : null;
+          }
+          else if (tempcardata.tipuls[j].type == 'takala_mizdamenet') {
+            tempcardata.takala_mizdamenet = tempcardata.tipuls[j].takala_mizdamenet;
+            tempcardata.takala_mizdamenet_date = tempcardata.tipuls[j].takala_mizdamenet_date;
+          }
+          else if (tempcardata.tipuls[j].type == 'hh_stand') {
+            tempcardata.missing_makat_1 = tempcardata.tipuls[j].missing_makat_1;
+            tempcardata.missing_makat_2 = tempcardata.tipuls[j].missing_makat_2;
+          }
+          tempdata_to_excel.push(tempcardata)
+        }
+      }
+      else {
+        tempdata_to_excel.push(data[i])
+      }
+    }
+
+    for (let i = 0; i < tempdata_to_excel.length; i++) {
+      pikods.map((pikod, index) => (pikod._id == tempdata_to_excel[i].pikod ? tempdata_to_excel[i].pikod_name = pikod.name : null));
+      ogdas.map((ogda, index) => (ogda._id == tempdata_to_excel[i].ogda ? tempdata_to_excel[i].ogda_name = ogda.name : null));
+      hativas.map((hativa, index) => (hativa._id == tempdata_to_excel[i].hativa ? tempdata_to_excel[i].hativa_name = hativa.name : null));
+      gdods.map((gdod, index) => (gdod._id == tempdata_to_excel[i].gdod ? tempdata_to_excel[i].gdod_name = gdod.name : null));
+
+      magadals.map((magadal, index) => (magadal._id == tempdata_to_excel[i].magadal ? tempdata_to_excel[i].magadal_name = magadal.name : null));
+      magads.map((magad, index) => (magad._id == tempdata_to_excel[i].magad ? tempdata_to_excel[i].magad_name = magad.name : null));
+      mkabazs.map((mkabaz, index) => (mkabaz._id == tempdata_to_excel[i].mkabaz ? tempdata_to_excel[i].mkabaz_name = mkabaz.name : null));
+      makats.map((makat, index) => (makat._id == tempdata_to_excel[i].makat ? tempdata_to_excel[i].makat_name = makat.name : null));
+      makats.map((makat, index) => (makat._id == tempdata_to_excel[i].makat ? tempdata_to_excel[i].makat_description_name = makat.description : null));
+
+      tempdata_to_excel[i].latest_recalibration_date = tempdata_to_excel[i].latest_recalibration_date ? tempdata_to_excel[i].latest_recalibration_date.slice(0, 10).split("-").reverse().join("-") : null;
+      tempdata_to_excel[i].expected_repair = tempdata_to_excel[i].expected_repair ? tempdata_to_excel[i].expected_repair.slice(0, 10).split("-").reverse().join("-") : null;
+    }
+
+    // setData_to_excel(tempdata_to_excel);
+
+    //export to excel -fix 
+    for (let i = 0; i < tempdata_to_excel.length; i++) {
+      delete tempdata_to_excel[i]._id;
+      delete tempdata_to_excel[i].magadal;
+      delete tempdata_to_excel[i].magad;
+      delete tempdata_to_excel[i].mkabaz;
+      delete tempdata_to_excel[i].makat;
+      delete tempdata_to_excel[i].makat_description;
+      delete tempdata_to_excel[i].pikod;
+      delete tempdata_to_excel[i].ogda;
+      delete tempdata_to_excel[i].hativa;
+      delete tempdata_to_excel[i].gdod;
+      delete tempdata_to_excel[i].tipuls;
+      delete tempdata_to_excel[i].__v;
+      delete tempdata_to_excel[i].createdAt;
+      delete tempdata_to_excel[i].updatedAt;
+    }
+
+    let Heading = [["צ'", 'מעמד הכלי', 'זמינות', 'כשירות למלחמה', 'סטאטוס הכלי', 'צפי תיקון', 'פלוגה', 'מהות התקלה', 'מועד כיול אחרון', 'מיקום בימ"ח', 'משפחה', 'מיקום', 'שבצ"ק', 'פיקוד', 'אוגדה', 'חטיבה', 'גדוד', 'מאגד על', 'מאגד', 'מקבץ', 'מק"ט', 'תיאור מק"ט', 'סוג טיפול', 'תאריך כניסה לטיפול', 'מיקום טיפול', 'חריג טיפול', 'תאריך חריגת טיפול', 'תקלה מזדמנת', 'תאריך תקלה מזדמנת', 'מק"ט חסר', 'כמות']];
+
+    //Had to create a new workbook and then add the header
+    const wb = XLSX.utils.book_new();
+    const ws = XLSX.utils.json_to_sheet([]);
+    XLSX.utils.sheet_add_aoa(ws, Heading);
+
+    //Starting in the second row to avoid overriding and skipping headers
+    XLSX.utils.sheet_add_json(ws, tempdata_to_excel, { origin: 'A2', skipHeader: true });
+
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+    XLSX.writeFile(wb, 'גזירה.xlsx');
+    window.location.reload();
+  }
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -458,7 +542,6 @@ const SortingTable = (props) => {
       :
       <>
         {/*modals */}
-        <DownloadExcelModal isOpen={isdownloadexcelopen} Toggle={ToggleExcel} ToggleForModal={ToggleForModalExcel} data={data} />
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
         {/*filter */}
@@ -474,7 +557,7 @@ const SortingTable = (props) => {
             buttonText="הורד כקובץ אקסל"
             style={{ float: 'right' }}
           /> */}
-          <button className="btn-new-blue" onClick={ToggleExcel}>הורד כקובץ אקסל</button>
+          <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
         </div>
         <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
         <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />

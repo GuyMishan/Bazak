@@ -38,6 +38,9 @@ import shortlist_white from "assets/img/shortlist_white.png";
 import info from "assets/img/info.png";
 import info_white from "assets/img/info_white.png";
 
+import graphpic from "assets/img/graphpic.png";
+import graphpic_white from "assets/img/graphpic_white.png";
+
 import { signout } from "auth/index";
 import history from "../../../history";
 
@@ -124,6 +127,21 @@ function SidebarHativa(props) {
             </Row>
           </NavLink>
         </li>
+        {/* <li>
+          <NavLink to={`/statisticspage/hativa/${user.hativaid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={graphpic} style={{ height: "20px" }}></img>
+                  : <img src={graphpic_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  סטטיסטיקות
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li> */}
         <li>
           <NavLink to={`/unittreepage/hativa/${user.hativaid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>

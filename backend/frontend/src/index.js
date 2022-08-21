@@ -33,6 +33,7 @@ import SubUnitsPage from "views/generalpages/subunitspage/SubUnitsPage";
 import ZminotPage from "views/generalpages/zminotpage/ZminotPage";
 import UnitTreePage from "views/generalpages/unittreepage/UnitTreePage";
 import AboutPage from "views/generalpages/aboutpage/AboutPage";
+import StatisticsPage from "views/generalpages/statisticspage/StatisticsPage";
 //excel routes
 import Exceluploadusers from "views/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
@@ -61,6 +62,7 @@ ReactDOM.render(
             <LoggedinRoute path="/zminotpage/:unittype/:unitid/:ismushbat" exact component={ZminotPage} />
             <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
             <LoggedinRoute path="/about" exact component={AboutPage} />
+            <LoggedinRoute path="/statisticspage/:unittype/:unitid/:cartype/:carid" exact component={StatisticsPage} />
             {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
