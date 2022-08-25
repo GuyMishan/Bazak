@@ -17,13 +17,14 @@ import {
 } from "reactstrap";
 import axios from 'axios';
 import BazakComp from './BazakComp';
-import Team100Comp from './Team100Comp';
+// import Team100Comp from './Team100Comp';
+
 function AboutPage({ match, theme }) {
 
   return (
     <>
       <BazakComp theme={theme}/>
-      <Team100Comp theme={theme}/>
+      {/* <Team100Comp theme={theme}/> */}
     </>
   );
 }

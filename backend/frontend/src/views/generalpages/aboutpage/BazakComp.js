@@ -15,13 +15,16 @@ import {
   Col,
   Collapse,
 } from "reactstrap";
-import logobazakshort from "assets/img/logobazakshort.png";
+// import logobazakshort from "assets/img/logobazakshort.png";
+
+import bazakodot from "assets/img/bazakodot.png";
+import bazakodot_white from "assets/img/bazakodot_white.png";
 
 function BazakComp({ match, theme }) {
 
   return (
-    <div style={{ height: '500px' }}>
-      <Row>
+    <div style={{textAlign:'center' }}>
+      {/* <Row>
         <Col xs={12} md={4}>
 
         </Col>
@@ -39,7 +42,9 @@ function BazakComp({ match, theme }) {
           <h3>מערכת הבז"כ היא מערכת שמסייעת בניהול של נושא הזמינות והכשירות בצה"ל. המערכת מאפשרת קבלת החלטות ביצועיות שוטפות, ובכך משפרת את הפעילות והיעילות בצה"ל.
              המערכת משרתת את תחומי התכנון, קבלת ההחלטות, ניהול הפרויקט והתוצר, איתור חריגים והפיקוח על תהליכים מובנים אשר ניתן לבצע בצורה ממוחשבת.</h3>
         </div>
-      </Container>
+      </Container> */}
+        {theme == 'white-content' ? <img src={bazakodot} style={{height:'1200px'}}></img>
+              : <img src={bazakodot_white} style={{height:'1200px'}}></img>}
     </div>
   );
 }
