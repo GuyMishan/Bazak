@@ -1,6 +1,9 @@
 "use strict";
 const SingleFile = require("../../models/fileuploader/singleFile");
 const MultipleFile = require("../../models/fileuploader/multiplefile");
+//new
+const Pikod = require("../../models/units/pikod");
+const Assessment = require("../../models/assessment/assessment");
 
 //moves the $file to $dir2
 var moveFile = (file, dir2, newName) => {
@@ -29,10 +32,10 @@ const singleFileUpload = async (req, res, next) => {
         console.log("File exists! moving to archive");
         moveFile(
           "./uploads/" +
-            req.body.collection +
-            "/" +
-            req.body.id +
-            path.extname(file),
+          req.body.collection +
+          "/" +
+          req.body.id +
+          path.extname(file),
           "./uploads/archive/" + req.body.collection,
           req.body.id + "#" + Math.random() * (100000000000000 - 0) + 0
         );
@@ -139,10 +142,49 @@ const downloadFile = async (req, res, next) => {
   }
 };
 
+const downloadFilePikod = async (req, res, next) => {
+  const col = req.query.collec;
+  const id = req.query.id;
+  const folder = "uploads/" + col;
+  const fs = require("fs");
+  var path = require("path");
+  var ext;
+
+  let tempstr = "הערכת מצב"
+
+  let assessment = await Assessment.findOne().where({ _id: id })
+  if (!assessment || !assessment.pikod) {
+
+  }
+  else {
+    let pikod = await Pikod.findOne().where({ _id: assessment.pikod })
+    if (!pikod) {
+
+    }
+    else {
+      tempstr += " " + pikod.name;
+    }
+  }
+
+  fs.readdirSync(folder).forEach((file) => {
+    if (file.startsWith(id)) {
+      ext = path.extname(file);
+    }
+  });
+  try {
+    //download + rename
+    res.download("uploads/" + col + "/" + id + ext, tempstr + ext);
+  } catch (error) {
+    res.status(400).send(error.message);
+  }
+};
+
 module.exports = {
   singleFileUpload,
   multipleFileUpload,
   getallSingleFiles,
   getallMultipleFiles,
   downloadFile,
+  //
+  downloadFilePikod
 };

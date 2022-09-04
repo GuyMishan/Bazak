@@ -20,7 +20,8 @@ const storage = multer.diskStorage({
 const filefilter = (req, file, cb) => {
     if (file.mimetype === 'application/pdf' || file.mimetype === 'application/msword' 
         || file.mimetype === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || file.mimetype === 'application/vnd.rar'
-        || file.mimetype === 'application/zip' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        || file.mimetype === 'application/zip' || file.mimetype === 'image/jpeg' || file.mimetype === 'image/png' || file.mimetype === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        || file.mimetype === 'application/vnd.openxmlformats-officedocument.presentationml.presentation' || file.mimetype === 'application/vnd.openxmlformats-officedocument.presentationml.template' || file.mimetype === 'application/vnd.openxmlformats-officedocument.presentationml.slideshow'){
             cb(null, true);
         }else {
             cb(null, false);
