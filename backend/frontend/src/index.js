@@ -4,13 +4,13 @@ import { BrowserRouter, Router, Route, Switch, Redirect, withRouter } from "reac
 
 import { ToastContainer } from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
-import 'components/Table.css' 
-import 'components/TableDark.css' 
-import 'components/ExcelButton.css' 
-import 'components/EmptyButton.css' 
-import 'components/NewButton.css' 
-import 'components/NewButtonBlue.css' 
-import 'components/NewButtonDelete.css' 
+import 'components/Table.css'
+import 'components/TableDark.css'
+import 'components/ExcelButton.css'
+import 'components/EmptyButton.css'
+import 'components/NewButton.css'
+import 'components/NewButtonBlue.css'
+import 'components/NewButtonDelete.css'
 import "assets/css/black-dashboard-react.css";
 import ThemeContextWrapper from "./components/general/ThemeWrapper/ThemeWrapper";
 import BackgroundColorWrapper from "./components/general/BackgroundColorWrapper/BackgroundColorWrapper";
@@ -42,12 +42,12 @@ import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
 ReactDOM.render(
   <>
     <ThemeContextWrapper>
-      <ToastContainer autoClose={2000} />
+      <ToastContainer rtl autoClose={4000} style={{ textAlign: 'right' }} />
       <BackgroundColorWrapper>
         <Router history={history}>
           <Switch>
-           {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
-           <UnloggedinRoute path="/signin" exact component={SignIn} />
+            {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
+            <UnloggedinRoute path="/signin" exact component={SignIn} />
             <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
             <UnloggedinRoute path="/signup" exact component={SignUp} />
             {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}

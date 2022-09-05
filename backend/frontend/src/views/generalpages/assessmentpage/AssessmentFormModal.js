@@ -69,12 +69,10 @@ const AssessmentFormModal = (props) => {
   function handleChange(evt) {
     const value = evt.target.value;
     if (value != "בחר") {
-      if (evt.target.name != 'carnumber') {
-        setAssessmentData({ ...assessmentdata, [evt.target.name]: value });
-      }
-      else {
-        CheckCarnumberAndSetFormdata(evt.target.value);
-      }
+      setAssessmentData({ ...assessmentdata, [evt.target.name]: value });
+    }
+    else {
+
     }
   }
 
@@ -83,30 +81,6 @@ const AssessmentFormModal = (props) => {
       setAssessmentData({ ...assessmentdata, [name]: selectedOption.value });
     else {
 
-    }
-  }
-
-
-  async function CheckCarnumberAndSetFormdata(carnumber) {
-    if (carnumber != '') {
-      let response = await axios.get(`http://localhost:8000/api/assessmentdata/assessmentdatabycarnumber/${carnumber}`)
-      if (response.data.length > 0) {//צ' קיים במערכת
-        if ((!response.data[0].gdod) || (response.data[0].gdod == null) && (!response.data[0].hativa) || (response.data[0].hativa == null) && (!response.data[0].ogda) || (response.data[0].ogda == null) && (!response.data[0].pikod) || (response.data[0].pikod == null)) {
-          let tempassessmentdata = response.data[0]
-          tempassessmentdata.gdod = assessmentdata.gdod;
-          tempassessmentdata.hativa = assessmentdata.hativa;
-          tempassessmentdata.ogda = assessmentdata.ogda;
-          tempassessmentdata.pikod = assessmentdata.pikod;
-        }
-        setAssessmentData(response.data[0]);
-        toast.success("נתוני הצ' נטענו לטופס");
-      }
-      else {
-        setAssessmentData({ ...assessmentdata, carnumber: carnumber });
-      }
-    }
-    else {
-      setAssessmentData({ ...assessmentdata, carnumber: carnumber });
     }
   }
 
@@ -204,7 +178,8 @@ const AssessmentFormModal = (props) => {
     if (props.isOpen == true)
       init();
     else {
-      setAssessmentData({})
+      setAssessmentData({});
+      setSingleFile("");
     }
   }, [props.isOpen])
 
@@ -258,10 +233,9 @@ const AssessmentFormModal = (props) => {
                 </Col>
               </Row>
 
-              {user.role == '0' || user.role == '4' ?
-                <div style={{ textAlign: 'center', paddingTop: '20px' }}>
-                  <button className="btn" onClick={clickSubmit}>עדכן</button>
-                </div> : null}
+              <div style={{ textAlign: 'center', paddingTop: '20px' }}>
+                <button className="btn" onClick={clickSubmit}>עדכן</button>
+              </div>
             </Container>
           </CardBody>
         </Card>

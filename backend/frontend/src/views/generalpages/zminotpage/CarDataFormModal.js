@@ -212,10 +212,12 @@ const CarDataFormModal = (props) => {
   function handleChange(evt) {
     const value = evt.target.value;
     if (value != "בחר") {
-      if (evt.target.name != 'carnumber') {
+      if (evt.target.name != "carnumber") {
+        if (evt.target.name == "status" && value == "מושבת") {
+          toast.error("העברת סטטוס הכלי למושבת משמעותה השבתת הכלי לגמרי");
+        }
         setCarData({ ...cardata, [evt.target.name]: value });
-      }
-      else {
+      } else {
         CheckCarnumberAndSetFormdata(evt.target.value);
       }
     }
@@ -332,7 +334,14 @@ const CarDataFormModal = (props) => {
         props.ToggleForModal();
       }
       else {
-        toast.error("צ' כבר שייך ליחידה - לא ניתן לשנות יחידה");
+        //find which unit car is already in.
+        let cardata_unitstr = "";
+        let gdod_result = await axios.get(`http://localhost:8000/api/gdod/${response.data[0].gdod}`);
+        let hativa_result = await axios.get(`http://localhost:8000/api/hativa/${response.data[0].hativa}`);
+        let ogda_result = await axios.get(`http://localhost:8000/api/ogda/${response.data[0].ogda}`);
+        let pikod_result = await axios.get(`http://localhost:8000/api/pikod/${response.data[0].pikod}`);
+        cardata_unitstr = pikod_result.data.name + "/" + ogda_result.data.name + "/" + hativa_result.data.name + "/" + gdod_result.data.name;
+        toast.error(`צ' כבר שייך ליחידה - ${cardata_unitstr} לא ניתן לשנות יחידה`);
       }
     }
     else {

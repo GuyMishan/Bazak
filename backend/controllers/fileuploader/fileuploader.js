@@ -23,50 +23,55 @@ var moveFile = (file, dir2, newName) => {
 };
 
 const singleFileUpload = async (req, res, next) => {
-  const path = require("path");
-  const fs = require("fs");
-  const ext = path.extname(req.file.path);
-  try {
-    fs.readdirSync("./uploads/" + req.body.collection).forEach((file) => {
-      if (file.startsWith(req.body.id)) {
-        console.log("File exists! moving to archive");
-        moveFile(
-          "./uploads/" +
-          req.body.collection +
-          "/" +
-          req.body.id +
-          path.extname(file),
-          "./uploads/archive/" + req.body.collection,
-          req.body.id + "#" + Math.random() * (100000000000000 - 0) + 0
-        );
-      }
-    });
-  } catch (err) {
-    console.error(err);
+  if (req.file) {
+    const path = require("path");
+    const fs = require("fs");
+    const ext = path.extname(req.file.path);
+    try {
+      fs.readdirSync("./uploads/" + req.body.collection).forEach((file) => {
+        if (file.startsWith(req.body.id)) {
+          console.log("File exists! moving to archive");
+          moveFile(
+            "./uploads/" +
+            req.body.collection +
+            "/" +
+            req.body.id +
+            path.extname(file),
+            "./uploads/archive/" + req.body.collection,
+            req.body.id + "#" + Math.random() * (100000000000000 - 0) + 0
+          );
+        }
+      });
+    } catch (err) {
+      console.error(err);
+    }
+    try {
+      const file = new SingleFile({
+        fileName: req.file.originalname,
+        filePath: req.file.path,
+        fileType: req.file.mimetype,
+        collec: req.body.collection,
+        listing_id: req.body.id,
+        fileSize: fileSizeFormatter(req.file.size, 2), // 0.00
+      });
+      await file.save();
+      moveFile(
+        "./" + file.filePath,
+        "./uploads/" + req.body.collection,
+        req.body.id
+      );
+      res.status(201).send("File Uploaded Successfully");
+    } catch (error) {
+      res.status(400).send(error.message);
+    }
+    // console.log("1")
+    // console.log(req.body)
+    // console.log("2")
+    // console.log(req.file)
   }
-  try {
-    const file = new SingleFile({
-      fileName: req.file.originalname,
-      filePath: req.file.path,
-      fileType: req.file.mimetype,
-      collec: req.body.collection,
-      listing_id: req.body.id,
-      fileSize: fileSizeFormatter(req.file.size, 2), // 0.00
-    });
-    await file.save();
-    moveFile(
-      "./" + file.filePath,
-      "./uploads/" + req.body.collection,
-      req.body.id
-    );
-    res.status(201).send("File Uploaded Successfully");
-  } catch (error) {
-    res.status(400).send(error.message);
+  else{
+    res.status(201).send("לא נשלח קובץ - הקובץ לא נשמר");
   }
-  // console.log("1")
-  // console.log(req.body)
-  // console.log("2")
-  // console.log(req.file)
 };
 
 const multipleFileUpload = async (req, res, next) => {
