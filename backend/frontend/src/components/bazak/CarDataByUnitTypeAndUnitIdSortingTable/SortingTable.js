@@ -9,12 +9,16 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import people from "assets/img/people.png";
 import PropagateLoader from "react-spinners/PropagateLoader";
-
+import {
+  Row,
+  Col,
+} from "reactstrap";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
 import DownloadExcelModal from "./DownloadExcelModal";
+import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
 
 const SortingTable = (props) => {
   const columns = useMemo(() => COLUMNS, []);
@@ -698,6 +702,13 @@ const SortingTable = (props) => {
               </option>
             </select>
           </div>
+          <Row>
+            <Col xs={12} md={3} style={{ textAlign: 'right' }}>
+              <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
+            </Col>
+            <Col xs={12} md={9}>
+            </Col>
+          </Row>
         </div>
       </>
   );

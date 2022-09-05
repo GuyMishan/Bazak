@@ -148,7 +148,7 @@ const SortingTable = (props) => {
       let response1 = await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: props.unitid })
       let temp_gdods = response1.data;
       for (let i = 0; i < temp_gdods.length; i++) {
-        temp_data_arr.push({ gdod: temp_gdods[i], cardatas: [] });
+        temp_data_arr.push({ gdod: temp_gdods[i], cardatas: [] ,maxdate : new Date(1900, 10, 10)});
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_cartypes.length; k++) {
@@ -164,6 +164,7 @@ const SortingTable = (props) => {
                 temp_data_arr[j].cardatas[k].numberofcars = temp_data_arr[j].cardatas[k].numberofcars + 1;
                 if (temp_cardatas[i].zminot == 'זמין') { temp_data_arr[j].cardatas[k].numberofcars_zamin = temp_data_arr[j].cardatas[k].numberofcars_zamin + 1; }
                 if (temp_cardatas[i].kshirot == 'כשיר') { temp_data_arr[j].cardatas[k].numberofcars_kashir = temp_data_arr[j].cardatas[k].numberofcars_kashir + 1; }
+                if (new Date(temp_cardatas[i].updatedAt) > temp_data_arr[j].maxdate) { temp_data_arr[j].maxdate = new Date(temp_cardatas[i].updatedAt); }
               }
             }
           }
@@ -245,6 +246,7 @@ const SortingTable = (props) => {
           <thead>
             <tr>
               <th> </th>
+              {props.unittype == 'hativa' ? <th>תאריך עדכון אחרון</th>:null}
               {cartypes.map((cartype, index) => {
                 return (props.match.params.cartype == 'magadal' ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/${props.match.params.unittype}/${props.match.params.unitid}/magad/${cartype._id}`}>{cartype.name}</Link></th>
                   : props.match.params.cartype == 'magad' ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${cartype._id}`}>{cartype.name}</Link></th>
@@ -259,7 +261,7 @@ const SortingTable = (props) => {
                 {props.unittype == 'admin' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/pikod/${data.pikod._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.pikod.name}</Link></th>
                   : props.unittype == 'pikod' && data.ogda ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/ogda/${data.ogda._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.ogda.name}</Link></th>
                     : props.unittype == 'ogda' && data.hativa ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/hativa/${data.hativa._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.hativa.name}</Link></th>
-                      : props.unittype == 'hativa' && data.gdod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/zminotpage/gdod/${data.gdod._id}/false`}>{data.gdod.name}</Link></th>
+                      : props.unittype == 'hativa' && data.gdod ? <><th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/zminotpage/gdod/${data.gdod._id}/false`}>{data.gdod.name}</Link></th> <td>{data.maxdate.toISOString().slice(0, 10).split("-").reverse().join("/")}</td></>
                         : <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}></th>}
                 {props.theme == 'white-content' ?
                   data.cardatas ? data.cardatas.map(cardatas => {

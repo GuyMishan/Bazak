@@ -130,7 +130,7 @@ function Signin() {
                 </div>
                 <Form role="form" >
                   <FormGroup className="mb-3">
-                    <Input onChange={handleChange('personalnumber')} placeholder="מספר אישי" type="string" value={personalnumber} /> {/* disable on prod*/}
+                    <Input onChange={handleChange('personalnumber')} placeholder="מספר אישי" type="string" value={personalnumber} disabled/> {/* disable on prod*/}
                   </FormGroup>
                   {loading ? (
                     <>

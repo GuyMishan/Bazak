@@ -39,7 +39,7 @@ function LatestUpdateDateComponent(props) {
   useEffect(() => {
     if (props.isdataloaded == true)
       init();
-  }, [props.isdataloaded])
+  }, [props.isdataloaded,props.cardatas])
 
   return (
     <div>
