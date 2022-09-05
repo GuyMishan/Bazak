@@ -60,7 +60,7 @@ function SubUnitsPage({ match, theme }) {
         </Row>
         <Row>
           <Col xs={12} md={3} style={{ textAlign: 'right' }}>
-            <LatestUpdateDateComponent cardatas={cardatas} />
+            <LatestUpdateDateComponent cardatas={cardatas} isdataloaded={isdataloaded}/>
           </Col>
           <Col xs={12} md={6}>
           </Col>
