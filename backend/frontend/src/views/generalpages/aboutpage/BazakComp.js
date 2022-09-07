@@ -19,6 +19,7 @@ import {
 
 import bazakodot from "assets/img/bazakodot.png";
 import bazakodot_white from "assets/img/bazakodot_white.png";
+import manual from "../../../assets/manual/manualExample.pdf";
 
 function BazakComp({ match, theme }) {
 
@@ -45,6 +46,12 @@ function BazakComp({ match, theme }) {
       </Container> */}
         {theme == 'white-content' ? <img src={bazakodot} style={{height:'1200px'}}></img>
               : <img src={bazakodot_white} style={{height:'1200px'}}></img>}
+      <div style={{marginTop:'-100px'}}>
+        <h1 style={{fontWeight: 'bold'}}>מדריך למשתמש:</h1>
+        <a href={manual} download='manual.pdf'>
+        <Button style={{fontSize: '24px'}}>הורדה</Button>
+        </a>
+      </div>
     </div>
   );
 }
