@@ -101,7 +101,7 @@ function Sidebar() {
                 className="btn-new-blue"
                 style={{ width: '80%', marginTop: '15px' }}
               >
-                הרשם
+                רשום משתמש
               </button>
               }
             <a href="http://216.1.1.11:8008/presentation">

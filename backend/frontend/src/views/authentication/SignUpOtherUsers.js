@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Link, Redirect } from "react-router-dom";
+
+import { signin, authenticate, isAuthenticated } from 'auth/index';
+
+import { Link, Redirect, useHistory } from "react-router-dom";
 import {
   Button,
   Card,
@@ -16,7 +19,7 @@ import {
   Col,
 } from "reactstrap";
 import axios from "axios";
-import history from 'history.js'
+import history from 'history.js';
 import { toast } from "react-toastify";
 import Select from 'components/general/Select/AnimatedSelect'
 
@@ -37,11 +40,12 @@ export default function SignUpForm() {
     loading: false,
     redirectToReferrer: false,
   });
-
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
   const [ogdas, setOgdas] = useState([]);
   const [pikods, setPikods] = useState([]);
+
+  const { user } = isAuthenticated();
 
   const loadGdods = () => {
     axios
@@ -98,6 +102,26 @@ export default function SignUpForm() {
     else {
       setData({ ...data, [name]: "" });
     }
+  }
+  
+  const returnBack = () => {
+      if (user && user.validated == true) {
+        if (user.role === "0") {
+          history.push(`/dashboard/admin/0/magadal/0`);
+        }
+        if (user.role === "1") {
+          history.push(`/dashboard/gdod/${user.gdodid}/magadal/0`);
+        }
+        if (user.role === "2") {
+          history.push(`/dashboard/hativa/${user.hativaid}/magadal/0`);
+        }
+        if (user.role === "3") {
+          history.push(`/dashboard/ogda/${user.ogdaid}/magadal/0`);
+        }
+        if (user.role === "4") {
+          history.push(`/dashboard/pikod/${user.pikodid}/magadal/0`);
+        }
+      }
   }
 
   const clickSubmit = (event) => {
@@ -379,8 +403,11 @@ export default function SignUpForm() {
                   ) : null}
 
                   <div className="text-center">
+                    <button style={{marginLeft:'30px'}} onClick={() => returnBack()} className="btn-new-blue">
+                      חזור
+                    </button>
                     <button onClick={clickSubmit} className="btn-new-blue">
-                      הרשם
+                      רשום משתמש
                     </button>
                   </div>
                 </Form>
