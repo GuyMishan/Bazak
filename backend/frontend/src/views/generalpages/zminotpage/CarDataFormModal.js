@@ -632,7 +632,7 @@ const CarDataFormModal = (props) => {
               <Row>
                 <Col>
                   <div style={{ textAlign: 'right', paddingTop: '10px'}}>זמינות</div>
-                  <Input style={{border: '1px solid #ff0000'}} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
+                  <Input style={{border: '2px solid'}} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
                     <option value={'בחר'}>בחר</option>
                     <option value={'זמין'}>זמין</option>
                     <option value={'לא זמין'}>לא זמין</option>
@@ -640,7 +640,7 @@ const CarDataFormModal = (props) => {
                 </Col>
                 <Col>
                   <div style={{ textAlign: 'right', paddingTop: '10px'}}>כשירות למלחמה</div>
-                  <Input style={{border: '1px solid #ff0000'}} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
+                  <Input style={{border: '2px solid'}} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
                     <option value={'בחר'}>בחר</option>
                     <option value={'כשיר'}>כשיר</option>
                     <option value={'לא כשיר'}>לא כשיר</option>
