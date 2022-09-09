@@ -650,7 +650,6 @@ const SortingTable = (props) => {
                           }
                         })
                       }
-                      {/* <td role="cell"> <div style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }}>{data[0].updatedAt.slice(0, 10).split("-").reverse().join("-")}</div></td> */}
                       <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
                       {props.unittype != 'notype' ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
                         : null}
