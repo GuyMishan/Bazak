@@ -20,15 +20,15 @@ table {
     color: white;
   }
 
-  table tr:nth-child(even){background-color:  #27293d;}
+  /* table tr:nth-child(even){background-color:  #27293d;} */
 
   /*table tr:hover {background-color: #2ccb6d;}*/
   
-  table tr{
+  /* table tr{
     background-color:   #27293d;
       color: black;
       text-align: right;
-  }
+  } */
 
   table th,tfoot td {
     padding-top: 0px;
