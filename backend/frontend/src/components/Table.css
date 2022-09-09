@@ -20,7 +20,7 @@
     color: black;
   }
 
-  .white-content table tr:nth-child(even){background-color:  #f7f7f7;}
+  /* .white-content table tr:nth-child(even){background-color:  #f7f7f7;} */
 
   /*table tr:hover {background-color: #2ccb6d;}*/
   
