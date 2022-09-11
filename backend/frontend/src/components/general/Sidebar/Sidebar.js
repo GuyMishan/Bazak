@@ -95,13 +95,13 @@ function Sidebar() {
               >
                 התנתק
               </button>
-              : 
+              :
               <button
                 onClick={clickSubmit}
                 className="btn-new-blue"
                 style={{ width: '80%', marginTop: '15px' }}
               >
-                רשום משתמש
+                 רשום משתמש נוסף
               </button>
               }
             <a href="http://216.1.1.11:8008/presentation">
