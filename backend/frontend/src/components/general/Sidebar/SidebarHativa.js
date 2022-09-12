@@ -121,7 +121,7 @@ function SidebarHativa(props) {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                זמינות תת-יחידות
+                  זמינות תת-יחידות
                 </h4>
               </Col>
             </Row>
@@ -158,6 +158,21 @@ function SidebarHativa(props) {
           </NavLink>
         </li>
         <li>
+          <NavLink to={`/subunitsrecentfeedspage/hativa/${user.hativaid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
+                  : <img src={shortlist_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  תקינות הזנות
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
           <NavLink to={`/zminotpage/notype/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
@@ -181,7 +196,7 @@ function SidebarHativa(props) {
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                  כלים מושבתים 
+                  כלים מושבתים
                 </h4>
               </Col>
             </Row>

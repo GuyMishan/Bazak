@@ -52,7 +52,7 @@ ReactDOM.render(
             <UnloggedinRoute path="/signin" exact component={SignIn} />
             <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
             <UnloggedinRoute path="/signup" exact component={SignUp} />
-            <UnloggedinRoute path="/signupotherusers" exact component={SignUpOtherUsers} />
+            <LoggedinRoute path="/signupotherusers" exact component={SignUpOtherUsers} />
             {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}

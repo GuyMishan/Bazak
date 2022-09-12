@@ -193,6 +193,35 @@ const SortingTable = (props) => {
     }
   }
 
+  const fixfilterunits = async () => {
+    let tempfilter = {};
+    if (props.unittype == 'pikod') {
+      tempfilter.pikod = props.unitid
+    }
+    else if (props.unittype == 'ogda') {
+      tempfilter.ogda = props.unitid
+      let response = await axios.get(`http://localhost:8000/api/ogda/${props.unitid}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'hativa') {
+      tempfilter.hativa = props.unitid
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${props.unitid}`,)
+      tempfilter.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    else if (props.unittype == 'gdod') {
+      tempfilter.gdod = props.unitid
+      let response2 = await axios.get(`http://localhost:8000/api/gdod/${props.unitid}`,)
+      tempfilter.hativa = response2.data.hativa
+      let response1 = await axios.get(`http://localhost:8000/api/hativa/${tempfilter.hativa}`,)
+      tempfilter.ogda = response1.data.ogda
+      let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
+      tempfilter.pikod = response.data.pikod
+    }
+    setFilter(tempfilter);
+  }
+
   const setfilterfunction = (evt) => {
     if (evt.currentTarget.name == 'takin') {
       if (filter.takinfilter) {
@@ -291,6 +320,7 @@ const SortingTable = (props) => {
 
   function init() {
     CalculateDataArr()
+    fixfilterunits();
   }
 
   useEffect(() => {
