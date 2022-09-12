@@ -105,4 +105,9 @@ export const COLUMNS = [
         accessor: 'tipuls',
         Filter: ColumnFilter
     },
+    {
+        Header: 'תאריך עדכון אחרון',
+        accessor: 'updatedAt',
+        Filter: ColumnFilter
+    },
 ]

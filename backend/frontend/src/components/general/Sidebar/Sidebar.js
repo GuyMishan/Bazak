@@ -49,9 +49,14 @@ function Sidebar() {
 
   const clickSubmit = (event) => {
     event.preventDefault();
-    signout().then((response) => {
-      history.push(`/adminsignin`);
-    });
+    if(user.role === "0"){
+        signout().then((response) => {
+            history.push(`/adminsignin`);
+        });
+    }
+    else{
+      history.push(`/signupotherusers`);
+    }
   };
 
   const [color, setcolor] = useState("transparent");
@@ -90,7 +95,15 @@ function Sidebar() {
               >
                 התנתק
               </button>
-              : null}
+              :
+              <button
+                onClick={clickSubmit}
+                className="btn-new-blue"
+                style={{ width: '80%', marginTop: '15px' }}
+              >
+                 רשום משתמש נוסף
+              </button>
+              }
             <a href="http://216.1.1.11:8008/presentation">
               <button
                 className="btn-new-delete"

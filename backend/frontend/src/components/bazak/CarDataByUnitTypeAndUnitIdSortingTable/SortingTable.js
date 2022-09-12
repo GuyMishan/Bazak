@@ -598,6 +598,9 @@ const SortingTable = (props) => {
                             return <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                           }
                           else {
+                             if (cell.column.id == "updatedAt") {
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td>  : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            }
                             if (cell.column.id == "latest_recalibration_date") {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }

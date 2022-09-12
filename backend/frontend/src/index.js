@@ -25,6 +25,7 @@ import AdminRoute from "auth/AdminRoute.js";
 import SignIn from "views/authentication/SignInForm";
 import AdminSignIn from "views/authentication/AdminSignInForm";
 import SignUp from "views/authentication/SignUpForm";
+import SignUpOtherUsers from "views/authentication/SignUpOtherUsers";
 import ManageUsers from "views/authentication/manageusers/ManageUsers";
 import EditUser from "views/authentication/EditUserForm";
 //general routes
@@ -51,6 +52,7 @@ ReactDOM.render(
             <UnloggedinRoute path="/signin" exact component={SignIn} />
             <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
             <UnloggedinRoute path="/signup" exact component={SignUp} />
+            <LoggedinRoute path="/signupotherusers" exact component={SignUpOtherUsers} />
             {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
 
             {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}

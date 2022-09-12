@@ -135,10 +135,25 @@ const SubUnitsRecentFeedsFilter = (props) => {
     function init() {
         getTakins();
         getSadirs();
-        loadPikods();
-        // loadOgdas(props.unitid);
-        // loadHativas(props.unitid);
-        // loadGdods(props.unitid);
+        // loadPikods();
+        switch (props.unittype) {
+            case 'admin':
+                loadPikods();
+                break;
+            case 'pikod':
+                loadOgdas(props.unitid);
+                break;
+            case 'ogda':
+                loadHativas(props.unitid);
+                break;
+            case 'hativa':
+                loadGdods(props.unitid);
+                break;
+            case 'gdod':
+                break;
+            default:
+                break;
+        }
     }
 
     useEffect(() => {
