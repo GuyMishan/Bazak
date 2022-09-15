@@ -41,6 +41,7 @@ function AssessmentComponent(props) {
         <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
             <a href={"http://localhost:8000/api/downloadFilePikod?collec=assessment&id=" + props.assessment._id} target="_blank">
                 <div>
+                    {/* {props.assessment.englishname ? CheckImgPath(props.assessment.englishname) == true ? <img style={{ height: '300px', width: '300px' }} src={require(`assets/img/unitsimg/${props.assessment.englishname}.png`).default}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img>} */}
                     {props.assessment.englishname ? CheckImgPath(props.assessment.englishname) == true ? <img style={{ height: '300px', width: '300px' }} src={require(`assets/img/unitsimg/${props.assessment.englishname}.png`)}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img>}
                 </div>
             </a>
