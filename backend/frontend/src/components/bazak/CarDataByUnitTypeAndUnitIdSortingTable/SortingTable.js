@@ -469,6 +469,7 @@ const SortingTable = (props) => {
 
     //export to excel -fix 
     for (let i = 0; i < tempdata_to_excel.length; i++) {
+      //delete unwanted fields
       delete tempdata_to_excel[i]._id;
       delete tempdata_to_excel[i].magadal;
       delete tempdata_to_excel[i].magad;
@@ -483,21 +484,72 @@ const SortingTable = (props) => {
       delete tempdata_to_excel[i].__v;
       delete tempdata_to_excel[i].createdAt;
       delete tempdata_to_excel[i].updatedAt;
+      
+      //add non-existing fields - 31
+      if(!tempdata_to_excel[i].carnumber){tempdata_to_excel[i].carnumber=" "}
+      if(!tempdata_to_excel[i].expected_repair){tempdata_to_excel[i].expected_repair=" "}
+      if(!tempdata_to_excel[i].family){tempdata_to_excel[i].family=" "}
+      if(!tempdata_to_excel[i].gdod_name){tempdata_to_excel[i].gdod_name=" "}
+      if(!tempdata_to_excel[i].hativa_name){tempdata_to_excel[i].hativa_name=" "}
+      if(!tempdata_to_excel[i].kshirot){tempdata_to_excel[i].kshirot=" "}
+      if(!tempdata_to_excel[i].latest_recalibration_date){tempdata_to_excel[i].latest_recalibration_date=" "}
+      if(!tempdata_to_excel[i].magad_name){tempdata_to_excel[i].magad_name=" "}
+      if(!tempdata_to_excel[i].magadal_name){tempdata_to_excel[i].magadal_name=" "}
+      if(!tempdata_to_excel[i].makat_description_name){tempdata_to_excel[i].makat_description_name=" "}
+      if(!tempdata_to_excel[i].makat_name){tempdata_to_excel[i].makat_name=" "}
+      if(!tempdata_to_excel[i].mikum){tempdata_to_excel[i].mikum=" "}
+      if(!tempdata_to_excel[i].mikum_bimh){tempdata_to_excel[i].mikum_bimh=" "}
+      if(!tempdata_to_excel[i].mkabaz_name){tempdata_to_excel[i].mkabaz_name=" "}
+      if(!tempdata_to_excel[i].ogda_name){tempdata_to_excel[i].ogda_name=" "}
+      if(!tempdata_to_excel[i].pikod_name){tempdata_to_excel[i].pikod_name=" "}
+      if(!tempdata_to_excel[i].pluga){tempdata_to_excel[i].pluga=" "}
+      if(!tempdata_to_excel[i].shabzak){tempdata_to_excel[i].shabzak=" "}
+      if(!tempdata_to_excel[i].stand){tempdata_to_excel[i].stand=" "}
+      if(!tempdata_to_excel[i].status){tempdata_to_excel[i].status=" "}
+      if(!tempdata_to_excel[i].takala_info){tempdata_to_excel[i].takala_info=" "}
+      if(!tempdata_to_excel[i].zminot){tempdata_to_excel[i].zminot=" "} //22
+      //
+      if(!tempdata_to_excel[i].tipul){tempdata_to_excel[i].tipul=" "}
+      if(!tempdata_to_excel[i].tipul_entry_date){tempdata_to_excel[i].tipul_entry_date=" "}
+      if(!tempdata_to_excel[i].mikum_tipul){tempdata_to_excel[i].mikum_tipul=" "}
+      if(!tempdata_to_excel[i].harig_tipul){tempdata_to_excel[i].harig_tipul=" "}
+      if(!tempdata_to_excel[i].harig_tipul_date){tempdata_to_excel[i].harig_tipul_date=" "}
+      if(!tempdata_to_excel[i].takala_mizdamenet){tempdata_to_excel[i].takala_mizdamenet=" "}
+      if(!tempdata_to_excel[i].takala_mizdamenet_date){tempdata_to_excel[i].takala_mizdamenet_date=" "}
+      if(!tempdata_to_excel[i].missing_makat_1){tempdata_to_excel[i].missing_makat_1=" "}
+      if(!tempdata_to_excel[i].missing_makat_2){tempdata_to_excel[i].missing_makat_2=" "}
     }
+    console.log(tempdata_to_excel)
 
-    let Heading = [["צ'", 'מעמד הכלי', 'זמינות', 'כשירות למלחמה', 'סטאטוס הכלי', 'צפי תיקון', 'פלוגה', 'מהות התקלה', 'מועד כיול אחרון', 'מיקום בימ"ח', 'משפחה', 'מיקום', 'שבצ"ק', 'פיקוד', 'אוגדה', 'חטיבה', 'גדוד', 'מאגד על', 'מאגד', 'מקבץ', 'מק"ט', 'תיאור מק"ט', 'סוג טיפול', 'תאריך כניסה לטיפול', 'מיקום טיפול', 'חריג טיפול', 'תאריך חריגת טיפול', 'תקלה מזדמנת', 'תאריך תקלה מזדמנת', 'מק"ט חסר', 'כמות']];
+    // let Heading = [["צ'", 'מעמד הכלי', 'זמינות', 'כשירות למלחמה', 'סטאטוס הכלי', 'צפי תיקון', 'פלוגה', 'מהות התקלה', 'מועד כיול אחרון', 'מיקום בימ"ח', 'משפחה', 'מיקום', 'שבצ"ק', 'פיקוד', 'אוגדה', 'חטיבה', 'גדוד', 'מאגד על', 'מאגד', 'מקבץ', 'מק"ט', 'תיאור מק"ט', 'סוג טיפול', 'תאריך כניסה לטיפול', 'מיקום טיפול', 'חריג טיפול', 'תאריך חריגת טיפול', 'תקלה מזדמנת', 'תאריך תקלה מזדמנת', 'מק"ט חסר', 'כמות']];
 
-    //Had to create a new workbook and then add the header
-    const wb = XLSX.utils.book_new();
-    const ws = XLSX.utils.json_to_sheet([]);
-    XLSX.utils.sheet_add_aoa(ws, Heading);
+    // //Had to create a new workbook and then add the header
+    // const wb = XLSX.utils.book_new();
+    // const ws = XLSX.utils.json_to_sheet([]);
+    // XLSX.utils.sheet_add_aoa(ws, Heading);
 
-    //Starting in the second row to avoid overriding and skipping headers
-    XLSX.utils.sheet_add_json(ws, tempdata_to_excel, { origin: 'A2', skipHeader: true });
+    // //Starting in the second row to avoid overriding and skipping headers
+    // XLSX.utils.sheet_add_json(ws, tempdata_to_excel, { origin: 'A2', skipHeader: true });
 
-    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
 
-    XLSX.writeFile(wb, 'גזירה.xlsx');
+    // XLSX.writeFile(wb, 'גזירה.xlsx');
+
+    let EXCEL_EXTENSION = '.xlsx';
+    let worksheet= XLSX.WorkSheet;
+    let sheetName = 'גזירה';  
+     
+    const headers = { carnumber: "צ'",magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
+    , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון' , tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'};
+    tempdata_to_excel.unshift(headers); // if custom header, then make sure first row of data is custom header 
+    
+    worksheet = XLSX.utils.json_to_sheet(tempdata_to_excel, { skipHeader: true });
+
+   const workbook = XLSX.utils.book_new();
+   const fileName =  'גזירה'+ EXCEL_EXTENSION;
+   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+   XLSX.writeFile(workbook, fileName);
+
     window.location.reload();
   }
 
