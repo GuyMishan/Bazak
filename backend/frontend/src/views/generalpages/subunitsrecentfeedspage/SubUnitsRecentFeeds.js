@@ -54,9 +54,7 @@ function SubUnitsRecentFeeds({ match, theme }) {
       </div>
       :
       <div>
-        <Row>
-          <SortingTable theme={theme} match={match} unittype={match.params.unittype} unitid={match.params.unitid} cardatas={cardatas} />
-        </Row>
+        <SortingTable theme={theme} match={match} unittype={match.params.unittype} unitid={match.params.unitid} cardatas={cardatas} />
       </div>
   );
 }

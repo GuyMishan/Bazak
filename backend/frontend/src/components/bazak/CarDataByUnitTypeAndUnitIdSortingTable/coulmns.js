@@ -1,4 +1,33 @@
 import { ColumnFilter } from './ColumnFilter'
+
+function daysOff(row) {
+    if (row.tipuls == undefined || row.tipuls.length == 0)
+        return "";
+    var today = new Date();
+    var dates = [];
+    for (var i = 0; i < row.tipuls.length; i++) {
+        var x = row.tipuls[i];
+        if ('takala_mizdamenet_date' in x && x['takala_mizdamenet_date'] != "")
+            dates.push(x['takala_mizdamenet_date']);
+        if ('tipul_entry_date' in x && x['tipul_entry_date'] != "")
+            dates.push(x['tipul_entry_date']);
+        if ('harig_tipul_date' in x && x['harig_tipul_date'] != "")
+            dates.push(x['harig_tipul_date']);
+    }
+    if (dates.length == 0) {
+        return ("לא הוזן תאריך")
+    }
+    var sorted = dates.sort(function (a, b) {
+        return new Date(a) - new Date(b)
+    });
+
+    var unavailableFrom = new Date(sorted[0]);
+
+    var timediff = Math.ceil((today.getTime() - unavailableFrom.getTime()) / (1000 * 3600 * 24));
+
+    return String(timediff)
+}
+
 export const COLUMNS = [
     {
         Header: "צ'",
@@ -88,6 +117,11 @@ export const COLUMNS = [
     {
         Header: 'כשירות למלחמה',
         accessor: 'kshirot',
+        Filter: ColumnFilter
+    },
+    {
+        Header: 'ימי שהייה',
+        accessor: daysOff,
         Filter: ColumnFilter
     },
     {

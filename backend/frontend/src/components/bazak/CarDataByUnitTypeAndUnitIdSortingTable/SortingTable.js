@@ -17,7 +17,6 @@ import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
-import DownloadExcelModal from "./DownloadExcelModal";
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
 
 const SortingTable = (props) => {
@@ -33,8 +32,6 @@ const SortingTable = (props) => {
   //cardata form modal delete
   const [iscardataformdeleteopen, setIscardataformdeleteopen] = useState(false);
   const [cardataidfordeletemodal, setCardataidfordeletemodal] = useState(undefined);
-  //downloadexcel modal
-  const [isdownloadexcelopen, setIsdownloadexcelopen] = useState(false);
   //units
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
@@ -47,6 +44,7 @@ const SortingTable = (props) => {
   const [magadals, setMagadals] = useState([]);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
+  //excel download
   const XLSX = require('xlsx')
 
   const loadPikods = async () => {
@@ -119,14 +117,6 @@ const SortingTable = (props) => {
     updatechangedcardata(); // update table..
   }
 
-  function ToggleExcel(evt) {
-    setIsdownloadexcelopen(!isdownloadexcelopen);
-  }
-
-  function ToggleForModalExcel(evt) {
-    setIsdownloadexcelopen(!isdownloadexcelopen);
-  }
-
   async function updatechangedcardata() {
     if (cardataidformodal != undefined) {
       if (props.unittype != 'notype') {
@@ -185,7 +175,7 @@ const SortingTable = (props) => {
   function init() {
     setIsdataloaded(false);
     getCardDataByUnitTypeAndUnitId();
-    fixfilterunits();
+    fixfilterbyurl();
     ReadLocalStorage();
   }
 
@@ -202,7 +192,7 @@ const SortingTable = (props) => {
 
   const getCardDataByUnitTypeAndUnitId = async () => {
     if (props.ismushbat == "false") {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${props.unittype}/${props.unitid}`)
+      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitidandcartypeandcarid/${props.unittype}/${props.unitid}/${props.cartype}/${props.carid}`)
         .then(response => {
           setOriginaldata(response.data)
           setData(response.data)
@@ -225,31 +215,46 @@ const SortingTable = (props) => {
     }
   }
 
-  const fixfilterunits = async () => {
+  const fixfilterbyurl = async () => {
     let tempfilter = {};
+    if (props.unittype == 'admin') {
+      // nothing
+    }
     if (props.unittype == 'pikod') {
-      tempfilter.pikod = props.unitid
+      tempfilter.pikod = [props.unitid]
     }
     else if (props.unittype == 'ogda') {
-      tempfilter.ogda = props.unitid
+      tempfilter.ogda = [props.unitid]
       let response = await axios.get(`http://localhost:8000/api/ogda/${props.unitid}`,)
-      tempfilter.pikod = response.data.pikod
+      tempfilter.pikod = [response.data.pikod]
     }
     else if (props.unittype == 'hativa') {
-      tempfilter.hativa = props.unitid
+      tempfilter.hativa = [props.unitid]
       let response1 = await axios.get(`http://localhost:8000/api/hativa/${props.unitid}`,)
-      tempfilter.ogda = response1.data.ogda
+      tempfilter.ogda = [response1.data.ogda]
       let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
-      tempfilter.pikod = response.data.pikod
+      tempfilter.pikod = [response.data.pikod]
     }
     else if (props.unittype == 'gdod') {
-      tempfilter.gdod = props.unitid
+      tempfilter.gdod = [props.unitid]
       let response2 = await axios.get(`http://localhost:8000/api/gdod/${props.unitid}`,)
-      tempfilter.hativa = response2.data.hativa
+      tempfilter.hativa = [response2.data.hativa]
       let response1 = await axios.get(`http://localhost:8000/api/hativa/${tempfilter.hativa}`,)
-      tempfilter.ogda = response1.data.ogda
+      tempfilter.ogda = [response1.data.ogda]
       let response = await axios.get(`http://localhost:8000/api/ogda/${tempfilter.ogda}`,)
-      tempfilter.pikod = response.data.pikod
+      tempfilter.pikod = [response.data.pikod]
+    }
+    //
+    if (props.cartype == 'magadal') {
+      // nothing
+    }
+    else if (props.cartype == 'magad') {
+      tempfilter.magadal = [props.carid]
+    }
+    else if (props.cartype == 'mkabaz') {
+      tempfilter.magad = [props.carid]
+      let response1 = await axios.get(`http://localhost:8000/api/magad/${props.carid}`,)
+      tempfilter.magadal = [response1.data[0].magadal]
     }
     setFilter(tempfilter);
   }
@@ -532,7 +537,7 @@ const SortingTable = (props) => {
     init();
     init2();
     setPageSize(20);
-  }, [props]);
+  }, [props.unittype,props.unitid,props.ismushbat,props.match]);
 
   useEffect(() => {
     FixLocalStorageHeaders();
@@ -549,7 +554,7 @@ const SortingTable = (props) => {
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
         {/*filter */}
-        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} /*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
+        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
 
         <div style={{ float: 'right', paddingBottom: '5px' }}>
           {/* <ReactHTMLTableToExcel

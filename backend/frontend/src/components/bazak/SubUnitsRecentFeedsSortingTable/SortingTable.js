@@ -1,21 +1,30 @@
 import React, { useMemo, useState, useEffect } from "react";
+import { useTable, useSortBy, useGlobalFilter, useFilters, usePagination } from "react-table";
 import { withRouter, Redirect, Link } from "react-router-dom";
+import { COLUMNS } from "./coulmns";
+import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import style from 'components/Table.css'
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import people from "assets/img/people.png";
-
+import PropagateLoader from "react-spinners/PropagateLoader";
+import {
+  Row,
+  Col,
+} from "reactstrap";
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
-import { Button } from "reactstrap";
 import SubUnitsRecentFeedsFilter from "../Filters/SubUnitsRecentFeedsFilter";
 
 const SortingTable = (props) => {
-    //data
+  const columns = useMemo(() => COLUMNS, []);
+  //data
   const [originaldata, setOriginaldata] = useState([])
   const [data, setData] = useState([])
   //filter
   const [filter, setFilter] = useState([])
+  //spinner
+  const [isdataloaded, setIsdataloaded] = useState(false);
 
   async function CalculateDataArr() {
     let temp_cardatas;
@@ -85,26 +94,24 @@ const SortingTable = (props) => {
         return f.gdod === el._id;
       });
     });
-    
+
     for (let i = 0; i < temp_gdods.length; i++) {
       let tempdata = { gdod: temp_gdods[i], cardatas: [], maxdate: new Date(1900, 10, 10), istakin: 'תקין' }
-      if(tempdata.gdod.sadir && tempdata.gdod.sadir == 'לא סדיר'){
-        tempdata.issadir='לא סדיר'
+      if (tempdata.gdod.sadir && tempdata.gdod.sadir == 'לא סדיר') {
+        tempdata.issadir = 'לא סדיר'
       }
-      else{
-        tempdata.issadir='סדיר'
+      else {
+        tempdata.issadir = 'סדיר'
       }
       for (let j = 0; j < temp_hativas.length; j++) {
         if (temp_hativas[j]._id == temp_gdods[i].hativa) {
           tempdata.hativa = temp_hativas[j];
           for (let k = 0; k < temp_ogdas.length; k++) {
-            if(temp_ogdas[k]._id==temp_hativas[j].ogda)
-            {
-              tempdata.ogda=temp_ogdas[k];
-              for (let l = 0; l < temp_pikods.length; l++) {    
-                if(temp_pikods[l]._id==temp_ogdas[k].pikod)
-                {
-                  tempdata.pikod=temp_pikods[l];
+            if (temp_ogdas[k]._id == temp_hativas[j].ogda) {
+              tempdata.ogda = temp_ogdas[k];
+              for (let l = 0; l < temp_pikods.length; l++) {
+                if (temp_pikods[l]._id == temp_ogdas[k].pikod) {
+                  tempdata.pikod = temp_pikods[l];
                 }
               }
             }
@@ -116,7 +123,7 @@ const SortingTable = (props) => {
 
     for (let j = 0; j < temp_data_arr.length; j++) {
       for (let k = 0; k < temp_cartypes.length; k++) {
-        temp_data_arr[j].cardatas[k] = { [props.match.params.cartype]: temp_cartypes[k]};
+        temp_data_arr[j].cardatas[k] = { [props.match.params.cartype]: temp_cartypes[k] };
       }
     }
 
@@ -133,40 +140,40 @@ const SortingTable = (props) => {
     }
 
     for (let i = 0; i < temp_data_arr.length; i++) {
-      if(temp_data_arr[i].gdod.sadir && temp_data_arr[i].gdod.sadir=='לא סדיר'){
+      if (temp_data_arr[i].gdod.sadir && temp_data_arr[i].gdod.sadir == 'לא סדיר') {
         let Date_1 = new Date().toLocaleDateString("hi-IN");
         let Date_1_copy = new Date();
         let Date_2 = new Date(Date_1_copy.getFullYear(), Date_1_copy.getMonth(), Date_1_copy.getDate() - 7).toLocaleDateString("hi-IN");
         let Date_to_check = temp_data_arr[i].maxdate.toLocaleDateString("hi-IN");
-  
+
         let D_1 = Date_1.split("/");
         let D_2 = Date_2.split("/");
         let D_3 = Date_to_check.split("/");
-  
+
         let d1 = new Date(D_1[2], parseInt(D_1[1]) - 1, D_1[0]);
         let d2 = new Date(D_2[2], parseInt(D_2[1]) - 1, D_2[0]);
         let d3 = new Date(D_3[2], parseInt(D_3[1]) - 1, D_3[0]);
-  
+
         if (d3 <= d1 && d3 > d2) {
           temp_data_arr[i].istakin = 'תקין'
         } else {
           temp_data_arr[i].istakin = 'לא תקין'
         }
       }
-      else{
+      else {
         let Date_1 = new Date().toLocaleDateString("hi-IN");
         let Date_1_copy = new Date();
         let Date_2 = new Date(Date_1_copy.getFullYear(), Date_1_copy.getMonth(), Date_1_copy.getDate() - 1).toLocaleDateString("hi-IN");
         let Date_to_check = temp_data_arr[i].maxdate.toLocaleDateString("hi-IN");
-  
+
         let D_1 = Date_1.split("/")
         let D_2 = Date_2.split("/")
         let D_3 = Date_to_check.split("/")
-  
+
         let d1 = new Date(D_1[2], parseInt(D_1[1]) - 1, D_1[0]).toLocaleDateString("hi-IN");
         let d2 = new Date(D_2[2], parseInt(D_2[1]) - 1, D_2[0]).toLocaleDateString("hi-IN");
         let d3 = new Date(D_3[2], parseInt(D_3[1]) - 1, D_3[0]).toLocaleDateString("hi-IN");
-  
+
         if (d3 == d1 || d3 == d2) {
           temp_data_arr[i].istakin = 'תקין'
         } else {
@@ -174,8 +181,9 @@ const SortingTable = (props) => {
         }
       }
     }
-    setOriginaldata(temp_data_arr)
+    setOriginaldata(temp_data_arr);
     setData(temp_data_arr);
+    setIsdataloaded(true);
   }
 
   function handleChange8(selectedOption, name) {
@@ -323,68 +331,186 @@ const SortingTable = (props) => {
     fixfilterunits();
   }
 
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    footerGroups,
+    page,
+    prepareRow,
+    allColumns,
+    canPreviousPage,
+    canNextPage,
+    pageOptions,
+    pageCount,
+    gotoPage,
+    nextPage,
+    previousPage,
+    setPageSize,
+    state: { pageIndex, pageSize, globalFilter },
+    setGlobalFilter,
+  } = useTable({
+    columns, data, initialState: { pageIndex: 0 },
+  },
+    useGlobalFilter, useFilters, useSortBy, usePagination);
+
   useEffect(() => {
     applyfiltersontodata()
   }, [filter]);
 
   useEffect(() => {
     init();
-  }, [props]);
+  }, [props.unittype,props.unitid,props.cardatas,props.match]);
 
   return (
-    <>
-      <SubUnitsRecentFeedsFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} /*handleChange2={handleChange2}*/ handleChange8={handleChange8} />
-      <div style={{ float: 'right', paddingBottom: '5px' }}>
-        <ReactHTMLTableToExcel
-          id="test-table-xls-button"
-          className="btn-green"
-          table="table-to-xls"
-          filename="קובץ - הזנות אחרונות"
-          sheet="קובץ - הזנות אחרונות"
-          buttonText="הורד כקובץ אקסל"
-          style={{ float: 'right' }}
-        />
+    !isdataloaded ?
+      <div style={{ width: '50%', marginTop: '30%' }}>
+        <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
-      <div className="table-responsive" style={{ overflow: 'auto' }}>
-        <table id="table-to-xls">
-          <thead>
-            <tr>
-              <th>פיקוד</th>
-              <th>אוגדה</th>
-              <th>חטיבה</th>
-              <th>גדוד</th>
-              <th>סדיר/לא סדיר</th>
-              <th>תאריך עדכון אחרון</th>
-              <th>תקין/לא תקין</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((data, index) => {
-              return (
-                data.istakin == 'תקין' ?
-                  <tr className="greencell">
-                    <td>{data.pikod ? data.pikod.name : ""}</td>
-                    <td>{data.ogda ? data.ogda.name : ""}</td>
-                    <td>{data.hativa ? data.hativa.name : ""}</td>
-                    <td>{data.gdod ? data.gdod.name : ""}</td>
-                    <td>{data.gdod && data.gdod.sadir && data.gdod.sadir=='לא סדיר' ? "לא סדיר" : "סדיר"}</td>
-                    <td>{data.maxdate.toISOString().slice(0, 10).split("-").reverse().join("/")}</td>
-                    <td>{data.istakin}</td>
-                  </tr> :
-                  <tr className="redcell">
-                    <td>{data.pikod ? data.pikod.name : ""}</td>
-                    <td>{data.ogda ? data.ogda.name : ""}</td>
-                    <td>{data.hativa ? data.hativa.name : ""}</td>
-                    <td>{data.gdod ? data.gdod.name : ""}</td>
-                    <td>{data.gdod && data.gdod.sadir && data.gdod.sadir=='לא סדיר' ? "לא סדיר" : "סדיר"}</td>
-                    <td>{data.maxdate.toISOString().slice(0, 10).split("-").reverse().join("/")}</td>
-                    <td>{data.istakin}</td>
-                  </tr>)
-            })}
-          </tbody>
-        </table>
-      </div>
-    </>
+      :
+      <>
+        <SubUnitsRecentFeedsFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} /*handleChange2={handleChange2}*/ handleChange8={handleChange8} />
+        <div style={{ float: 'right', paddingBottom: '5px' }}>
+          <ReactHTMLTableToExcel
+            id="test-table-xls-button"
+            className="btn-green"
+            table="table-to-xls"
+            filename="קובץ - תקינות הזנות"
+            sheet="קובץ - תקינות הזנות"
+            buttonText="הורד כקובץ אקסל"
+            style={{ float: 'right' }}
+          />
+        </div>
+        {/*<GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />*/}
+        <div className="table-responsive" style={{ overflow: 'auto' }}>
+          <table {...getTableProps()} id="table-to-xls">
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th  >
+                      <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
+                      <div>{column.canFilter ? column.render('Filter') : null}</div>
+                      <div>
+                        {column.isSorted ? (column.isSortedDesc ? '🔽' : '⬆️') : ''}
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              ))}
+
+            </thead>
+            <tbody {...getTableBodyProps()}>
+              {
+                page.map(row => {
+                  prepareRow(row)
+                  return (
+                    row.original.istakin == 'תקין' ?
+                      <tr className="greencell">
+                        {
+                          row.cells.map(cell => {
+                            if ((cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "maxdate")) {
+                              return <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                            }
+                            else {
+                              if (cell.column.id == "pikod") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "ogda") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "hativa") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "gdod") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "maxdate") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.toISOString().slice(0, 10).split("-").reverse().join("/")}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                            }
+                          })
+                        }
+                      </tr> :
+                      <tr className="redcell">
+                        {
+                          row.cells.map(cell => {
+                            if ((cell.column.id != "pikod") && (cell.column.id != "ogda") && (cell.column.id != "hativa") && (cell.column.id != "gdod") && (cell.column.id != "maxdate")) {
+                              return <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                            }
+                            else {
+                              if (cell.column.id == "pikod") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "ogda") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "hativa") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "gdod") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.name}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                              if (cell.column.id == "maxdate") {
+                                return cell.value ? <td style={{ width: `${100 / (7)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.toISOString().slice(0, 10).split("-").reverse().join("/")}</td> : <td style={{ width: `${100 / (7)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              }
+                            }
+                          })
+                        }
+                        {/* {console.log(row)} */}
+                      </tr>
+                  )
+                })
+              }
+            </tbody>
+          </table>
+          <div className="pagination">
+
+            <button onClick={() => previousPage()} disabled={!canPreviousPage}>
+              {'<'}
+            </button>{' '}
+            <button onClick={() => nextPage()} disabled={!canNextPage}>
+              {'>'}
+            </button>{' '}
+
+            <span>
+              עמוד{' '}
+              <strong>
+                {pageIndex + 1} מתוך {pageOptions.length}
+              </strong>{' '}
+            </span>
+            <span>
+              | חפש עמוד:{' '}
+              <input
+
+                type="number"
+                defaultValue={pageIndex + 1}
+                onChange={e => {
+                  const page = e.target.value ? Number(e.target.value) - 1 : 0
+                  gotoPage(page)
+                }}
+                style={{ width: '100px', borderRadius: '10px' }}
+              />
+            </span>{' '}
+            <select
+              style={{ borderRadius: '10px' }}
+              value={pageSize}
+              onChange={e => {
+                setPageSize(Number(e.target.value))
+              }}
+            >
+              {[5, 10, 15, 20, 25].map(pageSize => (
+                <option key={pageSize} value={pageSize}>
+                  הראה {pageSize}
+                </option>
+              ))}
+              <option key={data.length} value={data.length}>
+                הראה הכל
+              </option>
+            </select>
+          </div>
+        </div>
+      </>
   );
 }
 export default withRouter(SortingTable);;

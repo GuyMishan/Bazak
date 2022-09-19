@@ -88,6 +88,7 @@ export default function AnimatedMultiSelect(props) {
                                 primary50: 'transparent',
                                 neutral50: 'white',
                                 neutral80: 'white',
+                                neutral10: '#3d3e50',
                             },
                         })}
                     />

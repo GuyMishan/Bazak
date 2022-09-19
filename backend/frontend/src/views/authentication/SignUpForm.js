@@ -36,6 +36,8 @@ export default function SignUpForm() {
     successmsg: false,
     loading: false,
     redirectToReferrer: false,
+    //
+    site_permission:'צפייה ועריכה',
   });
 
   const [gdods, setGdods] = useState([]);
@@ -47,7 +49,7 @@ export default function SignUpForm() {
     axios.get(`http://localhost:8000/auth/passportauth`)
       .then(response => {
         console.log(response.data);
-        setData({ ...data, personalnumber:response.data.stam._json.cn})
+        setData({ ...data, personalnumber: response.data.stam._json.cn })
       })
       .catch(error => {
         console.log(error);
@@ -210,7 +212,7 @@ export default function SignUpForm() {
       // it isn't
       if (c == c.toUpperCase()) {
         //UpperCase Letter -Make Lowercase
-        let tempc=c.toLowerCase();
+        let tempc = c.toLowerCase();
         let temppersonalnumber = data.personalnumber;
         temppersonalnumber = temppersonalnumber.substring(1);
         temppersonalnumber = tempc + temppersonalnumber;
@@ -236,6 +238,8 @@ export default function SignUpForm() {
       hativaid: data.hativaid,
       ogdaid: data.ogdaid,
       pikodid: data.pikodid,
+      
+      site_permission: data.site_permission,
     };
     axios
       .post(`http://localhost:8000/api/signup`, user)
@@ -395,6 +399,25 @@ export default function SignUpForm() {
                     </>
                   ) : data.role === "" ? (
                     <div>נא להכניס הרשאה</div>
+                  ) : null}
+
+                  {data.role != "" ? (
+                    <>
+                      <div style={{ textAlign: "right", paddingTop: "10px" }}>
+                        הרשאת עריכה
+                      </div>
+                      <FormGroup dir="rtl">
+                        <Input
+                          type="select"
+                          name="site_permission"
+                          value={data.site_permission}
+                          onChange={handleChange}
+                        >
+                          <option value={'צפייה ועריכה'}>צפייה ועריכה</option>
+                          <option value={'צפייה'}>צפייה</option>
+                        </Input>
+                      </FormGroup>
+                    </>
                   ) : null}
 
                   <div className="text-center">
