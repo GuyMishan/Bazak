@@ -87,7 +87,7 @@ function AssessmentPage(props) {
             </div>
             :
             <div>
-                <AssessmentFormModal isOpen={isassessmentdataformopen} assessmentdataid={assessmentdataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} user={user}/>
+                <AssessmentFormModal isOpen={isassessmentdataformopen} assessmentdataid={assessmentdataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} user={user} />
 
                 {user.role == '0' ?
                     <div style={{ display: 'flex', justifyContent: 'right', paddingBottom: '15px' }}>
@@ -98,15 +98,21 @@ function AssessmentPage(props) {
                     <Row>
                         {assessments.map((assessment, i) => (
                             assessment ?
-                                <>
-                                    {user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) ?
-                                        <div style={{ display: 'flex', justifyContent: 'right' }}>
-                                            {props.theme == 'white-content' ? <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic_black} style={{ height: "100%" }}></img></button>
-                                                : <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic} style={{ height: "100%" }} ></img></button>}
-                                        </div> : null}
+                                <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
+                                    <Row>
+                                        <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
+                                            {(user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod)) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+                                                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                                                    {props.theme == 'white-content' ? <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic_black} style={{ height: "100%" }}></img></button>
+                                                        : <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic} style={{ height: "100%" }} ></img></button>}
+                                                </div> : null}
+                                        </Col>
 
-                                    <AssessmentComponent theme={props.theme} match={props.match} assessment={assessment} pikods={pikods} />
-                                </>
+                                        <Col xs={12} md={9} style={{ textAlign: 'center', padding: '0px' }}>
+                                            <AssessmentComponent theme={props.theme} match={props.match} assessment={assessment} pikods={pikods} />
+                                        </Col>
+                                    </Row>
+                                </Col>
                                 : null))}
                     </Row>
                 </div>
