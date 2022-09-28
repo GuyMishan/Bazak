@@ -16,6 +16,8 @@ const userSchema = new mongoose.Schema({
     hativaid: {type:String},
     ogdaid: {type:String},
     pikodid: {type:String},
+    //
+    site_permission: {type:String,default:'צפייה ועריכה'},
 }, {timestamps: true})
 
 // virtual field

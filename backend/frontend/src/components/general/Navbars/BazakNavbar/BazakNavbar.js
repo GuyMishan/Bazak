@@ -28,11 +28,12 @@ import {
 import { ThemeContext, themes } from "contexts/ThemeContext";
 
 import UserProfileCircle from '../UserProfileCircle/UserProfileCircle'
-import BazakNavbarTitle from '../BazakNavbarTitle/BazakNavbarTitle';
+import BazakNavbarTitle from './BazakNavbarTitle/BazakNavbarTitle';
+import ToggleDarkModeButton from './ToggleDarkModeButton/ToggleDarkModeButton';
 
 function BazakNavbar(props) {
-  const [colorhr, setcolorhr] = useState("transparent");
-  const [color, setcolor] = useState("transparent");
+  const [colorhr, setcolorhr] = useState("lightGray");
+  const [color, setcolor] = useState("white");
   const { user } = isAuthenticated()
 
   return (
@@ -49,7 +50,8 @@ function BazakNavbar(props) {
             <Navbar style={{ display: 'block', height: '60px', backgroundColor: color, boxShadow: "none", top: '0', paddingBottom: '0px', marginRight: '60px', position: 'sticky' }}>
               <Row>
                 <Col xs={12} md={4}>
-                  <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color} />
+                  {/* <UserProfileCircle fname={user.name} lname={user.lastname} bgcolor={color} /> */}
+                  <ToggleDarkModeButton color={color} />
                 </Col>
                 <Col xs={12} md={4}>
                   <BazakNavbarTitle theme={theme} />

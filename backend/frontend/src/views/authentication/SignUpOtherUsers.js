@@ -33,12 +33,14 @@ export default function SignUpForm() {
     hativaid: "",
     ogdaid: "",
     pikodid: "",
-
+    //
     errortype: "",
     error: false,
     successmsg: false,
     loading: false,
     redirectToReferrer: false,
+    //
+    site_permission: '',
   });
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
@@ -248,6 +250,8 @@ export default function SignUpForm() {
       hativaid: data.hativaid,
       ogdaid: data.ogdaid,
       pikodid: data.pikodid,
+
+      site_permission: data.site_permission,
     };
     axios
       .post(`http://localhost:8000/api/signup`, user)
@@ -400,6 +404,25 @@ export default function SignUpForm() {
                     </>
                   ) : data.role === "" ? (
                     <div>נא להכניס הרשאה</div>
+                  ) : null}
+                  
+                  {data.role != "" ? (
+                    <>
+                      <div style={{ textAlign: "right", paddingTop: "10px" }}>
+                        הרשאת עריכה
+                      </div>
+                      <FormGroup dir="rtl">
+                        <Input
+                          type="select"
+                          name="site_permission"
+                          value={data.site_permission}
+                          onChange={handleChange}
+                        >
+                          <option value={'צפייה ועריכה'}>צפייה ועריכה</option>
+                          <option value={'צפייה'}>צפייה</option>
+                        </Input>
+                      </FormGroup>
+                    </>
                   ) : null}
 
                   <div className="text-center">

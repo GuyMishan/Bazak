@@ -308,16 +308,6 @@ const CarDataFormModal = (props) => {
     let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
     if (response.data.length > 0) {
       if ((!response.data[0].gdod) || (response.data[0].gdod == null) && (!response.data[0].hativa) || (response.data[0].hativa == null) && (!response.data[0].ogda) || (response.data[0].ogda == null) && (!response.data[0].pikod) || (response.data[0].pikod == null)) {
-        //create archivecardata
-        await axios.get(`http://localhost:8000/api/cardata/${response.data[0]._id}`)
-          .then(response => {
-            let tempcardata = response.data[0];
-            delete tempcardata._id;
-            let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
-          })
-          .catch((error) => {
-            console.log(error);
-          })
         //update cardata
         var tempcardataid = response.data[0]._id;
         let tempcardata = { ...cardata }
@@ -330,6 +320,8 @@ const CarDataFormModal = (props) => {
           tempcardata.tipuls = finalspecialkeytwo;
         }
         let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
+        //create archivecardata
+        let result2 = await axios.post(`http://localhost:8000/api/archivecardata`, tempcardata)
         toast.success(`צ' עודכן בהצלחה`);
         props.ToggleForModal();
       }
@@ -363,16 +355,6 @@ const CarDataFormModal = (props) => {
   }
 
   async function UpdateCarData() {
-    //create archivecardata
-    await axios.get(`http://localhost:8000/api/cardata/${props.cardataid}`)
-      .then(response => {
-        let tempcardata = response.data[0];
-        delete tempcardata._id;
-        let result = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
-      })
-      .catch((error) => {
-        console.log(error);
-      })
     //update cardata
     var tempcardataid = props.cardataid;
     let tempcardata = { ...cardata }
@@ -385,6 +367,8 @@ const CarDataFormModal = (props) => {
       tempcardata.tipuls = finalspecialkeytwo;
     }
     let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
+    //create archivecardata
+    let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
     toast.success(`צ' עודכן בהצלחה`);
     props.ToggleForModal();
   }
@@ -631,16 +615,16 @@ const CarDataFormModal = (props) => {
 
               <Row>
                 <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px'}}>זמינות</div>
-                  <Input style={{border: '2px solid'}} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
+                  <Input style={{ border: '2px solid' }} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
                     <option value={'בחר'}>בחר</option>
                     <option value={'זמין'}>זמין</option>
                     <option value={'לא זמין'}>לא זמין</option>
                   </Input>
                 </Col>
                 <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px'}}>כשירות למלחמה</div>
-                  <Input style={{border: '2px solid'}} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
+                  <Input style={{ border: '2px solid' }} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
                     <option value={'בחר'}>בחר</option>
                     <option value={'כשיר'}>כשיר</option>
                     <option value={'לא כשיר'}>לא כשיר</option>
@@ -876,7 +860,7 @@ const CarDataFormModal = (props) => {
                 </Col>
               </Row>
 
-              {user.role == '0' || user.role == '1' || isgdodsadir == false ?
+              {(user.role == '0' || user.role == '1' || isgdodsadir == false) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn" onClick={clickSubmit}>עדכן</button>
                 </div> : null}

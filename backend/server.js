@@ -64,6 +64,9 @@ app.use('/api',fileuploaderRoutes)
 //
 const assessmentRoutes = require("./routes/assessment/assessment");
 app.use('/api',assessmentRoutes)
+//
+const ramamRoutes = require("./routes/ramam/ramam");
+app.use('/api',ramamRoutes)
 
 if(process.env.NODE_ENV === 'production'){
     //set static folder

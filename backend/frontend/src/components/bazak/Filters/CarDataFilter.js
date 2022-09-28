@@ -197,25 +197,7 @@ const CarDataFilter = (props) => {
         getKshirots();
         getZminots();
         getMagadals();
-        // loadPikods();
-        switch (props.unittype) {
-            case 'admin':
-                loadPikods();
-                break;
-            case 'pikod':
-                loadOgdas(props.unitid);
-                break;
-            case 'ogda':
-                loadHativas(props.unitid);
-                break;
-            case 'hativa':
-                loadGdods(props.unitid);
-                break;
-            case 'gdod':
-                break;
-            default:
-                break;
-        }
+        loadPikods();
     }
 
     useEffect(() => {
@@ -341,45 +323,57 @@ const CarDataFilter = (props) => {
                                     </> : null}
                             </Row>
                             <Row style={{ marginBottom: '15px' }}>
-                                {(!(props.filter.magad) || !(props.filter.magad.length > 0)) ?
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מאגד על</h6>
-                                        <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} />
-                                    </Col> :
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מאגד על</h6>
-                                        <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} isDisabled={true} />
-                                    </Col>}
+                                {((props.cartype == "magadal")) ?
+                                    <>
+                                        {(!(props.filter.magad) || !(props.filter.magad.length > 0)) ?
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מאגד על</h6>
+                                                <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} />
+                                            </Col> :
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מאגד על</h6>
+                                                <MultiSelect data={magadals} handleChange2={props.handleChange8} name={'magadal'} isDisabled={true} />
+                                            </Col>}
+                                    </> : null}
 
-                                {((props.filter.magadal) && (props.filter.magadal.length > 0) && (!(props.filter.mkabaz) || !(props.filter.mkabaz.length > 0))) ?
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מאגד</h6>
-                                        <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} />
-                                    </Col> :
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מאגד</h6>
-                                        <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} isDisabled={true} />
-                                    </Col>}
+                                {((props.cartype == "magadal") || (props.cartype == "magad")) ?
+                                    <>
+                                        {((props.filter.magadal) && (props.filter.magadal.length > 0) && (!(props.filter.mkabaz) || !(props.filter.mkabaz.length > 0))) ?
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מאגד</h6>
+                                                <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} />
+                                            </Col> :
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מאגד</h6>
+                                                <MultiSelect data={magads} handleChange2={props.handleChange8} name={'magad'} isDisabled={true} />
+                                            </Col>}
+                                    </> : null}
 
-                                {((props.filter.magad) && (props.filter.magad.length > 0) && (!(props.filter.makat) || !(props.filter.makat.length > 0))) ?
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מקבץ</h6>
-                                        <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} />
-                                    </Col> :
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מקבץ</h6>
-                                        <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} isDisabled={true} />
-                                    </Col>}
+                                {((props.cartype == "magadal") || (props.cartype == "magad") || (props.cartype == "mkabaz")) ?
+                                    <>
+                                        {((props.filter.magad) && (props.filter.magad.length > 0) && (!(props.filter.makat) || !(props.filter.makat.length > 0))) ?
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מקבץ</h6>
+                                                <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} />
+                                            </Col> :
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מקבץ</h6>
+                                                <MultiSelect data={mkabazs} handleChange2={props.handleChange8} name={'mkabaz'} isDisabled={true} />
+                                            </Col>}
+                                    </> : null}
 
-                                {((props.filter.mkabaz) && (props.filter.mkabaz.length > 0) && (props.filter.mkabaz.length > 0)) ?
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מק"ט</h6>
-                                        <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} />
-                                    </Col> :
-                                    <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                        <h6>מק"ט</h6>
-                                        <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} isDisabled={true} />
-                                    </Col>}
+                                {((props.cartype == "magadal") || (props.cartype == "magad") || (props.cartype == "mkabaz")) ?
+                                    <>
+                                        {((props.filter.mkabaz) && (props.filter.mkabaz.length > 0) && (props.filter.mkabaz.length > 0)) ?
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מק"ט</h6>
+                                                <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} />
+                                            </Col> :
+                                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                                                <h6>מק"ט</h6>
+                                                <MultiSelect data={makats} handleChange2={props.handleChange8} name={'makat'} isDisabled={true} />
+                                            </Col>}
+                                    </> : null}
                             </Row>
                         </Col>
                     </Row>

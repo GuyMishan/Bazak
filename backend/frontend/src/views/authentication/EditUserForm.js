@@ -38,12 +38,14 @@ const EditUserForm = ({ match }) => {
     hativaid: "",
     ogdaid: "",
     pikodid: "",
-
+    //
     errortype: "",
     error: false,
     successmsg: false,
     loading: false,
     redirectToReferrer: false,
+    //
+    site_permission: '',
   });
 
   const [gdods, setGdods] = useState([]);
@@ -209,6 +211,8 @@ const EditUserForm = ({ match }) => {
       hativaid: data.hativaid,
       ogdaid: data.ogdaid,
       pikodid: data.pikodid,
+
+      site_permission: data.site_permission,
     };
 
     axios.put(`http://localhost:8000/api/user/update/${userid}`, user)
@@ -341,6 +345,25 @@ const EditUserForm = ({ match }) => {
                     </>
                   ) : data.role === "" ? (
                     <div>נא להכניס הרשאה</div>
+                  ) : null}
+
+                  {data.role != "" ? (
+                    <>
+                      <div style={{ textAlign: "right", paddingTop: "10px" }}>
+                        הרשאת עריכה
+                      </div>
+                      <FormGroup dir="rtl">
+                        <Input
+                          type="select"
+                          name="site_permission"
+                          value={data.site_permission}
+                          onChange={handleChange}
+                        >
+                          <option value={'צפייה ועריכה'}>צפייה ועריכה</option>
+                          <option value={'צפייה'}>צפייה</option>
+                        </Input>
+                      </FormGroup>
+                    </>
                   ) : null}
 
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מאושר/לא מאושר מערכת</div>
