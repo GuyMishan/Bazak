@@ -111,7 +111,7 @@ const SortingTable = (props) => {
           buttonText="הורד כקובץ אקסל"
           style={{}}
         />
-        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ marginRight: '5px' }}>הוסף צ'</button>
+        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ marginRight: '5px' }}>הוסף רמ"מ</button>
       </div>
       {/*<GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />*/}
       {/*modals */}
