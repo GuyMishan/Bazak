@@ -58,18 +58,20 @@ const CarDataFormModal = (props) => {
         setCarData(tempcardata);
         setFinalSpecialKeytwo(tempcardata.tipuls);
         //new 18.8.22
-        axios.get(`http://localhost:8000/api/gdod/${tempcardata.gdod}`)
-          .then(response => {
-            if (/*response.data.sadir &&*/ response.data.sadir == 'לא סדיר') {
-              setIsgdodsadir(false)
-            }
-            else {
-              setIsgdodsadir(true)
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        if (tempcardata.gdod) {
+          axios.get(`http://localhost:8000/api/gdod/${tempcardata.gdod}`)
+            .then(response => {
+              if (/*response.data.sadir &&*/ response.data.sadir == 'לא סדיר') {
+                setIsgdodsadir(false)
+              }
+              else {
+                setIsgdodsadir(true)
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -321,6 +323,7 @@ const CarDataFormModal = (props) => {
         }
         let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
         //create archivecardata
+        delete tempcardata._id;
         let result2 = await axios.post(`http://localhost:8000/api/archivecardata`, tempcardata)
         toast.success(`צ' עודכן בהצלחה`);
         props.ToggleForModal();
@@ -368,6 +371,7 @@ const CarDataFormModal = (props) => {
     }
     let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
     //create archivecardata
+    delete tempcardata._id;
     let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
     toast.success(`צ' עודכן בהצלחה`);
     props.ToggleForModal();

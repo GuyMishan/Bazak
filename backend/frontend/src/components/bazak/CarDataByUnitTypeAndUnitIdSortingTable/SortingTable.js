@@ -5,9 +5,7 @@ import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
-import people from "assets/img/people.png";
+import { signin, authenticate, isAuthenticated } from 'auth/index';
 import PropagateLoader from "react-spinners/PropagateLoader";
 import {
   Row,
@@ -18,12 +16,18 @@ import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
+//redux
+import { useSelector, useDispatch } from 'react-redux'
+import { getCarDataFunc, findcardatabyidandupdateFunc,findcardatabyidanddeleteFunc } from 'redux/features/cardata/cardataSlice'
 
 const SortingTable = (props) => {
+  //user
+  const { user } = isAuthenticated()
+  //table
   const columns = useMemo(() => COLUMNS, []);
   //data
-  const [originaldata, setOriginaldata] = useState([])
   const [data, setData] = useState([])
+  const [originaldata, setOriginaldata] = useState([])
   //filter
   const [filter, setFilter] = useState([])
   //cardata form modal
@@ -46,6 +50,9 @@ const SortingTable = (props) => {
   const [isdataloaded, setIsdataloaded] = useState(false);
   //excel download
   const XLSX = require('xlsx')
+  //redux
+  const dispatch = useDispatch()
+  const reduxcardata = useSelector((state) => state.cardata.value)
 
   const loadPikods = async () => {
     let response = await axios.get("http://localhost:8000/api/pikod",)
@@ -114,12 +121,13 @@ const SortingTable = (props) => {
 
   function ToggleForModalDelete(evt) {
     setIscardataformdeleteopen(!iscardataformdeleteopen);
-    updatechangedcardata(); // update table..
+    updatechangedcardatadelete(); // update table..
   }
 
-  async function updatechangedcardata() {
+  async function updatechangedcardata() { //need fix!!
     if (cardataidformodal != undefined) {
       if (props.unittype != 'notype') {
+        //update table row
         let response = await axios.get(`http://localhost:8000/api/cardata/${cardataidformodal}`)
         let tempcardata = response.data[0];
 
@@ -139,37 +147,67 @@ const SortingTable = (props) => {
         }
         setOriginaldata(temporiginaldata)
         setData(tempdata)
+        dispatch(findcardatabyidandupdateFunc(tempcardata))
       }
-      else {
-        let tempdata = [...data];
-        let temporiginaldata = [...originaldata];
+      else{
+      //delete from table but add to redux
+      let tempdata = [...data];
+      let temporiginaldata = [...originaldata];
 
-        let tempdeleteindex = 999;
-        let tempdeleteindexoriginal = 999;
+      let tempdeleteindex = 999;
+      let tempdeleteindexoriginal = 999;
 
-        for (let i = 0; i < tempdata.length; i++) {
-          if (cardataidformodal == tempdata[i]._id) {
-            tempdeleteindex = i;
-          }
+      for (let i = 0; i < tempdata.length; i++) {
+        if (cardataidfordeletemodal == tempdata[i]._id) {
+          tempdeleteindex = i;
         }
+      }
 
-        for (let i = 0; i < temporiginaldata.length; i++) {
-          if (cardataidformodal == temporiginaldata[i]._id) {
-            //delete from arr
-            tempdeleteindexoriginal = i;
-          }
+      for (let i = 0; i < temporiginaldata.length; i++) {
+        if (cardataidfordeletemodal == temporiginaldata[i]._id) {
+          tempdeleteindexoriginal = i;
         }
+      }
 
-        tempdata.splice(tempdeleteindex, 1);
-        temporiginaldata.splice(tempdeleteindexoriginal, 1);
+      tempdata.splice(tempdeleteindex, 1);
+      temporiginaldata.splice(tempdeleteindexoriginal, 1);
 
-        setOriginaldata(temporiginaldata)
-        setData(tempdata)
+      setOriginaldata(temporiginaldata)
+      setData(tempdata)
+      dispatch(getCarDataFunc(user))
       }
     }
-    else {
-      init();
+    else {//add to table
+      dispatch(getCarDataFunc(user))
     }
+  }
+
+  async function updatechangedcardatadelete() {
+      //delete from table
+      let tempdata = [...data];
+      let temporiginaldata = [...originaldata];
+
+      let tempdeleteindex = 999;
+      let tempdeleteindexoriginal = 999;
+
+      for (let i = 0; i < tempdata.length; i++) {
+        if (cardataidfordeletemodal == tempdata[i]._id) {
+          tempdeleteindex = i;
+        }
+      }
+
+      for (let i = 0; i < temporiginaldata.length; i++) {
+        if (cardataidfordeletemodal == temporiginaldata[i]._id) {
+          tempdeleteindexoriginal = i;
+        }
+      }
+
+      tempdata.splice(tempdeleteindex, 1);
+      temporiginaldata.splice(tempdeleteindexoriginal, 1);
+
+      setOriginaldata(temporiginaldata)
+      setData(tempdata)
+      dispatch(findcardatabyidanddeleteFunc(cardataidfordeletemodal))
   }
 
   function init() {
@@ -190,20 +228,77 @@ const SortingTable = (props) => {
     loadMakats();
   }
 
+  const getReduxCardDataByUnitTypeAndUnitId = async () => {
+      if (reduxcardata.length == 0) {
+        await dispatch(getCarDataFunc(user));
+      }
+  }
+
   const getCardDataByUnitTypeAndUnitId = async () => {
-    if (props.ismushbat == "false") {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitidandcartypeandcarid/${props.unittype}/${props.unitid}/${props.cartype}/${props.carid}`)
-        .then(response => {
-          setOriginaldata(response.data)
-          setData(response.data)
-          setIsdataloaded(true)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    if (props.unittype != 'notype') {
+      let myArrayFiltered1 = []; //filter cartype
+
+    switch (props.match.params.cartype) {
+      case 'magadal':
+        myArrayFiltered1 = reduxcardata;
+        break;
+      case 'magad':
+        myArrayFiltered1 = reduxcardata.filter((el) => {
+          return props.match.params.carid === el.magadal;
+        });
+        break;
+      case 'mkabaz':
+        myArrayFiltered1 = reduxcardata.filter((el) => {
+          return props.match.params.carid === el.magad;
+        });
+        break;
     }
-    else {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid_mushbat/${props.unittype}/${props.unitid}`)
+
+    let myArrayFiltered2 = []; //filter cartype
+
+    switch (props.match.params.unittype) {
+      case 'admin':
+        myArrayFiltered2 = myArrayFiltered1;
+        break;
+      case 'pikod':
+        myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+          return props.match.params.unitid === el.pikod;
+        });
+        break;
+      case 'ogda':
+        myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+          return props.match.params.unitid === el.ogda;
+        });
+        break;
+      case 'hativa':
+        myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+          return props.match.params.unitid === el.hativa;
+        });
+        break;
+      case 'gdod':
+        myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+          return props.match.params.unitid === el.gdod;
+        });
+        break;
+    }
+
+      let myArrayFiltered3 = []; //filter ismushbat
+
+      if (props.ismushbat == "false") {
+        myArrayFiltered3 = myArrayFiltered2;
+      }
+      else {
+        myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+          return 'true' === el.ismushbat;
+        });
+      }
+
+      setOriginaldata(myArrayFiltered3)
+      setData(myArrayFiltered3)
+      setIsdataloaded(true)
+    }
+    else { //read from db only for nounit cardatas..
+      await axios.get(`http://localhost:8000/api/cardatanotype`)
         .then(response => {
           setOriginaldata(response.data)
           setData(response.data)
@@ -489,40 +584,40 @@ const SortingTable = (props) => {
       delete tempdata_to_excel[i].__v;
       delete tempdata_to_excel[i].createdAt;
       delete tempdata_to_excel[i].updatedAt;
-      
+
       //add non-existing fields - 31
-      if(!tempdata_to_excel[i].carnumber){tempdata_to_excel[i].carnumber=" "}
-      if(!tempdata_to_excel[i].expected_repair){tempdata_to_excel[i].expected_repair=" "}
-      if(!tempdata_to_excel[i].family){tempdata_to_excel[i].family=" "}
-      if(!tempdata_to_excel[i].gdod_name){tempdata_to_excel[i].gdod_name=" "}
-      if(!tempdata_to_excel[i].hativa_name){tempdata_to_excel[i].hativa_name=" "}
-      if(!tempdata_to_excel[i].kshirot){tempdata_to_excel[i].kshirot=" "}
-      if(!tempdata_to_excel[i].latest_recalibration_date){tempdata_to_excel[i].latest_recalibration_date=" "}
-      if(!tempdata_to_excel[i].magad_name){tempdata_to_excel[i].magad_name=" "}
-      if(!tempdata_to_excel[i].magadal_name){tempdata_to_excel[i].magadal_name=" "}
-      if(!tempdata_to_excel[i].makat_description_name){tempdata_to_excel[i].makat_description_name=" "}
-      if(!tempdata_to_excel[i].makat_name){tempdata_to_excel[i].makat_name=" "}
-      if(!tempdata_to_excel[i].mikum){tempdata_to_excel[i].mikum=" "}
-      if(!tempdata_to_excel[i].mikum_bimh){tempdata_to_excel[i].mikum_bimh=" "}
-      if(!tempdata_to_excel[i].mkabaz_name){tempdata_to_excel[i].mkabaz_name=" "}
-      if(!tempdata_to_excel[i].ogda_name){tempdata_to_excel[i].ogda_name=" "}
-      if(!tempdata_to_excel[i].pikod_name){tempdata_to_excel[i].pikod_name=" "}
-      if(!tempdata_to_excel[i].pluga){tempdata_to_excel[i].pluga=" "}
-      if(!tempdata_to_excel[i].shabzak){tempdata_to_excel[i].shabzak=" "}
-      if(!tempdata_to_excel[i].stand){tempdata_to_excel[i].stand=" "}
-      if(!tempdata_to_excel[i].status){tempdata_to_excel[i].status=" "}
-      if(!tempdata_to_excel[i].takala_info){tempdata_to_excel[i].takala_info=" "}
-      if(!tempdata_to_excel[i].zminot){tempdata_to_excel[i].zminot=" "} //22
+      if (!tempdata_to_excel[i].carnumber) { tempdata_to_excel[i].carnumber = " " }
+      if (!tempdata_to_excel[i].expected_repair) { tempdata_to_excel[i].expected_repair = " " }
+      if (!tempdata_to_excel[i].family) { tempdata_to_excel[i].family = " " }
+      if (!tempdata_to_excel[i].gdod_name) { tempdata_to_excel[i].gdod_name = " " }
+      if (!tempdata_to_excel[i].hativa_name) { tempdata_to_excel[i].hativa_name = " " }
+      if (!tempdata_to_excel[i].kshirot) { tempdata_to_excel[i].kshirot = " " }
+      if (!tempdata_to_excel[i].latest_recalibration_date) { tempdata_to_excel[i].latest_recalibration_date = " " }
+      if (!tempdata_to_excel[i].magad_name) { tempdata_to_excel[i].magad_name = " " }
+      if (!tempdata_to_excel[i].magadal_name) { tempdata_to_excel[i].magadal_name = " " }
+      if (!tempdata_to_excel[i].makat_description_name) { tempdata_to_excel[i].makat_description_name = " " }
+      if (!tempdata_to_excel[i].makat_name) { tempdata_to_excel[i].makat_name = " " }
+      if (!tempdata_to_excel[i].mikum) { tempdata_to_excel[i].mikum = " " }
+      if (!tempdata_to_excel[i].mikum_bimh) { tempdata_to_excel[i].mikum_bimh = " " }
+      if (!tempdata_to_excel[i].mkabaz_name) { tempdata_to_excel[i].mkabaz_name = " " }
+      if (!tempdata_to_excel[i].ogda_name) { tempdata_to_excel[i].ogda_name = " " }
+      if (!tempdata_to_excel[i].pikod_name) { tempdata_to_excel[i].pikod_name = " " }
+      if (!tempdata_to_excel[i].pluga) { tempdata_to_excel[i].pluga = " " }
+      if (!tempdata_to_excel[i].shabzak) { tempdata_to_excel[i].shabzak = " " }
+      if (!tempdata_to_excel[i].stand) { tempdata_to_excel[i].stand = " " }
+      if (!tempdata_to_excel[i].status) { tempdata_to_excel[i].status = " " }
+      if (!tempdata_to_excel[i].takala_info) { tempdata_to_excel[i].takala_info = " " }
+      if (!tempdata_to_excel[i].zminot) { tempdata_to_excel[i].zminot = " " } //22
       //
-      if(!tempdata_to_excel[i].tipul){tempdata_to_excel[i].tipul=" "}
-      if(!tempdata_to_excel[i].tipul_entry_date){tempdata_to_excel[i].tipul_entry_date=" "}
-      if(!tempdata_to_excel[i].mikum_tipul){tempdata_to_excel[i].mikum_tipul=" "}
-      if(!tempdata_to_excel[i].harig_tipul){tempdata_to_excel[i].harig_tipul=" "}
-      if(!tempdata_to_excel[i].harig_tipul_date){tempdata_to_excel[i].harig_tipul_date=" "}
-      if(!tempdata_to_excel[i].takala_mizdamenet){tempdata_to_excel[i].takala_mizdamenet=" "}
-      if(!tempdata_to_excel[i].takala_mizdamenet_date){tempdata_to_excel[i].takala_mizdamenet_date=" "}
-      if(!tempdata_to_excel[i].missing_makat_1){tempdata_to_excel[i].missing_makat_1=" "}
-      if(!tempdata_to_excel[i].missing_makat_2){tempdata_to_excel[i].missing_makat_2=" "}
+      if (!tempdata_to_excel[i].tipul) { tempdata_to_excel[i].tipul = " " }
+      if (!tempdata_to_excel[i].tipul_entry_date) { tempdata_to_excel[i].tipul_entry_date = " " }
+      if (!tempdata_to_excel[i].mikum_tipul) { tempdata_to_excel[i].mikum_tipul = " " }
+      if (!tempdata_to_excel[i].harig_tipul) { tempdata_to_excel[i].harig_tipul = " " }
+      if (!tempdata_to_excel[i].harig_tipul_date) { tempdata_to_excel[i].harig_tipul_date = " " }
+      if (!tempdata_to_excel[i].takala_mizdamenet) { tempdata_to_excel[i].takala_mizdamenet = " " }
+      if (!tempdata_to_excel[i].takala_mizdamenet_date) { tempdata_to_excel[i].takala_mizdamenet_date = " " }
+      if (!tempdata_to_excel[i].missing_makat_1) { tempdata_to_excel[i].missing_makat_1 = " " }
+      if (!tempdata_to_excel[i].missing_makat_2) { tempdata_to_excel[i].missing_makat_2 = " " }
     }
     console.log(tempdata_to_excel)
 
@@ -541,19 +636,21 @@ const SortingTable = (props) => {
     // XLSX.writeFile(wb, 'גזירה.xlsx');
 
     let EXCEL_EXTENSION = '.xlsx';
-    let worksheet= XLSX.WorkSheet;
-    let sheetName = 'גזירה';  
-     
-    const headers = { carnumber: "צ'",magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
-    , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון' , tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'};
+    let worksheet = XLSX.WorkSheet;
+    let sheetName = 'גזירה';
+
+    const headers = {
+      carnumber: "צ'", magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
+      , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון', tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'
+    };
     tempdata_to_excel.unshift(headers); // if custom header, then make sure first row of data is custom header 
-    
+
     worksheet = XLSX.utils.json_to_sheet(tempdata_to_excel, { skipHeader: true });
 
-   const workbook = XLSX.utils.book_new();
-   const fileName =  'גזירה'+ EXCEL_EXTENSION;
-   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-   XLSX.writeFile(workbook, fileName);
+    const workbook = XLSX.utils.book_new();
+    const fileName = 'גזירה' + EXCEL_EXTENSION;
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    XLSX.writeFile(workbook, fileName);
 
     window.location.reload();
   }
@@ -586,10 +683,22 @@ const SortingTable = (props) => {
   }, [filter]);
 
   useEffect(() => {
-    init();
+    if (reduxcardata.length > 0) {
+      init();
+    }
+  }, [props.unittype, props.unitid, props.ismushbat, props.match]);
+
+  useEffect(() => {
+    if (reduxcardata.length > 0 && isdataloaded == false) {
+      init();
+    }
+  }, [reduxcardata]);
+
+  useEffect(() => {
+    getReduxCardDataByUnitTypeAndUnitId();
     init2();
     setPageSize(20);
-  }, [props.unittype,props.unitid,props.ismushbat,props.match]);
+  }, [])
 
   useEffect(() => {
     FixLocalStorageHeaders();
@@ -655,8 +764,8 @@ const SortingTable = (props) => {
                             return <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                           }
                           else {
-                             if (cell.column.id == "updatedAt") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td>  : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            if (cell.column.id == "updatedAt") {
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "latest_recalibration_date") {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>

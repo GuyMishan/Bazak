@@ -23,26 +23,31 @@ import history from 'history.js'
 import { toast } from "react-toastify";
 
 import logobazak2 from "assets/img/logobazak2.png";
+//redux
+import { useSelector, useDispatch } from 'react-redux'
+import { clearCarData } from 'redux/features/cardata/cardataSlice'
 
 function AdminSignInForm() {
   const [values, setValues] = useState({
     personalnumber: '',
-    password: '',
     errortype: '',
     error: false,
     successmsg: false,
     loading: false,
     redirectToReferrer: false,
   })
-  const { personalnumber, password, error, loading, redirectToReferrer } = values
+  const { personalnumber, error, loading, redirectToReferrer } = values
   const { user } = isAuthenticated()
+  //redux
+  const dispatch = useDispatch()
+
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value })
   }
   const clickSubmit = (event) => {
     //event.preventDefault()
     setValues({ ...values, loading: true, successmsg: false, error: false })
-    axios.post(`http://localhost:8000/api/signin`, { personalnumber, password })
+    axios.post(`http://localhost:8000/api/signin`, { personalnumber })
       .then(res => {
         authenticate(res.data)
         setValues({ ...values, loading: false, error: false, redirectToReferrer: true })
@@ -93,8 +98,8 @@ function AdminSignInForm() {
   )
 
   useEffect(() => {
-    setValues({ ...values, password: values.personalnumber });
-  }, [values.personalnumber])
+    dispatch(clearCarData())
+  }, [])
 
   const signInForm = () => (
     <>
