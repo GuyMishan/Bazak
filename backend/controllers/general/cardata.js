@@ -236,7 +236,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  Cardata.findByIdAndUpdate(req.params.cardataId, req.body)
+  Cardata.findByIdAndUpdate(req.params.cardataId, req.body, { overwrite: true })
     .then((candidatepreference) => res.json(candidatepreference))
     .catch((err) => res.status(400).json("Error: " + err));
 }
