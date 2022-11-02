@@ -98,7 +98,7 @@ function SidebarPikod(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/pikod/${user.pikodid}/magadal/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/pikod/${user.pikodid}/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -188,7 +188,7 @@ function SidebarPikod(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/notype/0/magadal/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/notype/0/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -203,7 +203,7 @@ function SidebarPikod(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/pikod/${user.pikodid}/magadal/0/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/pikod/${user.pikodid}/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>

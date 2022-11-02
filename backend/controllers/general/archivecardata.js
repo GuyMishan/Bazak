@@ -1,22 +1,230 @@
-const ArchiveCardata = require("../../models/general/archivecardata");
+const Archivecardata = require("../../models/general/archivecardata");
+const mongoose = require('mongoose');
+
+let readtipul = [
+  {
+    $lookup: {
+      from: "gdods",
+      localField: "gdod",
+      foreignField: "_id",
+      as: "gdod_data"
+    }
+  },
+  {
+    $unwind: "$gdod_data"
+  },
+  {
+    $lookup: {
+      from: "hativas",
+      localField: "gdod_data.hativa",
+      foreignField: "_id",
+      as: "hativa_data"
+    }
+  },
+  {
+    $set: {
+      hativa: { $arrayElemAt: ["$hativa_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "ogdas",
+      localField: "hativa_data.ogda",
+      foreignField: "_id",
+      as: "ogda_data"
+    }
+  },
+  {
+    $set: {
+      ogda: { $arrayElemAt: ["$ogda_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "pikods",
+      localField: "ogda_data.pikod",
+      foreignField: "_id",
+      as: "pikod_data"
+    }
+  },
+  {
+    $set: {
+      pikod: { $arrayElemAt: ["$pikod_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "makats",
+      localField: "makat",
+      foreignField: "_id",
+      as: "makat_data"
+    }
+  },
+  {
+    $unwind: "$makat_data"
+  },
+  {
+    $lookup: {
+      from: "mkabazs",
+      localField: "makat_data.mkabaz",
+      foreignField: "_id",
+      as: "mkabaz_data"
+    }
+  },
+  {
+    $set: {
+      mkabaz: { $arrayElemAt: ["$mkabaz_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magads",
+      localField: "mkabaz_data.magad",
+      foreignField: "_id",
+      as: "magad_data"
+    }
+  },
+  {
+    $set: {
+      magad: { $arrayElemAt: ["$magad_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magadals",
+      localField: "magad_data.magadal",
+      foreignField: "_id",
+      as: "magadal_data"
+    }
+  },
+  {
+    $set: {
+      magadal: { $arrayElemAt: ["$magadal_data._id", 0] }
+    }
+  },
+];
+
+let readtipulnotype = [
+  {
+    $lookup: {
+      from: "makats",
+      localField: "makat",
+      foreignField: "_id",
+      as: "makat_data"
+    }
+  },
+  {
+    $unwind: "$makat_data"
+  },
+  {
+    $lookup: {
+      from: "mkabazs",
+      localField: "makat_data.mkabaz",
+      foreignField: "_id",
+      as: "mkabaz_data"
+    }
+  },
+  {
+    $set: {
+      mkabaz: { $arrayElemAt: ["$mkabaz_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magads",
+      localField: "mkabaz_data.magad",
+      foreignField: "_id",
+      as: "magad_data"
+    }
+  },
+  {
+    $set: {
+      magad: { $arrayElemAt: ["$magad_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magadals",
+      localField: "magad_data.magadal",
+      foreignField: "_id",
+      as: "magadal_data"
+    }
+  },
+  {
+    $set: {
+      magadal: { $arrayElemAt: ["$magadal_data._id", 0] }
+    }
+  },
+];
 
 exports.read = async (req, res) => {
-  const archivecardata = await ArchiveCardata.findById(req.params.id);
-  if (!archivecardata) {
-    res.status(500).json({ message: 'האימון לא נמצא' })
-  } else {
-    res.status(200).send([archivecardata])
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
   }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Archivecardata.aggregate(finalquerry)
+    .then((result) => {
+      if (result.length != 0) {
+        res.json(result);
+      }
+      else {
+        let tipulfindquerry = readtipulnotype.slice();
+        let finalquerry = tipulfindquerry;
+
+        let andquery = [];
+
+        andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+
+        if (andquery.length != 0) {
+          let matchquerry = {
+            "$match": {
+              "$and": andquery
+            }
+          };
+          finalquerry.push(matchquerry)
+        }
+
+        // console.log(matchquerry)
+        //console.log(andquery)
+
+        Archivecardata.aggregate(finalquerry)
+          .then((result) => {
+            res.json(result);
+          })
+          .catch((error) => {
+            res.status(400).json('Error: ' + error);
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 }
 
+
 exports.find = (req, res) => {
-  ArchiveCardata.find()
+  Archivecardata.find()
     .then((archivecardata) => res.json(archivecardata))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.create = (req, res) => {
-  const archivecardata = new ArchiveCardata(req.body);
+  const archivecardata = new Archivecardata(req.body);
   archivecardata.save((err, data) => {
     if (err) {
       return res.status(400).json({
@@ -28,51 +236,141 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  ArchiveCardata.findByIdAndUpdate(req.params.archivecardataId, req.body)
+  Archivecardata.findByIdAndUpdate(req.params.archivecardataId, req.body)
     .then((candidatepreference) => res.json(candidatepreference))
     .catch((err) => res.status(400).json("Error: " + err));
 }
 
 exports.remove = (req, res) => {
-  ArchiveCardata.deleteOne({ _id: req.params.id })
+  Archivecardata.deleteOne({ _id: req.params.id })
     .then((archivecardata) => res.json(archivecardata))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 exports.archivecardatabyunittypeandunitid = (req, res) => {
-  if (req.params.unittype == 'admin' && req.params.unitid == '0') {
-    ArchiveCardata.find({ pikod: { $ne: null },ogda: { $ne: null },hativa: { $ne: null },gdod: { $ne: null } })
-      .then((archivecardata) => res.json(archivecardata))
-      .catch((err) => res.status(400).json("Error: " + err));
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  switch (req.params.unittype) {
+    case 'admin':
+      break;
+    case 'pikod': andquery.push({ "pikod_data._id": req.params.unitid });
+      break;
+    case 'ogda': andquery.push({ "ogda_data._id": req.params.unitid });
+      break;
+    case 'hativa': andquery.push({ "hativa_data._id": req.params.unitid });
+      break;
+    case 'gdod': andquery.push({ "gdod_data._id": req.params.unitid });
+      break;
   }
-  else
-    if (req.params.unittype == 'pikod') {
-      ArchiveCardata.find({ pikod: req.params.unitid })
-        .then((archivecardata) => res.json(archivecardata))
-        .catch((err) => res.status(400).json("Error: " + err));
-    }
-    else
-      if (req.params.unittype == 'ogda') {
-        ArchiveCardata.find({ ogda: req.params.unitid })
-          .then((archivecardata) => res.json(archivecardata))
-          .catch((err) => res.status(400).json("Error: " + err));
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
       }
-      else
-        if (req.params.unittype == 'hativa') {
-          ArchiveCardata.find({ hativa: req.params.unitid })
-            .then((archivecardata) => res.json(archivecardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
-        else
-          if (req.params.unittype == 'gdod') {
-            ArchiveCardata.find({ gdod: req.params.unitid })
-              .then((archivecardata) => res.json(archivecardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Archivecardata.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };
 
 exports.archivecardatabycarnumber = (req, res) => {
-  ArchiveCardata.find({ carnumber: req.params.carnumber })
-    .then((archivecardata) => res.json(archivecardata))
-    .catch((err) => res.status(400).json("Error: " + err));
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  andquery.push({ "carnumber": req.params.carnumber });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Archivecardata.aggregate(finalquerry)
+    .then((result) => {
+      if(result.length!=0){
+        res.json(result);
+      }
+      else{
+        let tipulfindquerry = readtipulnotype.slice();
+        let finalquerry = tipulfindquerry;
+      
+        let andquery = [];
+      
+        andquery.push({ "carnumber": req.params.carnumber });
+      
+        if (andquery.length != 0) {
+          let matchquerry = {
+            "$match": {
+              "$and": andquery
+            }
+          };
+          finalquerry.push(matchquerry)
+        }
+      
+        // console.log(matchquerry)
+        //console.log(andquery)
+      
+        Archivecardata.aggregate(finalquerry)
+          .then((result) => {
+              res.json(result);
+          })
+          .catch((error) => {
+            res.status(400).json('Error: ' + error);
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
+};
+
+exports.archivecardatanotype = (req, res) => {
+  let tipulfindquerry = readtipulnotype.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  andquery.push({ "gdod": null });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Archivecardata.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };

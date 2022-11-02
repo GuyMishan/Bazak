@@ -1,13 +1,221 @@
 const Cardata = require("../../models/general/cardata");
+const mongoose = require('mongoose');
+
+let readtipul = [
+  {
+    $lookup: {
+      from: "gdods",
+      localField: "gdod",
+      foreignField: "_id",
+      as: "gdod_data"
+    }
+  },
+  {
+    $unwind: "$gdod_data"
+  },
+  {
+    $lookup: {
+      from: "hativas",
+      localField: "gdod_data.hativa",
+      foreignField: "_id",
+      as: "hativa_data"
+    }
+  },
+  {
+    $set: {
+      hativa: { $arrayElemAt: ["$hativa_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "ogdas",
+      localField: "hativa_data.ogda",
+      foreignField: "_id",
+      as: "ogda_data"
+    }
+  },
+  {
+    $set: {
+      ogda: { $arrayElemAt: ["$ogda_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "pikods",
+      localField: "ogda_data.pikod",
+      foreignField: "_id",
+      as: "pikod_data"
+    }
+  },
+  {
+    $set: {
+      pikod: { $arrayElemAt: ["$pikod_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "makats",
+      localField: "makat",
+      foreignField: "_id",
+      as: "makat_data"
+    }
+  },
+  {
+    $unwind: "$makat_data"
+  },
+  {
+    $lookup: {
+      from: "mkabazs",
+      localField: "makat_data.mkabaz",
+      foreignField: "_id",
+      as: "mkabaz_data"
+    }
+  },
+  {
+    $set: {
+      mkabaz: { $arrayElemAt: ["$mkabaz_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magads",
+      localField: "mkabaz_data.magad",
+      foreignField: "_id",
+      as: "magad_data"
+    }
+  },
+  {
+    $set: {
+      magad: { $arrayElemAt: ["$magad_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magadals",
+      localField: "magad_data.magadal",
+      foreignField: "_id",
+      as: "magadal_data"
+    }
+  },
+  {
+    $set: {
+      magadal: { $arrayElemAt: ["$magadal_data._id", 0] }
+    }
+  },
+];
+
+let readtipulnotype = [
+  {
+    $lookup: {
+      from: "makats",
+      localField: "makat",
+      foreignField: "_id",
+      as: "makat_data"
+    }
+  },
+  {
+    $unwind: "$makat_data"
+  },
+  {
+    $lookup: {
+      from: "mkabazs",
+      localField: "makat_data.mkabaz",
+      foreignField: "_id",
+      as: "mkabaz_data"
+    }
+  },
+  {
+    $set: {
+      mkabaz: { $arrayElemAt: ["$mkabaz_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magads",
+      localField: "mkabaz_data.magad",
+      foreignField: "_id",
+      as: "magad_data"
+    }
+  },
+  {
+    $set: {
+      magad: { $arrayElemAt: ["$magad_data._id", 0] }
+    }
+  },
+  {
+    $lookup: {
+      from: "magadals",
+      localField: "magad_data.magadal",
+      foreignField: "_id",
+      as: "magadal_data"
+    }
+  },
+  {
+    $set: {
+      magadal: { $arrayElemAt: ["$magadal_data._id", 0] }
+    }
+  },
+];
 
 exports.read = async (req, res) => {
-  const cardata = await Cardata.findById(req.params.id);
-  if (!cardata) {
-    res.status(500).json({ message: 'האימון לא נמצא' })
-  } else {
-    res.status(200).send([cardata])
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
   }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Cardata.aggregate(finalquerry)
+    .then((result) => {
+      if (result.length != 0) {
+        res.json(result);
+      }
+      else {
+        let tipulfindquerry = readtipulnotype.slice();
+        let finalquerry = tipulfindquerry;
+
+        let andquery = [];
+
+        andquery.push({ "_id": mongoose.Types.ObjectId(req.params.id) });
+
+        if (andquery.length != 0) {
+          let matchquerry = {
+            "$match": {
+              "$and": andquery
+            }
+          };
+          finalquerry.push(matchquerry)
+        }
+
+        // console.log(matchquerry)
+        //console.log(andquery)
+
+        Cardata.aggregate(finalquerry)
+          .then((result) => {
+            res.json(result);
+          })
+          .catch((error) => {
+            res.status(400).json('Error: ' + error);
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 }
+
 
 exports.find = (req, res) => {
   Cardata.find()
@@ -40,205 +248,129 @@ exports.remove = (req, res) => {
 };
 
 exports.cardatabyunittypeandunitid = (req, res) => {
-  if (req.params.unittype == 'admin' && req.params.unitid == '0') {
-    Cardata.find({ pikod: { $ne: null }, ogda: { $ne: null }, hativa: { $ne: null }, gdod: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-      .then((cardata) => res.json(cardata))
-      .catch((err) => res.status(400).json("Error: " + err));
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  switch (req.params.unittype) {
+    case 'admin':
+      break;
+    case 'pikod': andquery.push({ "pikod_data._id": req.params.unitid });
+      break;
+    case 'ogda': andquery.push({ "ogda_data._id": req.params.unitid });
+      break;
+    case 'hativa': andquery.push({ "hativa_data._id": req.params.unitid });
+      break;
+    case 'gdod': andquery.push({ "gdod_data._id": req.params.unitid });
+      break;
   }
-  else
-    if (req.params.unittype == 'pikod') {
-      Cardata.find({ pikod: req.params.unitid }).where({ status: { $ne: 'מושבת' } })
-        .then((cardata) => res.json(cardata))
-        .catch((err) => res.status(400).json("Error: " + err));
-    }
-    else
-      if (req.params.unittype == 'ogda') {
-        Cardata.find({ ogda: req.params.unitid }).where({ status: { $ne: 'מושבת' } })
-          .then((cardata) => res.json(cardata))
-          .catch((err) => res.status(400).json("Error: " + err));
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
       }
-      else
-        if (req.params.unittype == 'hativa') {
-          Cardata.find({ hativa: req.params.unitid }).where({ status: { $ne: 'מושבת' } })
-            .then((cardata) => res.json(cardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
-        else
-          if (req.params.unittype == 'gdod') {
-            Cardata.find({ gdod: req.params.unitid }).where({ status: { $ne: 'מושבת' } })
-              .then((cardata) => res.json(cardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
-          else
-            if (req.params.unittype == 'notype') {
-              Cardata.find({ pikod: null, ogda: null, hativa: null, gdod: null }).where({ status: { $ne: 'מושבת' } })
-                .then((cardata) => res.json(cardata))
-                .catch((err) => res.status(400).json("Error: " + err));
-            }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Cardata.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };
 
 exports.cardatabycarnumber = (req, res) => {
-  Cardata.find({ carnumber: req.params.carnumber })
-    .then((cardata) => res.json(cardata))
-    .catch((err) => res.status(400).json("Error: " + err));
+  let tipulfindquerry = readtipul.slice();
+  let finalquerry = tipulfindquerry;
+
+  let andquery = [];
+
+  andquery.push({ "carnumber": req.params.carnumber });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
+      }
+    };
+    finalquerry.push(matchquerry)
+  }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Cardata.aggregate(finalquerry)
+    .then((result) => {
+      if(result.length!=0){
+        res.json(result);
+      }
+      else{
+        let tipulfindquerry = readtipulnotype.slice();
+        let finalquerry = tipulfindquerry;
+      
+        let andquery = [];
+      
+        andquery.push({ "carnumber": req.params.carnumber });
+      
+        if (andquery.length != 0) {
+          let matchquerry = {
+            "$match": {
+              "$and": andquery
+            }
+          };
+          finalquerry.push(matchquerry)
+        }
+      
+        // console.log(matchquerry)
+        //console.log(andquery)
+      
+        Cardata.aggregate(finalquerry)
+          .then((result) => {
+              res.json(result);
+          })
+          .catch((error) => {
+            res.status(400).json('Error: ' + error);
+          });
+      }
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };
 
-exports.cardatabyunittypeandunitid_mushbat = (req, res) => {
-  if (req.params.unittype == 'admin' && req.params.unitid == '0') {
-    Cardata.find({ pikod: { $ne: null }, ogda: { $ne: null }, hativa: { $ne: null }, gdod: { $ne: null } }).where({ status: 'מושבת' })
-      .then((cardata) => res.json(cardata))
-      .catch((err) => res.status(400).json("Error: " + err));
-  }
-  else
-    if (req.params.unittype == 'pikod') {
-      Cardata.find({ pikod: req.params.unitid }).where({ status: 'מושבת' })
-        .then((cardata) => res.json(cardata))
-        .catch((err) => res.status(400).json("Error: " + err));
-    }
-    else
-      if (req.params.unittype == 'ogda') {
-        Cardata.find({ ogda: req.params.unitid }).where({ status: 'מושבת' })
-          .then((cardata) => res.json(cardata))
-          .catch((err) => res.status(400).json("Error: " + err));
-      }
-      else
-        if (req.params.unittype == 'hativa') {
-          Cardata.find({ hativa: req.params.unitid }).where({ status: 'מושבת' })
-            .then((cardata) => res.json(cardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
-        else
-          if (req.params.unittype == 'gdod') {
-            Cardata.find({ gdod: req.params.unitid }).where({ status: 'מושבת' })
-              .then((cardata) => res.json(cardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
-          else
-            if (req.params.unittype == 'notype') {
-              Cardata.find({ pikod: null, ogda: null, hativa: null, gdod: null }).where({ status: 'מושבת' })
-                .then((cardata) => res.json(cardata))
-                .catch((err) => res.status(400).json("Error: " + err));
-            }
-};
+exports.cardatanotype = (req, res) => {
+  let tipulfindquerry = readtipulnotype.slice();
+  let finalquerry = tipulfindquerry;
 
-exports.cardatabyunittypeandunitidandcartypeandcarid = (req, res) => {
-  if (req.params.unittype == 'admin' && req.params.unitid == '0') {
-    if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-      Cardata.find({ pikod: { $ne: null }, ogda: { $ne: null }, hativa: { $ne: null }, gdod: { $ne: null }, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-        .then((cardata) => res.json(cardata))
-        .catch((err) => res.status(400).json("Error: " + err));
-    }
-    else
-      if (req.params.cartype == 'magad') {
-        Cardata.find({ pikod: { $ne: null }, ogda: { $ne: null }, hativa: { $ne: null }, gdod: { $ne: null }, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-          .then((cardata) => res.json(cardata))
-          .catch((err) => res.status(400).json("Error: " + err));
+  let andquery = [];
+
+  andquery.push({ "gdod": null });
+
+  if (andquery.length != 0) {
+    let matchquerry = {
+      "$match": {
+        "$and": andquery
       }
-      else
-        if (req.params.cartype == 'mkabaz') {
-          Cardata.find({ pikod: { $ne: null }, ogda: { $ne: null }, hativa: { $ne: null }, gdod: { $ne: null }, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-            .then((cardata) => res.json(cardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
+    };
+    finalquerry.push(matchquerry)
   }
-  else
-    if (req.params.unittype == 'pikod') {
-      if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-        Cardata.find({ pikod: req.params.unitid, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-          .then((cardata) => res.json(cardata))
-          .catch((err) => res.status(400).json("Error: " + err));
-      }
-      else
-        if (req.params.cartype == 'magad') {
-          Cardata.find({ pikod: req.params.unitid, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-            .then((cardata) => res.json(cardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
-        else
-          if (req.params.cartype == 'mkabaz') {
-            Cardata.find({ pikod: req.params.unitid, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-              .then((cardata) => res.json(cardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
-    }
-    else
-      if (req.params.unittype == 'ogda') {
-        if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-          Cardata.find({ ogda: req.params.unitid, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-            .then((cardata) => res.json(cardata))
-            .catch((err) => res.status(400).json("Error: " + err));
-        }
-        else
-          if (req.params.cartype == 'magad') {
-            Cardata.find({ ogda: req.params.unitid, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-              .then((cardata) => res.json(cardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
-          else
-            if (req.params.cartype == 'mkabaz') {
-              Cardata.find({ ogda: req.params.unitid, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                .then((cardata) => res.json(cardata))
-                .catch((err) => res.status(400).json("Error: " + err));
-            }
-      }
-      else
-        if (req.params.unittype == 'hativa') {
-          if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-            Cardata.find({ hativa: req.params.unitid, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-              .then((cardata) => res.json(cardata))
-              .catch((err) => res.status(400).json("Error: " + err));
-          }
-          else
-            if (req.params.cartype == 'magad') {
-              Cardata.find({ hativa: req.params.unitid, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                .then((cardata) => res.json(cardata))
-                .catch((err) => res.status(400).json("Error: " + err));
-            }
-            else
-              if (req.params.cartype == 'mkabaz') {
-                Cardata.find({ hativa: req.params.unitid, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                  .then((cardata) => res.json(cardata))
-                  .catch((err) => res.status(400).json("Error: " + err));
-              }
-        }
-        else
-          if (req.params.unittype == 'gdod') {
-            if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-              Cardata.find({ gdod: req.params.unitid, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-                .then((cardata) => res.json(cardata))
-                .catch((err) => res.status(400).json("Error: " + err));
-            }
-            else
-              if (req.params.cartype == 'magad') {
-                Cardata.find({ gdod: req.params.unitid, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                  .then((cardata) => res.json(cardata))
-                  .catch((err) => res.status(400).json("Error: " + err));
-              }
-              else
-                if (req.params.cartype == 'mkabaz') {
-                  Cardata.find({ gdod: req.params.unitid, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                    .then((cardata) => res.json(cardata))
-                    .catch((err) => res.status(400).json("Error: " + err));
-                }
-          }
-          else
-            if (req.params.unittype == 'notype') {
-              if (req.params.cartype == 'magadal' && req.params.carid == '0') {
-                Cardata.find({ pikod: null, ogda: null, hativa: null, gdod: null, magadal: { $ne: null }, magad: { $ne: null }, mkabaz: { $ne: null }, makat: { $ne: null } }).where({ status: { $ne: 'מושבת' } })
-                  .then((cardata) => res.json(cardata))
-                  .catch((err) => res.status(400).json("Error: " + err));
-              }
-              else
-                if (req.params.cartype == 'magad') {
-                  Cardata.find({ pikod: null, ogda: null, hativa: null, gdod: null, magadal: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                    .then((cardata) => res.json(cardata))
-                    .catch((err) => res.status(400).json("Error: " + err));
-                }
-                else
-                  if (req.params.cartype == 'mkabaz') {
-                    Cardata.find({ pikod: null, ogda: null, hativa: null, gdod: null, magad: req.params.carid }).where({ status: { $ne: 'מושבת' } })
-                      .then((cardata) => res.json(cardata))
-                      .catch((err) => res.status(400).json("Error: " + err));
-                  }
-            }
+
+  // console.log(matchquerry)
+  //console.log(andquery)
+
+  Cardata.aggregate(finalquerry)
+    .then((result) => {
+      res.json(result);
+    })
+    .catch((error) => {
+      res.status(400).json('Error: ' + error);
+    });
 };

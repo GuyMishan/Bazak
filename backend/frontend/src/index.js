@@ -20,6 +20,9 @@ import history from './history'
 import LoggedinRoute from "auth/LoggedinRoute";
 import UnloggedinRoute from "auth/UnloggedinRoute";
 import AdminRoute from "auth/AdminRoute.js";
+//redux
+import { Provider } from 'react-redux'
+import store from 'redux/store'
 
 //auth routes
 import SignIn from "views/authentication/SignInForm";
@@ -43,43 +46,45 @@ import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
 
 ReactDOM.render(
   <>
-    <ThemeContextWrapper>
-      <ToastContainer rtl autoClose={4000} style={{ textAlign: 'right' }} />
-      <BackgroundColorWrapper>
-        <Router history={history}>
-          <Switch>
-            {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
-            <UnloggedinRoute path="/signin" exact component={SignIn} />
-            <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
-            <UnloggedinRoute path="/signup" exact component={SignUp} />
-            <LoggedinRoute path="/signupotherusers" exact component={SignUpOtherUsers} />
-            {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
+    <Provider store={store}>
+      <ThemeContextWrapper>
+        <ToastContainer rtl autoClose={4000} style={{ textAlign: 'right' }} />
+        <BackgroundColorWrapper>
+          <Router history={history}>
+            <Switch>
+              {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
+              <UnloggedinRoute path="/signin" exact component={SignIn} />
+              <UnloggedinRoute path="/adminsignin" exact component={AdminSignIn} />
+              <UnloggedinRoute path="/signup" exact component={SignUp} />
+              <LoggedinRoute path="/signupotherusers" exact component={SignUpOtherUsers} />
+              {/*///////////////////////////////////////////UnLoggedIn Routes/////////////////////////////////////////////////*/}
 
-            {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
-            <AdminRoute path="/manageusers" exact component={ManageUsers} />
-            <AdminRoute path="/edituser/:userid" exact component={EditUser} />
-            {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
+              {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
+              <AdminRoute path="/manageusers" exact component={ManageUsers} />
+              <AdminRoute path="/edituser/:userid" exact component={EditUser} />
+              {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
-            {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
-            <LoggedinRoute path="/dashboard/:unittype/:unitid/:cartype/:carid" exact component={DashboardPage} />
-            <LoggedinRoute path="/subunitspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsPage} />
-            <LoggedinRoute path="/zminotpage/:unittype/:unitid/:cartype/:carid/:ismushbat" exact component={ZminotPage} />
-            <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
-            <LoggedinRoute path="/about" exact component={AboutPage} />
-            <LoggedinRoute path="/statisticspage/:unittype/:unitid/:cartype/:carid" exact component={StatisticsPage} />
-            <LoggedinRoute path="/assessmentpage" exact component={AssessmentPage} />
-            <LoggedinRoute path="/subunitsrecentfeedspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsRecentFeeds} />
-            {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
+              {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
+              <LoggedinRoute path="/dashboard/:unittype/:unitid/:cartype/:carid" exact component={DashboardPage} />
+              <LoggedinRoute path="/subunitspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsPage} />
+              <LoggedinRoute path="/zminotpage/:unittype/:unitid/:cartype/:carid/:ismushbat/:isstopped" exact component={ZminotPage} />
+              <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />
+              <LoggedinRoute path="/about" exact component={AboutPage} />
+              <LoggedinRoute path="/statisticspage/:unittype/:unitid/:cartype/:carid" exact component={StatisticsPage} />
+              <LoggedinRoute path="/assessmentpage" exact component={AssessmentPage} />
+              <LoggedinRoute path="/subunitsrecentfeedspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsRecentFeeds} />
+              {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
-            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
-            <Route path="/exceluploadusers" exact component={Exceluploadusers} />
-            <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
-            {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
-            <Redirect from="/" to="/signin" />
-          </Switch>
-        </Router>
-      </BackgroundColorWrapper>
-    </ThemeContextWrapper>
+              {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
+              <Route path="/exceluploadusers" exact component={Exceluploadusers} />
+              <Route path="/exceluploadjobs" exact component={Exceluploadjobs} />
+              {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
+              <Redirect from="/" to="/signin" />
+            </Switch>
+          </Router>
+        </BackgroundColorWrapper>
+      </ThemeContextWrapper>
+    </Provider>
   </>,
   document.getElementById("root")
 );

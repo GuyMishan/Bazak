@@ -40,7 +40,7 @@ export default function SignUpForm() {
     loading: false,
     redirectToReferrer: false,
     //
-    site_permission: '',
+    site_permission:'צפייה ועריכה',
   });
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);

@@ -29,7 +29,8 @@ export const COLUMNS = [
     {
         Header: 'תאריך עדכון אחרון',
         accessor: 'maxdate',
-        Filter: ColumnFilter
+        Filter: ColumnFilter,
+        sortType:'datetime'
     },
     {
         Header: 'תקין/לא תקין',
