@@ -108,7 +108,14 @@ function DashboardPage({ match, theme }) {
         });
         break;
     }
-    setCardatas(myArrayFiltered2);
+
+    let myArrayFiltered3 = []; //filter ismushbat
+
+    myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+      return 'מושבת' != el.status;
+    });
+
+    setCardatas(myArrayFiltered3);
     setIsdataloaded(true);
   }
 
@@ -188,7 +195,7 @@ function DashboardPage({ match, theme }) {
           <Col xs={12} md={6}>
           </Col>
           <Col xs={12} md={3}>
-            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/${match.params.cartype}/${match.params.carid}/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
+            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/${match.params.cartype}/${match.params.carid}/false/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
           </Col>
         </Row>
       </div>

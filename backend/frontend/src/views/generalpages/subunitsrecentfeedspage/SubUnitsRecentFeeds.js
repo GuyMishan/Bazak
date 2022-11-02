@@ -93,6 +93,7 @@ function SubUnitsRecentFeeds({ match, theme }) {
         });
         break;
     }
+
     setCardatas(myArrayFiltered2);
     setIsdataloaded(true);
   }

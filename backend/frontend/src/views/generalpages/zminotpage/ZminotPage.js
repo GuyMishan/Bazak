@@ -24,7 +24,7 @@ function ZminotPage({ match }) {
 
   return (
     <>
-      <CarDataByUnitTypeAndUnitIdSortingTable unittype={match.params.unittype} unitid={match.params.unitid} cartype={match.params.cartype} carid={match.params.carid} ismushbat={match.params.ismushbat} />     {/*spinner in table*/}
+      <CarDataByUnitTypeAndUnitIdSortingTable unittype={match.params.unittype} unitid={match.params.unitid} cartype={match.params.cartype} carid={match.params.carid} ismushbat={match.params.ismushbat} isstopped={match.params.isstopped} />     {/*spinner in table*/}
     </>
   );
 }

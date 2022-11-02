@@ -97,7 +97,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0/magadal/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/admin/0/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -187,7 +187,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/notype/0/magadal/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/notype/0/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -202,7 +202,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0/magadal/0/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/admin/0/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -211,6 +211,21 @@ function SidebarAdmin(props) {
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   כלים מושבתים
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to={`/zminotpage/admin/0/magadal/0/false/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
+                  : <img src={table_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  כלים עצורים
                 </h4>
               </Col>
             </Row>

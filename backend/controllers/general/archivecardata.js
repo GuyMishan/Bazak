@@ -236,7 +236,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  Archivecardata.findByIdAndUpdate(req.params.archivecardataId, req.body, { overwrite: true })
+  Archivecardata.findByIdAndUpdate(req.params.archivecardataId, req.body)
     .then((candidatepreference) => res.json(candidatepreference))
     .catch((err) => res.status(400).json("Error: " + err));
 }

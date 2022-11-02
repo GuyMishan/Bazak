@@ -83,17 +83,76 @@ const SortingTable = (props) => {
         let tempdata = [...data];
         let temporiginaldata = [...originaldata];
 
-        for (let i = 0; i < tempdata.length; i++) {
-          if (cardataidformodal == tempdata[i]._id) {
-            tempdata[i] = { ...tempcardata };
+
+        if (props.ismushbat == 'true') {
+          if (tempcardata.status == 'מושבת') {
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdata[i] = { ...tempcardata };
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                temporiginaldata[i] = { ...tempcardata };
+              }
+            }
+          }
+          else {
+            let tempdeleteindex = 999;
+            let tempdeleteindexoriginal = 999;
+
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdeleteindex = i;
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                tempdeleteindexoriginal = i;
+              }
+            }
+
+            tempdata.splice(tempdeleteindex, 1);
+            temporiginaldata.splice(tempdeleteindexoriginal, 1);
+          }
+        }
+        else {
+          if (tempcardata.status == 'מושבת') {
+            let tempdeleteindex = 999;
+            let tempdeleteindexoriginal = 999;
+
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdeleteindex = i;
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                tempdeleteindexoriginal = i;
+              }
+            }
+
+            tempdata.splice(tempdeleteindex, 1);
+            temporiginaldata.splice(tempdeleteindexoriginal, 1);
+          }
+          else {
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdata[i] = { ...tempcardata };
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                temporiginaldata[i] = { ...tempcardata };
+              }
+            }
           }
         }
 
-        for (let i = 0; i < temporiginaldata.length; i++) {
-          if (cardataidformodal == temporiginaldata[i]._id) {
-            temporiginaldata[i] = { ...tempcardata };
-          }
-        }
         setOriginaldata(temporiginaldata)
         setData(tempdata)
         dispatch(findcardatabyidandupdateFunc(tempcardata))
@@ -224,16 +283,29 @@ const SortingTable = (props) => {
       let myArrayFiltered3 = []; //filter ismushbat
 
       if (props.ismushbat == "false") {
-        myArrayFiltered3 = myArrayFiltered2;
+        myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+          return 'מושבת' != el.status;
+        });
       }
       else {
         myArrayFiltered3 = myArrayFiltered2.filter((el) => {
-          return 'true' === el.ismushbat;
+          return 'מושבת' === el.status;
         });
       }
 
-      setOriginaldata(myArrayFiltered3)
-      setData(myArrayFiltered3)
+      let myArrayFiltered4 = []; //filter isstopped
+
+      if (props.isstopped == "false") {
+        myArrayFiltered4 = myArrayFiltered3;
+      }
+      else {
+        myArrayFiltered4 = myArrayFiltered3.filter((el) => {
+          return 'עצור' === el.status;
+        });
+      }
+
+      setOriginaldata(myArrayFiltered4)
+      setData(myArrayFiltered4)
       setIsdataloaded(true)
     }
     else { //read from db only for nounit cardatas..
@@ -599,7 +671,7 @@ const SortingTable = (props) => {
     if (reduxcardata.length > 0) {
       init();
     }
-  }, [props.unittype, props.unitid, props.ismushbat, props.match]);
+  }, [props.unittype, props.unitid, props.ismushbat, props.isstopped, props.match]);
 
   useEffect(() => {
     if (reduxcardata.length > 0 && isdataloaded == false) {

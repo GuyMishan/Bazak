@@ -30,53 +30,27 @@ const SortingTable = (props) => {
     let temp_cardatas;
     let temp_cartypes;
 
-    if (props.theme == 'white-content') {
-      switch (props.match.params.cartype) {
-        case 'magadal':
-          temp_cardatas = props.cardatas.filter(cardata => ((cardata.stand == 'סדיר') || (cardata.stand == 'הכן') || (cardata.stand == 'הח"י')));
-          let response1 = await axios.get("http://localhost:8000/api/magadal",)
-          temp_cartypes = response1.data;
-          break;
-        case 'magad':
-          temp_cardatas = props.cardatas.filter(cardata => (((cardata.stand == 'סדיר') || (cardata.stand == 'הכן') || (cardata.stand == 'הח"י')) && (cardata.magadal == props.match.params.carid)));
-          let response2 = await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${props.match.params.carid}`)
-          temp_cartypes = response2.data;
-          break;
-        case 'mkabaz':
-          temp_cardatas = props.cardatas.filter(cardata => (((cardata.stand == 'סדיר') || (cardata.stand == 'הכן') || (cardata.stand == 'הח"י')) && (cardata.magad == props.match.params.carid)));
-          let response3 = await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${props.match.params.carid}`)
-          temp_cartypes = response3.data;
-          break;
-        default:
-          temp_cardatas = props.cardatas.filter(cardata => ((cardata.stand == 'סדיר') || (cardata.stand == 'הכן') || (cardata.stand == 'הח"י')));
-          let response4 = await axios.get("http://localhost:8000/api/magadal",)
-          temp_cartypes = response4.data;
-          break;
-      }
-    }
-    else {
-      switch (props.match.params.cartype) {
-        case 'magadal':
-          temp_cardatas = props.cardatas;
-          let response5 = await axios.get("http://localhost:8000/api/magadal",)
-          temp_cartypes = response5.data;
-          break;
-        case 'magad':
-          temp_cardatas = props.cardatas.filter(cardata => ((cardata.magadal == props.match.params.carid)));
-          let response6 = await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${props.match.params.carid}`)
-          temp_cartypes = response6.data;
-          break;
-        case 'mkabaz':
-          temp_cardatas = props.cardatas.filter(cardata => ((cardata.magad == props.match.params.carid)));
-          let response7 = await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${props.match.params.carid}`)
-          temp_cartypes = response7.data;
-          break;
-        default:
-          temp_cardatas = props.cardatas;
-          let response8 = await axios.get("http://localhost:8000/api/magadal",)
-          temp_cartypes = response8.data;
-          break;
-      }
+    switch (props.match.params.cartype) {
+      case 'magadal':
+        temp_cardatas = props.cardatas;
+        let response5 = await axios.get("http://localhost:8000/api/magadal",)
+        temp_cartypes = response5.data;
+        break;
+      case 'magad':
+        temp_cardatas = props.cardatas.filter(cardata => ((cardata.magadal == props.match.params.carid)));
+        let response6 = await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${props.match.params.carid}`)
+        temp_cartypes = response6.data;
+        break;
+      case 'mkabaz':
+        temp_cardatas = props.cardatas.filter(cardata => ((cardata.magad == props.match.params.carid)));
+        let response7 = await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${props.match.params.carid}`)
+        temp_cartypes = response7.data;
+        break;
+      default:
+        temp_cardatas = props.cardatas;
+        let response8 = await axios.get("http://localhost:8000/api/magadal",)
+        temp_cartypes = response8.data;
+        break;
     }
 
     let temp_data_arr = []
@@ -360,7 +334,7 @@ const SortingTable = (props) => {
 
   useEffect(() => {
     init();
-  }, [props.unittype,props.unitid,props.cardatas,props.match]);
+  }, [props.unittype, props.unitid, props.cardatas, props.match]);
 
   return (
     !isdataloaded ?
