@@ -1,3 +1,6 @@
+import axios from 'axios';
+import React, {useState} from 'react';
+
 export const signup = (user) => {
     return fetch(`http://localhost:8000/api/signup`,{
        method: "POST",
@@ -57,5 +60,65 @@ export const isAuthenticated = () => {
         return JSON.parse(localStorage.getItem('jwt'));
     } else {
         return false;
+    }
+}
+
+export async function hierarchyCheck(){
+    const unitIdByUserRole = () =>{
+        if (isAuthenticated().user.role === "1") {
+            return isAuthenticated().user.gdodid;
+        }
+        if (isAuthenticated().user.role === "2") {
+            return isAuthenticated().user.hativaid;
+        }
+        if (isAuthenticated().user.role === "3") {
+            return isAuthenticated().user.ogdaid;
+        }
+        if (isAuthenticated().user.role === "4") {
+            return isAuthenticated().user.pikodid;
+        }
+    }
+
+    const getTargetParentId= (targetUnitId, targetUnitType) => {
+         axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
+        .then(response => {
+        if (targetUnitType == 'gdod') {
+            return response.data.hativa;
+        }
+        if (targetUnitType == 'hativa') {
+            return response.data.ogda;
+        }
+        if (targetUnitType == 'ogda') {
+            return response.data.pikod;
+        }
+        
+        })
+        .catch((error) => {
+        console.log(error);
+        })
+    }
+    const hierarchyCheck = (targetUnitId, targetUnitType) => {
+    if(targetUnitId == unitIdByUserRole()){
+        return true;
+    }else{
+        if (targetUnitType != 'pikod') {
+            targetUnitId = getTargetParentId(targetUnitId, targetUnitType);
+            if (targetUnitType == 'gdod') {
+                targetUnitType = 'hativa';
+            }
+            if (targetUnitType == 'hativa') {
+                targetUnitType = 'ogda';
+            }
+            if (targetUnitType == 'ogda') {
+                targetUnitType = 'pikod';
+            }
+            if(targetUnitType == 'notype'){
+                return true;
+            }
+            return hierarchyCheck(targetUnitId, targetUnitType);
+        }else{
+            return false;
+        }
+    }
     }
 }
