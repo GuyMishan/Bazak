@@ -63,7 +63,7 @@ export const isAuthenticated = () => {
     }
 }
 
-export async function hierarchyCheck(){
+export async function HierarchyCheck(){
     const unitIdByUserRole = () =>{
         if (isAuthenticated().user.role === "1") {
             return isAuthenticated().user.gdodid;
