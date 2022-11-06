@@ -559,7 +559,7 @@ const SortingTable = (props) => {
       tempdata_to_excel[i].magadal_data ? tempdata_to_excel[i].magadal_name = tempdata_to_excel[i].magadal_data[0].name : tempdata_to_excel[i].magadal_name = " ";
       tempdata_to_excel[i].magad_data ? tempdata_to_excel[i].magad_name = tempdata_to_excel[i].magad_data[0].name : tempdata_to_excel[i].magad_name = " ";
       tempdata_to_excel[i].mkabaz_data ? tempdata_to_excel[i].mkabaz_name = tempdata_to_excel[i].mkabaz_data[0].name : tempdata_to_excel[i].mkabaz_name = " ";
-      tempdata_to_excel[i].makat_data ? tempdata_to_excel[i].makat_name = tempdata_to_excel[i].makat_data.name : tempdata_to_excel[i].makat_name = " ";
+      tempdata_to_excel[i].makat_data ? tempdata_to_excel[i].makat_name = tempdata_to_excel[i].makat_data._id : tempdata_to_excel[i].makat_name = " ";
       tempdata_to_excel[i].makat_data ? tempdata_to_excel[i].makat_description_name = tempdata_to_excel[i].makat_data.name : tempdata_to_excel[i].makat_description_name = " ";
 
       tempdata_to_excel[i].latest_recalibration_date = tempdata_to_excel[i].latest_recalibration_date ? tempdata_to_excel[i].latest_recalibration_date.slice(0, 10).split("-").reverse().join("-") : null;
@@ -688,6 +688,24 @@ const SortingTable = (props) => {
     FixLocalStorageHeaders();
   }, [hiddenColumns]);
 
+  //window
+  const [windowSize, setWindowSize] = useState(getWindowSize());
+
+  function getWindowSize() {
+    const { innerWidth, innerHeight } = window;
+    return { innerWidth, innerHeight };
+  }
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWindowSize(getWindowSize());
+    }
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
+
   return (
     !isdataloaded ?
       <div style={{ width: '50%', marginTop: '30%' }}>
@@ -698,21 +716,23 @@ const SortingTable = (props) => {
         {/*modals */}
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
-        {/*filter */}
-        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
 
-        <div style={{ float: 'right', paddingBottom: '5px' }}>
-          <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
-        </div>
-        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        <div className="table-responsive" style={{ overflow: 'auto' }}>
+        <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight)*0.9 }}>
+          {/*filter */}
+          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
+
+          <div style={{ float: 'right', paddingBottom: '5px' }}>
+            <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
+          </div>
+          <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
+          <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+
           <table {...getTableProps()} id="table-to-xls">
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th  >
+                    <th style={{ position: 'sticky', top: '-2px' }}>
                       <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
                       <div>{column.canFilter ? column.render('Filter') : null}</div>
                       <div>
@@ -720,8 +740,8 @@ const SortingTable = (props) => {
                       </div>
                     </th>
                   ))}
-                  <th></th>
-                  {props.unittype != 'notype' ? <th></th>
+                  <th style={{ position: 'sticky', top: '-2px' }}></th>
+                  {props.unittype != 'notype' ? <th style={{ position: 'sticky', top: '-2px' }}></th>
                     : null}
                 </tr>
               ))}
@@ -767,10 +787,10 @@ const SortingTable = (props) => {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.mkabaz_data ? row.original.mkabaz_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data.name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data._id : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat_description") {
-                              return row.original.makat ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data.description : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return row.original.makat ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data.name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "tipuls") {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
