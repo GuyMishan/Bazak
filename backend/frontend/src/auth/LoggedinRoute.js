@@ -8,7 +8,7 @@ const LoggedinRoute = ({props, component: Component, ...rest }) => (
     <Route
         {...rest}
         render ={ props =>
-            isAuthenticated() && (isAuthenticated().user.validated===true) && ((props.match.params.unitid==undefined)||(HierarchyCheck(props.match.params.unitid,props.match.params.unittype))||(isAuthenticated().user.role == '0' && props.match.params.unitid=='0'))  ? (// bug in zminotpage because unitid is 0 for some reason
+            isAuthenticated() && (isAuthenticated().user.validated===true) && ((props.match.params.unitid==undefined)||(HierarchyCheck(props.match.params.unitid,props.match.params.unittype)))  ? (
                 <LoggedinLayout component={Component}/>
             ) : (
                 <Redirect to = {{

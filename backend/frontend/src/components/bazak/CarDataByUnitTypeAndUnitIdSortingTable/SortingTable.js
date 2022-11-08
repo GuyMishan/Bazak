@@ -18,6 +18,7 @@ import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponen
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc, findcardatabyidandupdateFunc, findcardatabyidanddeleteFunc } from 'redux/features/cardata/cardataSlice'
+import SumCardataComponent from "../SumCardataComponent/SumCardataComponent";
 
 const SortingTable = (props) => {
   //user
@@ -726,7 +727,16 @@ const SortingTable = (props) => {
           </div>
           <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-
+          <Row>
+            <Col xs={12} md={3} style={{ textAlign: 'right', left:'20rem', marginTop:'1rem'}}>
+              <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
+            </Col>
+          </Row>
+          <Row>
+           <Col xs={12} md={3} style={{ textAlign: 'right',right:'1rem'}}>
+              <SumCardataComponent cardatas={data} isdataloaded={isdataloaded} />
+           </Col>
+          </Row>
           <table {...getTableProps()} id="table-to-xls">
             <thead>
               {headerGroups.map((headerGroup) => (
@@ -864,13 +874,6 @@ const SortingTable = (props) => {
               </option>
             </select>
           </div>
-          <Row>
-            <Col xs={12} md={3} style={{ textAlign: 'right' }}>
-              <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
-            </Col>
-            <Col xs={12} md={9}>
-            </Col>
-          </Row>
         </div>
       </>
   );

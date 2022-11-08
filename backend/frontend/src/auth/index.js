@@ -1,70 +1,71 @@
 import axios from 'axios';
-import React, {useState} from 'react';
+import history from '../history';
 
 export const signup = (user) => {
-    return fetch(`http://localhost:8000/api/signup`,{
-       method: "POST",
-       headers:{
-           Accept:'application/json',
-           "Content-Type": "application/json"
-       },
-       body: JSON.stringify(user)
-   })
-   .then(response => {
-       return response.json()
-   })
-   .catch(err => {
-       console.log(err)
-   })
+    return fetch(`http://localhost:8000/api/signup`, {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 export const signin = (user) => {
-    return fetch(`http://localhost:8000/api/signin`,{
-       method: "POST",
-       headers:{
-           Accept:'application/json',
-           "Content-Type": "application/json"
-       },
-       body: JSON.stringify(user)
-   })
-   .then(response => {
-       return response.json()
-   })
-   .catch(err => {
-       console.log(err)
-   })
+    return fetch(`http://localhost:8000/api/signin`, {
+        method: "POST",
+        headers: {
+            Accept: 'application/json',
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => {
+            console.log(err)
+        })
 }
 export const signout = () => {
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
         localStorage.removeItem('jwt')
         return fetch(`/api/signout`, {
             method: "GET",
         })
-        .then(response => {
-            console.log('signout', response)
-        })
-        .catch(err => console.log(err));
-}
+            .then(response => {
+                console.log('signout', response)
+            })
+            .catch(err => console.log(err));
+    }
 }
 
 export const authenticate = (data) => {
-    if(typeof window !== 'undefined') {
+    if (typeof window !== 'undefined') {
         localStorage.setItem('jwt', JSON.stringify(data))
     }
 }
-
 export const isAuthenticated = () => {
-    if(typeof window == 'undefined') {
+    if (typeof window == 'undefined') {
         return false;
     }
-    if(localStorage.getItem('jwt')) {
+    if (localStorage.getItem('jwt')) {
         return JSON.parse(localStorage.getItem('jwt'));
     } else {
         return false;
     }
 }
 
-export async function HierarchyCheck(){
-    const unitIdByUserRole = () =>{
+export async function HierarchyCheck(targetUnitId, targetUnitType){
+ hierarchyCheck(targetUnitId, targetUnitType);
+
+    function unitIdByUserRole(){
         if (isAuthenticated().user.role === "1") {
             return isAuthenticated().user.gdodid;
         }
@@ -78,47 +79,75 @@ export async function HierarchyCheck(){
             return isAuthenticated().user.pikodid;
         }
     }
-
-    const getTargetParentId= (targetUnitId, targetUnitType) => {
-         axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
-        .then(response => {
-        if (targetUnitType == 'gdod') {
-            return response.data.hativa;
+    function unitTypeByUserRole(){
+        if (isAuthenticated().user.role === "1") {
+            return "gdod";
         }
-        if (targetUnitType == 'hativa') {
-            return response.data.ogda;
+        if (isAuthenticated().user.role === "2") {
+            return "hativa";
         }
-        if (targetUnitType == 'ogda') {
-            return response.data.pikod;
+        if (isAuthenticated().user.role === "3") {
+            return "ogda";
         }
-        
-        })
-        .catch((error) => {
-        console.log(error);
-        })
+        if (isAuthenticated().user.role === "4") {
+            return "pikod";
+        }
     }
-    const hierarchyCheck = (targetUnitId, targetUnitType) => {
-    if(targetUnitId == unitIdByUserRole()){
-        return true;
-    }else{
-        if (targetUnitType != 'pikod') {
-            targetUnitId = getTargetParentId(targetUnitId, targetUnitType);
-            if (targetUnitType == 'gdod') {
-                targetUnitType = 'hativa';
-            }
-            if (targetUnitType == 'hativa') {
-                targetUnitType = 'ogda';
-            }
-            if (targetUnitType == 'ogda') {
-                targetUnitType = 'pikod';
-            }
-            if(targetUnitType == 'notype'){
+
+    async function getTargetParentId(targetUnitId, targetUnitType) {
+        try{
+        let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
+                if (targetUnitType == 'gdod') {
+                    return response.data.hativa;
+                }
+                if (targetUnitType == 'hativa') {
+                    return response.data.ogda;
+                }
+                if (targetUnitType == 'ogda') {
+                    return response.data.pikod;
+                }
+            }catch{
+                console.log("unit doesn't exist");
+                history.push(`/signin`);
                 return true;
             }
-            return hierarchyCheck(targetUnitId, targetUnitType);
-        }else{
-            return false;
-        }
     }
+
+     async function hierarchyCheck(targetUnitId, targetUnitType) {
+        if (targetUnitType == 'notype'||isAuthenticated().user.role == '0') {
+            console.log("1");
+            return true;
+        }
+        if (targetUnitType == 'admin' && isAuthenticated().user.role != '0') {
+            console.log("error");
+            history.push(`/signin`);
+            return true;
+        }
+        if (targetUnitId == unitIdByUserRole() && targetUnitType == unitTypeByUserRole()) {
+            console.log("2");
+            return true;
+        } else {
+            if (targetUnitType != 'pikod') {
+                targetUnitId = await getTargetParentId(targetUnitId, targetUnitType);
+                if (targetUnitType == 'gdod') {
+                    targetUnitType = 'hativa';
+                }
+                else{
+                    if (targetUnitType == 'hativa') {
+                        targetUnitType = 'ogda';
+                    }
+                    else{
+                        if (targetUnitType == 'ogda') {
+                            targetUnitType = 'pikod';
+                        }
+                    }
+                }
+                console.log("3");
+                return hierarchyCheck(targetUnitId, targetUnitType);
+            } else {
+                console.log("4");
+                history.push(`/signin`);
+            }
+        }
     }
 }
