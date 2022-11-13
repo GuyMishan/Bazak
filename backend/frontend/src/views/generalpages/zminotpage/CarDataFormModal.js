@@ -58,18 +58,20 @@ const CarDataFormModal = (props) => {
         setCarData(tempcardata);
         setFinalSpecialKeytwo(tempcardata.tipuls);
         //new 18.8.22
-        axios.get(`http://localhost:8000/api/gdod/${tempcardata.gdod}`)
-          .then(response => {
-            if (/*response.data.sadir &&*/ response.data.sadir == 'לא סדיר') {
-              setIsgdodsadir(false)
-            }
-            else {
-              setIsgdodsadir(true)
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+        if (tempcardata.gdod) {
+          axios.get(`http://localhost:8000/api/gdod/${tempcardata.gdod}`)
+            .then(response => {
+              if (/*response.data.sadir &&*/ response.data.sadir == 'לא סדיר') {
+                setIsgdodsadir(false)
+              }
+              else {
+                setIsgdodsadir(true)
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            })
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -216,6 +218,9 @@ const CarDataFormModal = (props) => {
         if (evt.target.name == "status" && value == "מושבת") {
           toast.error("העברת סטטוס הכלי למושבת משמעותה השבתת הכלי לגמרי");
         }
+        if (evt.target.name == "status" && value == "עצור") {
+          toast.error("העברת סטטוס הכלי לעצור משמעותה עצירת הכלי לגמרי");
+        }
         setCarData({ ...cardata, [evt.target.name]: value });
       } else {
         CheckCarnumberAndSetFormdata(evt.target.value);
@@ -321,6 +326,7 @@ const CarDataFormModal = (props) => {
         }
         let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
         //create archivecardata
+        delete tempcardata._id;
         let result2 = await axios.post(`http://localhost:8000/api/archivecardata`, tempcardata)
         toast.success(`צ' עודכן בהצלחה`);
         props.ToggleForModal();
@@ -355,22 +361,29 @@ const CarDataFormModal = (props) => {
   }
 
   async function UpdateCarData() {
-    //update cardata
-    var tempcardataid = props.cardataid;
-    let tempcardata = { ...cardata }
-    if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
-      tempcardata.tipuls = [];
-      tempcardata.takala_info = '';
-      tempcardata.expected_repair = '';
+    let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
+    if (response.data[0].status == 'עצור' && user.role != '0') {
+      toast.error(`הכלי עצור - טרם הועברת תחקיר מפקד יחידה בגין כלי`);
     }
     else {
-      tempcardata.tipuls = finalspecialkeytwo;
+      //update cardata
+      var tempcardataid = props.cardataid;
+      let tempcardata = { ...cardata }
+      if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
+        tempcardata.tipuls = [];
+        tempcardata.takala_info = '';
+        tempcardata.expected_repair = '';
+      }
+      else {
+        tempcardata.tipuls = finalspecialkeytwo;
+      }
+      let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
+      //create archivecardata
+      delete tempcardata._id;
+      let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
+      toast.success(`צ' עודכן בהצלחה`);
+      props.ToggleForModal();
     }
-    let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
-    //create archivecardata
-    let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
-    toast.success(`צ' עודכן בהצלחה`);
-    props.ToggleForModal();
   }
 
   function init() {
@@ -481,6 +494,7 @@ const CarDataFormModal = (props) => {
                     <option value={"פעיל"}>{"פעיל"}</option>
                     <option value={"מושבת"}>{"מושבת"}</option>
                     <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
+                    {user.role == '0' ? <option value={"עצור"}>{"עצור"}</option> : null}
                   </Input>
                 </Col>
               </Row>

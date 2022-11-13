@@ -5,25 +5,29 @@ import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import style from 'components/Table.css'
-import editpic from "assets/img/edit.png";
-import deletepic from "assets/img/delete.png";
-import people from "assets/img/people.png";
+import { signin, authenticate, isAuthenticated } from 'auth/index';
 import PropagateLoader from "react-spinners/PropagateLoader";
 import {
   Row,
   Col,
 } from "reactstrap";
-import ReactHTMLTableToExcel from 'react-html-table-to-excel';
 import CarDataFormModal from "views/generalpages/zminotpage/CarDataFormModal";
 import CarDataFormModalDelete from "views/generalpages/zminotpage/CarDataFormModalDelete";
 import CarDataFilter from 'components/bazak/Filters/CarDataFilter';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
+//redux
+import { useSelector, useDispatch } from 'react-redux'
+import { getCarDataFunc, findcardatabyidandupdateFunc, findcardatabyidanddeleteFunc } from 'redux/features/cardata/cardataSlice'
+import SumCardataComponent from "../SumCardataComponent/SumCardataComponent";
 
 const SortingTable = (props) => {
+  //user
+  const { user } = isAuthenticated()
+  //table
   const columns = useMemo(() => COLUMNS, []);
   //data
-  const [originaldata, setOriginaldata] = useState([])
   const [data, setData] = useState([])
+  const [originaldata, setOriginaldata] = useState([])
   //filter
   const [filter, setFilter] = useState([])
   //cardata form modal
@@ -32,60 +36,13 @@ const SortingTable = (props) => {
   //cardata form modal delete
   const [iscardataformdeleteopen, setIscardataformdeleteopen] = useState(false);
   const [cardataidfordeletemodal, setCardataidfordeletemodal] = useState(undefined);
-  //units
-  const [gdods, setGdods] = useState([]);
-  const [hativas, setHativas] = useState([]);
-  const [ogdas, setOgdas] = useState([]);
-  const [pikods, setPikods] = useState([]);
-  //cartypes
-  const [makats, setMakats] = useState([]);
-  const [mkabazs, setMkabazs] = useState([]);
-  const [magads, setMagads] = useState([]);
-  const [magadals, setMagadals] = useState([]);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
   //excel download
   const XLSX = require('xlsx')
-
-  const loadPikods = async () => {
-    let response = await axios.get("http://localhost:8000/api/pikod",)
-    setPikods(response.data);
-  }
-
-  const loadOgdas = async () => {
-    let response = await axios.get("http://localhost:8000/api/ogda",)
-    setOgdas(response.data);
-  }
-
-  const loadHativas = async () => {
-    let response = await axios.get("http://localhost:8000/api/hativa",)
-    setHativas(response.data);
-  }
-
-  const loadGdods = async () => {
-    let response = await axios.get("http://localhost:8000/api/gdod",)
-    setGdods(response.data);
-  }
-
-  const loadMagadals = async () => {
-    let response = await axios.get("http://localhost:8000/api/magadal",)
-    setMagadals(response.data);
-  }
-
-  const loadMagads = async () => {
-    let response = await axios.get("http://localhost:8000/api/magad",)
-    setMagads(response.data);
-  }
-
-  const loadMkabazs = async () => {
-    let response = await axios.get("http://localhost:8000/api/mkabaz",)
-    setMkabazs(response.data);
-  }
-
-  const loadMakats = async () => {
-    let response = await axios.get("http://localhost:8000/api/makat",)
-    setMakats(response.data);
-  }
+  //redux
+  const dispatch = useDispatch()
+  const reduxcardata = useSelector((state) => state.cardata.value)
 
   function Toggle(evt) {
     if (evt.currentTarget.value == '') {
@@ -114,33 +71,95 @@ const SortingTable = (props) => {
 
   function ToggleForModalDelete(evt) {
     setIscardataformdeleteopen(!iscardataformdeleteopen);
-    updatechangedcardata(); // update table..
+    updatechangedcardatadelete(); // update table..
   }
 
   async function updatechangedcardata() {
     if (cardataidformodal != undefined) {
       if (props.unittype != 'notype') {
+        //update table row
         let response = await axios.get(`http://localhost:8000/api/cardata/${cardataidformodal}`)
         let tempcardata = response.data[0];
 
         let tempdata = [...data];
         let temporiginaldata = [...originaldata];
 
-        for (let i = 0; i < tempdata.length; i++) {
-          if (cardataidformodal == tempdata[i]._id) {
-            tempdata[i] = { ...tempcardata };
+
+        if (props.ismushbat == 'true') {
+          if (tempcardata.status == 'מושבת') {
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdata[i] = { ...tempcardata };
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                temporiginaldata[i] = { ...tempcardata };
+              }
+            }
+          }
+          else {
+            let tempdeleteindex = 999;
+            let tempdeleteindexoriginal = 999;
+
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdeleteindex = i;
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                tempdeleteindexoriginal = i;
+              }
+            }
+
+            tempdata.splice(tempdeleteindex, 1);
+            temporiginaldata.splice(tempdeleteindexoriginal, 1);
+          }
+        }
+        else {
+          if (tempcardata.status == 'מושבת') {
+            let tempdeleteindex = 999;
+            let tempdeleteindexoriginal = 999;
+
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdeleteindex = i;
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                tempdeleteindexoriginal = i;
+              }
+            }
+
+            tempdata.splice(tempdeleteindex, 1);
+            temporiginaldata.splice(tempdeleteindexoriginal, 1);
+          }
+          else {
+            for (let i = 0; i < tempdata.length; i++) {
+              if (cardataidformodal == tempdata[i]._id) {
+                tempdata[i] = { ...tempcardata };
+              }
+            }
+
+            for (let i = 0; i < temporiginaldata.length; i++) {
+              if (cardataidformodal == temporiginaldata[i]._id) {
+                temporiginaldata[i] = { ...tempcardata };
+              }
+            }
           }
         }
 
-        for (let i = 0; i < temporiginaldata.length; i++) {
-          if (cardataidformodal == temporiginaldata[i]._id) {
-            temporiginaldata[i] = { ...tempcardata };
-          }
-        }
         setOriginaldata(temporiginaldata)
         setData(tempdata)
+        dispatch(findcardatabyidandupdateFunc(tempcardata))
       }
       else {
+        //delete from table but add to redux
         let tempdata = [...data];
         let temporiginaldata = [...originaldata];
 
@@ -155,7 +174,6 @@ const SortingTable = (props) => {
 
         for (let i = 0; i < temporiginaldata.length; i++) {
           if (cardataidformodal == temporiginaldata[i]._id) {
-            //delete from arr
             tempdeleteindexoriginal = i;
           }
         }
@@ -165,11 +183,41 @@ const SortingTable = (props) => {
 
         setOriginaldata(temporiginaldata)
         setData(tempdata)
+        dispatch(getCarDataFunc(user))
       }
     }
-    else {
-      init();
+    else {//add to table
+      setIsdataloaded(false);
+      dispatch(getCarDataFunc(user))
     }
+  }
+
+  async function updatechangedcardatadelete() {
+    //delete from table
+    let tempdata = [...data];
+    let temporiginaldata = [...originaldata];
+
+    let tempdeleteindex = 999;
+    let tempdeleteindexoriginal = 999;
+
+    for (let i = 0; i < tempdata.length; i++) {
+      if (cardataidfordeletemodal == tempdata[i]._id) {
+        tempdeleteindex = i;
+      }
+    }
+
+    for (let i = 0; i < temporiginaldata.length; i++) {
+      if (cardataidfordeletemodal == temporiginaldata[i]._id) {
+        tempdeleteindexoriginal = i;
+      }
+    }
+
+    tempdata.splice(tempdeleteindex, 1);
+    temporiginaldata.splice(tempdeleteindexoriginal, 1);
+
+    setOriginaldata(temporiginaldata)
+    setData(tempdata)
+    dispatch(findcardatabyidanddeleteFunc(cardataidfordeletemodal))
   }
 
   function init() {
@@ -179,31 +227,90 @@ const SortingTable = (props) => {
     ReadLocalStorage();
   }
 
-  function init2() {
-    loadPikods();
-    loadOgdas();
-    loadHativas();
-    loadGdods();
-    loadMagadals();
-    loadMagads();
-    loadMkabazs();
-    loadMakats();
+  const getReduxCardDataByUnitTypeAndUnitId = async () => {
+    if (reduxcardata.length == 0) {
+      await dispatch(getCarDataFunc(user));
+    }
   }
 
   const getCardDataByUnitTypeAndUnitId = async () => {
-    if (props.ismushbat == "false") {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitidandcartypeandcarid/${props.unittype}/${props.unitid}/${props.cartype}/${props.carid}`)
-        .then(response => {
-          setOriginaldata(response.data)
-          setData(response.data)
-          setIsdataloaded(true)
-        })
-        .catch((error) => {
-          console.log(error);
-        })
+    if (props.unittype != 'notype') {
+      let myArrayFiltered1 = []; //filter cartype
+
+      switch (props.match.params.cartype) {
+        case 'magadal':
+          myArrayFiltered1 = reduxcardata;
+          break;
+        case 'magad':
+          myArrayFiltered1 = reduxcardata.filter((el) => {
+            return props.match.params.carid === el.magadal;
+          });
+          break;
+        case 'mkabaz':
+          myArrayFiltered1 = reduxcardata.filter((el) => {
+            return props.match.params.carid === el.magad;
+          });
+          break;
+      }
+
+      let myArrayFiltered2 = []; //filter cartype
+
+      switch (props.match.params.unittype) {
+        case 'admin':
+          myArrayFiltered2 = myArrayFiltered1;
+          break;
+        case 'pikod':
+          myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+            return props.match.params.unitid === el.pikod;
+          });
+          break;
+        case 'ogda':
+          myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+            return props.match.params.unitid === el.ogda;
+          });
+          break;
+        case 'hativa':
+          myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+            return props.match.params.unitid === el.hativa;
+          });
+          break;
+        case 'gdod':
+          myArrayFiltered2 = myArrayFiltered1.filter((el) => {
+            return props.match.params.unitid === el.gdod;
+          });
+          break;
+      }
+
+      let myArrayFiltered3 = []; //filter ismushbat
+
+      if (props.ismushbat == "false") {
+        myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+          return 'מושבת' != el.status;
+        });
+      }
+      else {
+        myArrayFiltered3 = myArrayFiltered2.filter((el) => {
+          return 'מושבת' === el.status;
+        });
+      }
+
+      let myArrayFiltered4 = []; //filter isstopped
+
+      if (props.isstopped == "false") {
+        myArrayFiltered4 = myArrayFiltered3;
+      }
+      else {
+        myArrayFiltered4 = myArrayFiltered3.filter((el) => {
+          return 'עצור' === el.status;
+        });
+      }
+
+      setOriginaldata(myArrayFiltered4)
+      setData(myArrayFiltered4)
+      setIsdataloaded(true)
     }
-    else {
-      await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid_mushbat/${props.unittype}/${props.unitid}`)
+    else { //read from db only for nounit cardatas..
+      await axios.get(`http://localhost:8000/api/cardatanotype`)
         .then(response => {
           setOriginaldata(response.data)
           setData(response.data)
@@ -293,16 +400,6 @@ const SortingTable = (props) => {
       }
     }
   }
-
-  // function handleChange2(selectedOption, name) {
-  //   if (!(selectedOption.value == "בחר"))
-  //     setFilter({ ...filter, [name]: selectedOption.value });
-  //   else {
-  //     let tempfilter = { ...filter };
-  //     delete tempfilter[name];
-  //     setFilter(tempfilter);
-  //   }
-  // }
 
   function handleChange8(selectedOption, name) {
     if (!(selectedOption.value == "בחר")) {
@@ -450,27 +547,25 @@ const SortingTable = (props) => {
         }
       }
       else {
-        tempdata_to_excel.push(data[i])
+        tempdata_to_excel.push({ ...data[i] })
       }
     }
 
     for (let i = 0; i < tempdata_to_excel.length; i++) {
-      pikods.map((pikod, index) => (pikod._id == tempdata_to_excel[i].pikod ? tempdata_to_excel[i].pikod_name = pikod.name : null));
-      ogdas.map((ogda, index) => (ogda._id == tempdata_to_excel[i].ogda ? tempdata_to_excel[i].ogda_name = ogda.name : null));
-      hativas.map((hativa, index) => (hativa._id == tempdata_to_excel[i].hativa ? tempdata_to_excel[i].hativa_name = hativa.name : null));
-      gdods.map((gdod, index) => (gdod._id == tempdata_to_excel[i].gdod ? tempdata_to_excel[i].gdod_name = gdod.name : null));
+      tempdata_to_excel[i].pikod_data ? tempdata_to_excel[i].pikod_name = tempdata_to_excel[i].pikod_data[0].name : tempdata_to_excel[i].pikod_name = " ";
+      tempdata_to_excel[i].ogda_data ? tempdata_to_excel[i].ogda_name = tempdata_to_excel[i].ogda_data[0].name : tempdata_to_excel[i].ogda_name = " ";
+      tempdata_to_excel[i].hativa_data ? tempdata_to_excel[i].hativa_name = tempdata_to_excel[i].hativa_data[0].name : tempdata_to_excel[i].hativa_name = " ";
+      tempdata_to_excel[i].gdod_data ? tempdata_to_excel[i].gdod_name = tempdata_to_excel[i].gdod_data.name : tempdata_to_excel[i].gdod_name = " ";
 
-      magadals.map((magadal, index) => (magadal._id == tempdata_to_excel[i].magadal ? tempdata_to_excel[i].magadal_name = magadal.name : null));
-      magads.map((magad, index) => (magad._id == tempdata_to_excel[i].magad ? tempdata_to_excel[i].magad_name = magad.name : null));
-      mkabazs.map((mkabaz, index) => (mkabaz._id == tempdata_to_excel[i].mkabaz ? tempdata_to_excel[i].mkabaz_name = mkabaz.name : null));
-      makats.map((makat, index) => (makat._id == tempdata_to_excel[i].makat ? tempdata_to_excel[i].makat_name = makat.name : null));
-      makats.map((makat, index) => (makat._id == tempdata_to_excel[i].makat ? tempdata_to_excel[i].makat_description_name = makat.description : null));
+      tempdata_to_excel[i].magadal_data ? tempdata_to_excel[i].magadal_name = tempdata_to_excel[i].magadal_data[0].name : tempdata_to_excel[i].magadal_name = " ";
+      tempdata_to_excel[i].magad_data ? tempdata_to_excel[i].magad_name = tempdata_to_excel[i].magad_data[0].name : tempdata_to_excel[i].magad_name = " ";
+      tempdata_to_excel[i].mkabaz_data ? tempdata_to_excel[i].mkabaz_name = tempdata_to_excel[i].mkabaz_data[0].name : tempdata_to_excel[i].mkabaz_name = " ";
+      tempdata_to_excel[i].makat_data ? tempdata_to_excel[i].makat_name = tempdata_to_excel[i].makat_data._id : tempdata_to_excel[i].makat_name = " ";
+      tempdata_to_excel[i].makat_data ? tempdata_to_excel[i].makat_description_name = tempdata_to_excel[i].makat_data.name : tempdata_to_excel[i].makat_description_name = " ";
 
       tempdata_to_excel[i].latest_recalibration_date = tempdata_to_excel[i].latest_recalibration_date ? tempdata_to_excel[i].latest_recalibration_date.slice(0, 10).split("-").reverse().join("-") : null;
       tempdata_to_excel[i].expected_repair = tempdata_to_excel[i].expected_repair ? tempdata_to_excel[i].expected_repair.slice(0, 10).split("-").reverse().join("-") : null;
     }
-
-    // setData_to_excel(tempdata_to_excel);
 
     //export to excel -fix 
     for (let i = 0; i < tempdata_to_excel.length; i++) {
@@ -489,71 +584,59 @@ const SortingTable = (props) => {
       delete tempdata_to_excel[i].__v;
       delete tempdata_to_excel[i].createdAt;
       delete tempdata_to_excel[i].updatedAt;
-      
+
       //add non-existing fields - 31
-      if(!tempdata_to_excel[i].carnumber){tempdata_to_excel[i].carnumber=" "}
-      if(!tempdata_to_excel[i].expected_repair){tempdata_to_excel[i].expected_repair=" "}
-      if(!tempdata_to_excel[i].family){tempdata_to_excel[i].family=" "}
-      if(!tempdata_to_excel[i].gdod_name){tempdata_to_excel[i].gdod_name=" "}
-      if(!tempdata_to_excel[i].hativa_name){tempdata_to_excel[i].hativa_name=" "}
-      if(!tempdata_to_excel[i].kshirot){tempdata_to_excel[i].kshirot=" "}
-      if(!tempdata_to_excel[i].latest_recalibration_date){tempdata_to_excel[i].latest_recalibration_date=" "}
-      if(!tempdata_to_excel[i].magad_name){tempdata_to_excel[i].magad_name=" "}
-      if(!tempdata_to_excel[i].magadal_name){tempdata_to_excel[i].magadal_name=" "}
-      if(!tempdata_to_excel[i].makat_description_name){tempdata_to_excel[i].makat_description_name=" "}
-      if(!tempdata_to_excel[i].makat_name){tempdata_to_excel[i].makat_name=" "}
-      if(!tempdata_to_excel[i].mikum){tempdata_to_excel[i].mikum=" "}
-      if(!tempdata_to_excel[i].mikum_bimh){tempdata_to_excel[i].mikum_bimh=" "}
-      if(!tempdata_to_excel[i].mkabaz_name){tempdata_to_excel[i].mkabaz_name=" "}
-      if(!tempdata_to_excel[i].ogda_name){tempdata_to_excel[i].ogda_name=" "}
-      if(!tempdata_to_excel[i].pikod_name){tempdata_to_excel[i].pikod_name=" "}
-      if(!tempdata_to_excel[i].pluga){tempdata_to_excel[i].pluga=" "}
-      if(!tempdata_to_excel[i].shabzak){tempdata_to_excel[i].shabzak=" "}
-      if(!tempdata_to_excel[i].stand){tempdata_to_excel[i].stand=" "}
-      if(!tempdata_to_excel[i].status){tempdata_to_excel[i].status=" "}
-      if(!tempdata_to_excel[i].takala_info){tempdata_to_excel[i].takala_info=" "}
-      if(!tempdata_to_excel[i].zminot){tempdata_to_excel[i].zminot=" "} //22
+      if (!tempdata_to_excel[i].carnumber) { tempdata_to_excel[i].carnumber = " " }
+      if (!tempdata_to_excel[i].expected_repair) { tempdata_to_excel[i].expected_repair = " " }
+      if (!tempdata_to_excel[i].family) { tempdata_to_excel[i].family = " " }
+      if (!tempdata_to_excel[i].gdod_name) { tempdata_to_excel[i].gdod_name = " " }
+      if (!tempdata_to_excel[i].hativa_name) { tempdata_to_excel[i].hativa_name = " " }
+      if (!tempdata_to_excel[i].kshirot) { tempdata_to_excel[i].kshirot = " " }
+      if (!tempdata_to_excel[i].latest_recalibration_date) { tempdata_to_excel[i].latest_recalibration_date = " " }
+      if (!tempdata_to_excel[i].magad_name) { tempdata_to_excel[i].magad_name = " " }
+      if (!tempdata_to_excel[i].magadal_name) { tempdata_to_excel[i].magadal_name = " " }
+      if (!tempdata_to_excel[i].makat_description_name) { tempdata_to_excel[i].makat_description_name = " " }
+      if (!tempdata_to_excel[i].makat_name) { tempdata_to_excel[i].makat_name = " " }
+      if (!tempdata_to_excel[i].mikum) { tempdata_to_excel[i].mikum = " " }
+      if (!tempdata_to_excel[i].mikum_bimh) { tempdata_to_excel[i].mikum_bimh = " " }
+      if (!tempdata_to_excel[i].mkabaz_name) { tempdata_to_excel[i].mkabaz_name = " " }
+      if (!tempdata_to_excel[i].ogda_name) { tempdata_to_excel[i].ogda_name = " " }
+      if (!tempdata_to_excel[i].pikod_name) { tempdata_to_excel[i].pikod_name = " " }
+      if (!tempdata_to_excel[i].pluga) { tempdata_to_excel[i].pluga = " " }
+      if (!tempdata_to_excel[i].shabzak) { tempdata_to_excel[i].shabzak = " " }
+      if (!tempdata_to_excel[i].stand) { tempdata_to_excel[i].stand = " " }
+      if (!tempdata_to_excel[i].status) { tempdata_to_excel[i].status = " " }
+      if (!tempdata_to_excel[i].takala_info) { tempdata_to_excel[i].takala_info = " " }
+      if (!tempdata_to_excel[i].zminot) { tempdata_to_excel[i].zminot = " " } //22
       //
-      if(!tempdata_to_excel[i].tipul){tempdata_to_excel[i].tipul=" "}
-      if(!tempdata_to_excel[i].tipul_entry_date){tempdata_to_excel[i].tipul_entry_date=" "}
-      if(!tempdata_to_excel[i].mikum_tipul){tempdata_to_excel[i].mikum_tipul=" "}
-      if(!tempdata_to_excel[i].harig_tipul){tempdata_to_excel[i].harig_tipul=" "}
-      if(!tempdata_to_excel[i].harig_tipul_date){tempdata_to_excel[i].harig_tipul_date=" "}
-      if(!tempdata_to_excel[i].takala_mizdamenet){tempdata_to_excel[i].takala_mizdamenet=" "}
-      if(!tempdata_to_excel[i].takala_mizdamenet_date){tempdata_to_excel[i].takala_mizdamenet_date=" "}
-      if(!tempdata_to_excel[i].missing_makat_1){tempdata_to_excel[i].missing_makat_1=" "}
-      if(!tempdata_to_excel[i].missing_makat_2){tempdata_to_excel[i].missing_makat_2=" "}
+      if (!tempdata_to_excel[i].tipul) { tempdata_to_excel[i].tipul = " " }
+      if (!tempdata_to_excel[i].tipul_entry_date) { tempdata_to_excel[i].tipul_entry_date = " " }
+      if (!tempdata_to_excel[i].mikum_tipul) { tempdata_to_excel[i].mikum_tipul = " " }
+      if (!tempdata_to_excel[i].harig_tipul) { tempdata_to_excel[i].harig_tipul = " " }
+      if (!tempdata_to_excel[i].harig_tipul_date) { tempdata_to_excel[i].harig_tipul_date = " " }
+      if (!tempdata_to_excel[i].takala_mizdamenet) { tempdata_to_excel[i].takala_mizdamenet = " " }
+      if (!tempdata_to_excel[i].takala_mizdamenet_date) { tempdata_to_excel[i].takala_mizdamenet_date = " " }
+      if (!tempdata_to_excel[i].missing_makat_1) { tempdata_to_excel[i].missing_makat_1 = " " }
+      if (!tempdata_to_excel[i].missing_makat_2) { tempdata_to_excel[i].missing_makat_2 = " " }
     }
     console.log(tempdata_to_excel)
 
-    // let Heading = [["צ'", 'מעמד הכלי', 'זמינות', 'כשירות למלחמה', 'סטאטוס הכלי', 'צפי תיקון', 'פלוגה', 'מהות התקלה', 'מועד כיול אחרון', 'מיקום בימ"ח', 'משפחה', 'מיקום', 'שבצ"ק', 'פיקוד', 'אוגדה', 'חטיבה', 'גדוד', 'מאגד על', 'מאגד', 'מקבץ', 'מק"ט', 'תיאור מק"ט', 'סוג טיפול', 'תאריך כניסה לטיפול', 'מיקום טיפול', 'חריג טיפול', 'תאריך חריגת טיפול', 'תקלה מזדמנת', 'תאריך תקלה מזדמנת', 'מק"ט חסר', 'כמות']];
-
-    // //Had to create a new workbook and then add the header
-    // const wb = XLSX.utils.book_new();
-    // const ws = XLSX.utils.json_to_sheet([]);
-    // XLSX.utils.sheet_add_aoa(ws, Heading);
-
-    // //Starting in the second row to avoid overriding and skipping headers
-    // XLSX.utils.sheet_add_json(ws, tempdata_to_excel, { origin: 'A2', skipHeader: true });
-
-    // XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
-
-    // XLSX.writeFile(wb, 'גזירה.xlsx');
-
     let EXCEL_EXTENSION = '.xlsx';
-    let worksheet= XLSX.WorkSheet;
-    let sheetName = 'גזירה';  
-     
-    const headers = { carnumber: "צ'",magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
-    , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון' , tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'};
+    let worksheet = XLSX.WorkSheet;
+    let sheetName = 'גזירה';
+
+    const headers = {
+      carnumber: "צ'", magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
+      , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון', tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'
+    };
     tempdata_to_excel.unshift(headers); // if custom header, then make sure first row of data is custom header 
-    
+
     worksheet = XLSX.utils.json_to_sheet(tempdata_to_excel, { skipHeader: true });
 
-   const workbook = XLSX.utils.book_new();
-   const fileName =  'גזירה'+ EXCEL_EXTENSION;
-   XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
-   XLSX.writeFile(workbook, fileName);
+    const workbook = XLSX.utils.book_new();
+    const fileName = 'גזירה' + EXCEL_EXTENSION;
+    XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+    XLSX.writeFile(workbook, fileName);
 
     window.location.reload();
   }
@@ -586,14 +669,43 @@ const SortingTable = (props) => {
   }, [filter]);
 
   useEffect(() => {
-    init();
-    init2();
+    if (reduxcardata.length > 0) {
+      init();
+    }
+  }, [props.unittype, props.unitid, props.ismushbat, props.isstopped, props.match]);
+
+  useEffect(() => {
+    if (reduxcardata.length > 0 && isdataloaded == false) {
+      init();
+    }
+  }, [reduxcardata]);
+
+  useEffect(() => {
+    getReduxCardDataByUnitTypeAndUnitId();
     setPageSize(20);
-  }, [props.unittype,props.unitid,props.ismushbat,props.match]);
+  }, [])
 
   useEffect(() => {
     FixLocalStorageHeaders();
   }, [hiddenColumns]);
+
+  //window
+  const [windowSize, setWindowSize] = useState(getWindowSize());
+
+  function getWindowSize() {
+    const { innerWidth, innerHeight } = window;
+    return { innerWidth, innerHeight };
+  }
+
+  useEffect(() => {
+    function handleWindowResize() {
+      setWindowSize(getWindowSize());
+    }
+    window.addEventListener('resize', handleWindowResize);
+    return () => {
+      window.removeEventListener('resize', handleWindowResize);
+    };
+  }, []);
 
   return (
     !isdataloaded ?
@@ -605,30 +717,34 @@ const SortingTable = (props) => {
         {/*modals */}
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
-        {/*filter */}
-        <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
 
-        <div style={{ float: 'right', paddingBottom: '5px' }}>
-          {/* <ReactHTMLTableToExcel
-            id="test-table-xls-button"
-            className="btn-green"
-            table="table-to-xls"
-            filename="קובץ - זמינות"
-            sheet="קובץ - זמינות"
-            buttonText="הורד כקובץ אקסל"
-            style={{ float: 'right' }}
-          /> */}
-          <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
-        </div>
-        <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
-        <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
-        <div className="table-responsive" style={{ overflow: 'auto' }}>
+        <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
+          {/*filter */}
+          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
+
+          <div style={{ float: 'right', paddingBottom: '5px' }}>
+            <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
+          </div>
+          <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
+          <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+
+          <Row>
+            <Col xs={12} md={6} style={{ textAlign: 'right', left: '20rem', marginTop: '1rem' }}>
+              <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} md={6} style={{ textAlign: 'right', right: '1rem' }}>
+              <SumCardataComponent cardatas={data} isdataloaded={isdataloaded} />
+            </Col>
+          </Row>
+
           <table {...getTableProps()} id="table-to-xls">
             <thead>
               {headerGroups.map((headerGroup) => (
                 <tr {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column) => (
-                    <th  >
+                    <th style={{ position: 'sticky', top: '-2px' }}>
                       <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
                       <div>{column.canFilter ? column.render('Filter') : null}</div>
                       <div>
@@ -636,8 +752,8 @@ const SortingTable = (props) => {
                       </div>
                     </th>
                   ))}
-                  <th></th>
-                  {props.unittype != 'notype' ? <th></th>
+                  <th style={{ position: 'sticky', top: '-2px' }}></th>
+                  {props.unittype != 'notype' ? <th style={{ position: 'sticky', top: '-2px' }}></th>
                     : null}
                 </tr>
               ))}
@@ -655,43 +771,41 @@ const SortingTable = (props) => {
                             return <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.render('Cell')}</td>
                           }
                           else {
-                             if (cell.column.id == "updatedAt") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td>  : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                            if (cell.column.id == "updatedAt") {
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "latest_recalibration_date") {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '150px', maxWidth: '150px', overflow: 'auto' }} {...cell.getCellProps()}>{cell.value.slice(0, 10).split("-").reverse().join("-")}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "pikod") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{pikods.map((pikod, index) => (pikod._id == cell.value ? pikod.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.pikod_data ? row.original.pikod_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "ogda") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{ogdas.map((ogda, index) => (ogda._id == cell.value ? ogda.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.ogda_data ? row.original.ogda_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "hativa") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{hativas.map((hativa, index) => (hativa._id == cell.value ? hativa.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.hativa_data ? row.original.hativa_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "gdod") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == cell.value ? gdod.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.gdod_data ? row.original.gdod_data.name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "magadal") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magadals.map((magadal, index) => (magadal._id == cell.value ? magadal.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.magadal_data ? row.original.magadal_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "magad") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{magads.map((magad, index) => (magad._id == cell.value ? magad.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.magad_data ? row.original.magad_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "mkabaz") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{mkabazs.map((mkabaz, index) => (mkabaz._id == cell.value ? mkabaz.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.mkabaz_data ? row.original.mkabaz_data[0].name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat") {
-                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == cell.value ? makat._id : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data._id : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "makat_description") {
-                              return row.original.makat ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{makats.map((makat, index) => (makat._id == row.original.makat ? makat.name : null))}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
+                              return row.original.makat ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>{row.original.makat_data ? row.original.makat_data.name : null}</td> : <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}></td>
                             }
                             if (cell.column.id == "tipuls") {
                               return cell.value ? <td style={{ width: `${100 / (23 - hiddenColumns)}%`, minWidth: '50px', maxWidth: '100px', overflow: 'auto' }} {...cell.getCellProps()}>
-                                {/* {cell.value.map((tipul, index) => <p>{tipul.type}</p>)} */}
-                                {/* {cell.value.filter(function(item, pos) {return cell.value.indexOf(item.type) == pos;}).map((tipul, index) => <p>{tipul.type}</p>)} */}
                                 {cell.value.filter((value, index, self) =>
                                   index === self.findIndex((t) => (
                                     t.type === value.type
@@ -762,13 +876,6 @@ const SortingTable = (props) => {
               </option>
             </select>
           </div>
-          <Row>
-            <Col xs={12} md={3} style={{ textAlign: 'right' }}>
-              <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
-            </Col>
-            <Col xs={12} md={9}>
-            </Col>
-          </Row>
         </div>
       </>
   );
