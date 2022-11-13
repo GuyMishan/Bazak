@@ -324,6 +324,8 @@ const CarDataFormModal = (props) => {
         else {
           tempcardata.tipuls = finalspecialkeytwo;
         }
+        
+        tempcardata.updatedBy = user.name;
         let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
         //create archivecardata
         delete tempcardata._id;
@@ -377,11 +379,13 @@ const CarDataFormModal = (props) => {
       else {
         tempcardata.tipuls = finalspecialkeytwo;
       }
+      tempcardata.updatedBy = user.name;
       let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
       //create archivecardata
       delete tempcardata._id;
       let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
       toast.success(`צ' עודכן בהצלחה`);
+      console.log(tempcardata.updatedBy,result.updatedBy);
       props.ToggleForModal();
     }
   }
