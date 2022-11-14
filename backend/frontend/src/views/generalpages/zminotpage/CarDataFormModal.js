@@ -214,7 +214,6 @@ const CarDataFormModal = (props) => {
   function handleChange(evt) {
     const value = evt.target.value;
     if (value != "בחר") {
-      if (evt.target.name != "carnumber") {
         if (evt.target.name == "status" && value == "מושבת") {
           toast.error("העברת סטטוס הכלי למושבת משמעותה השבתת הכלי לגמרי");
         }
@@ -222,13 +221,11 @@ const CarDataFormModal = (props) => {
           toast.error("העברת סטטוס הכלי לעצור משמעותה עצירת הכלי לגמרי");
         }
         setCarData({ ...cardata, [evt.target.name]: value });
-      } else {
-        CheckCarnumberAndSetFormdata(evt.target.value);
-      }
     }
   }
 
-  async function CheckCarnumberAndSetFormdata(carnumber) {
+  async function CheckCarnumberAndSetFormdata() {
+    let carnumber = cardata.carnumber;
     if (carnumber != '') {
       let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${carnumber}`)
       if (response.data.length > 0) {//צ' קיים במערכת
@@ -478,9 +475,17 @@ const CarDataFormModal = (props) => {
                     <h6 style={{}}>צ'</h6>
                     <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} disabled />
                   </Col> :
-                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right'}}>
+                    <Row>
+                      <Col xs={12} md={8}>
                     <h6 style={{}}>צ'</h6>
                     <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} />
+                    </Col>
+                    <Col xs={12} md={4} style={{padding:'0px', textAlign:'center'}}>
+                    
+                    <button className="btn-new-blue" style={{margin:'0px', marginTop:'1.3rem'}} onClick={CheckCarnumberAndSetFormdata}>חפש</button>
+                    </Col>
+                    </Row>
                   </Col>}
 
                 <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
