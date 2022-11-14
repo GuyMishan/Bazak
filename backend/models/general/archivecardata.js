@@ -25,6 +25,7 @@ const archivecardataSchema = new mongoose.Schema({
     mikum: { type: String },
     expected_repair: { type: String },
     latest_recalibration_date: { type: Date },
+    updatedBy: { type: String },
 }, { timestamps: true });
 
 const ArchiveCardata = mongoose.model('ArchiveCardata', archivecardataSchema);
