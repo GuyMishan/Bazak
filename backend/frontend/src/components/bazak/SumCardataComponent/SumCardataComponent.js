@@ -18,7 +18,7 @@ import {
 import axios from 'axios';
 import { signin, authenticate, isAuthenticated } from 'auth/index';
 
-function LatestUpdateDateComponent(props) {
+function SumCardataComponent(props) {
   const [SumCarData, setSumCarData] = useState("");
 
   function init() {
@@ -33,13 +33,13 @@ function LatestUpdateDateComponent(props) {
   useEffect(() => {
     if (props.isdataloaded == true)
       init();
-  }, [props.isdataloaded,props.cardatas])
+  }, [props.isdataloaded, props.cardatas])
 
   return (
     <div>
-      <h3 style={{margin:'0px'}}>סה"כ צ': {SumCarData}</h3>
+      <h3 style={{ margin: '0px' }}>סה"כ צ': {SumCarData}</h3>
     </div>
   );
 }
 
-export default withRouter(LatestUpdateDateComponent);
+export default withRouter(SumCardataComponent);

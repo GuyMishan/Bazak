@@ -718,7 +718,7 @@ const SortingTable = (props) => {
         <CarDataFormModal isOpen={iscardataformopen} cardataid={cardataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} />
         <CarDataFormModalDelete isOpen={iscardataformdeleteopen} cardataid={cardataidfordeletemodal} Toggle={ToggleDelete} ToggleForModal={ToggleForModalDelete} unittype={props.unittype} unitid={props.unitid} />
 
-        <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight)*0.9 }}>
+        <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
           {/*filter */}
           <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
 
@@ -727,16 +727,18 @@ const SortingTable = (props) => {
           </div>
           <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
+
           <Row>
-            <Col xs={12} md={3} style={{ textAlign: 'right', left:'20rem', marginTop:'1rem'}}>
+            <Col xs={12} md={6} style={{ textAlign: 'right', left: '20rem', marginTop: '1rem' }}>
               <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
             </Col>
           </Row>
           <Row>
-           <Col xs={12} md={3} style={{ textAlign: 'right',right:'1rem'}}>
+            <Col xs={12} md={6} style={{ textAlign: 'right', right: '1rem' }}>
               <SumCardataComponent cardatas={data} isdataloaded={isdataloaded} />
-           </Col>
+            </Col>
           </Row>
+
           <table {...getTableProps()} id="table-to-xls">
             <thead>
               {headerGroups.map((headerGroup) => (

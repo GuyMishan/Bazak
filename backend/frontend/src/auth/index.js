@@ -62,10 +62,10 @@ export const isAuthenticated = () => {
     }
 }
 
-export async function HierarchyCheck(targetUnitId, targetUnitType){
- hierarchyCheck(targetUnitId, targetUnitType);
+export async function HierarchyCheck(targetUnitId, targetUnitType) {
+    hierarchyCheck(targetUnitId, targetUnitType);
 
-    function unitIdByUserRole(){
+    function unitIdByUserRole() {
         if (isAuthenticated().user.role === "1") {
             return isAuthenticated().user.gdodid;
         }
@@ -79,7 +79,7 @@ export async function HierarchyCheck(targetUnitId, targetUnitType){
             return isAuthenticated().user.pikodid;
         }
     }
-    function unitTypeByUserRole(){
+    function unitTypeByUserRole() {
         if (isAuthenticated().user.role === "1") {
             return "gdod";
         }
@@ -95,36 +95,32 @@ export async function HierarchyCheck(targetUnitId, targetUnitType){
     }
 
     async function getTargetParentId(targetUnitId, targetUnitType) {
-        try{
-        let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
-                if (targetUnitType == 'gdod') {
-                    return response.data.hativa;
-                }
-                if (targetUnitType == 'hativa') {
-                    return response.data.ogda;
-                }
-                if (targetUnitType == 'ogda') {
-                    return response.data.pikod;
-                }
-            }catch{
-                console.log("unit doesn't exist");
-                history.push(`/signin`);
-                return true;
+        try {
+            let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
+            if (targetUnitType == 'gdod') {
+                return response.data.hativa;
             }
+            if (targetUnitType == 'hativa') {
+                return response.data.ogda;
+            }
+            if (targetUnitType == 'ogda') {
+                return response.data.pikod;
+            }
+        } catch {
+            history.push(`/signin`);
+            return true;
+        }
     }
 
-     async function hierarchyCheck(targetUnitId, targetUnitType) {
-        if (targetUnitType == 'notype'||isAuthenticated().user.role == '0') {
-            console.log("1");
+    async function hierarchyCheck(targetUnitId, targetUnitType) {
+        if (targetUnitType == 'notype' || isAuthenticated().user.role == '0') {
             return true;
         }
         if (targetUnitType == 'admin' && isAuthenticated().user.role != '0') {
-            console.log("error");
             history.push(`/signin`);
             return true;
         }
         if (targetUnitId == unitIdByUserRole() && targetUnitType == unitTypeByUserRole()) {
-            console.log("2");
             return true;
         } else {
             if (targetUnitType != 'pikod') {
@@ -132,20 +128,18 @@ export async function HierarchyCheck(targetUnitId, targetUnitType){
                 if (targetUnitType == 'gdod') {
                     targetUnitType = 'hativa';
                 }
-                else{
+                else {
                     if (targetUnitType == 'hativa') {
                         targetUnitType = 'ogda';
                     }
-                    else{
+                    else {
                         if (targetUnitType == 'ogda') {
                             targetUnitType = 'pikod';
                         }
                     }
                 }
-                console.log("3");
                 return hierarchyCheck(targetUnitId, targetUnitType);
             } else {
-                console.log("4");
                 history.push(`/signin`);
             }
         }
