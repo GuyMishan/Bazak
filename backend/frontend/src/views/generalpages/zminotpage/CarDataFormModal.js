@@ -322,7 +322,7 @@ const CarDataFormModal = (props) => {
           tempcardata.tipuls = finalspecialkeytwo;
         }
         
-        tempcardata.updatedBy = user.name;
+        tempcardata.updatedBy = user.personalnumber;
         let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
         //create archivecardata
         delete tempcardata._id;
@@ -344,6 +344,7 @@ const CarDataFormModal = (props) => {
     else {
       //create cardata
       let tempcardata = { ...cardata }
+      tempcardata.updatedBy = user.personalnumber;
       delete tempcardata._id;
       if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
         tempcardata.tipuls = [];
@@ -376,7 +377,7 @@ const CarDataFormModal = (props) => {
       else {
         tempcardata.tipuls = finalspecialkeytwo;
       }
-      tempcardata.updatedBy = user.name;
+      tempcardata.updatedBy = user.personalnumber;
       let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
       //create archivecardata
       delete tempcardata._id;
