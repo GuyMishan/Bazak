@@ -21,6 +21,8 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 
 import DashboardCard from './DashboardCard';
 import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponent/LatestUpdateDateComponent';
+import ModularScreensModal from './ModularScreens/ModularScreensModal';
+import ChartModal from './ModularScreens/ChartModal';
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
@@ -31,11 +33,23 @@ function DashboardPage({ match, theme }) {
   //cardatas
   const [cardatas, setCardatas] = useState([])
   const [cartypes, setCartypes] = useState([]);
+  //modularscreens modal
+  const [ismodularscreensmodalopen, setIsmodularscreensmodalopen] = useState(false);
+  //chart modal
+  const [ischartmodalopen, setIschartmodalopen] = useState(false);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
   //redux
   const dispatch = useDispatch()
   const reduxcardata = useSelector((state) => state.cardata.value)
+
+  function Togglemodularscreensmodal(evt) {
+    setIsmodularscreensmodalopen(!ismodularscreensmodalopen);
+  }
+
+  function Togglechartmodal(evt) {
+    setIschartmodalopen(!ischartmodalopen);
+  }
 
   async function init() {
     setIsdataloaded(false);
@@ -182,19 +196,35 @@ function DashboardPage({ match, theme }) {
       </div>
       :
       <div>
+        <ModularScreensModal isOpen={ismodularscreensmodalopen} Toggle={Togglemodularscreensmodal} user={user} />
+        <ChartModal isOpen={ischartmodalopen} Toggle={Togglechartmodal} user={user} />
+
+        <Row style={{ marginBottom: '10px' }}>
+          <Col xs={12} md={3} style={{ textAlign: 'right' }}>
+            <button className='btn-new-blue'>סינון</button>
+          </Col>
+          <Col xs={12} md={5}>
+          </Col>
+          <Col xs={12} md={4} style={{ textAlign: 'left' }}>
+            <button className='btn-new-blue' onClick={Togglechartmodal}>ערוך</button>
+          </Col>
+        </Row>
+
         <Row>
           {cartypes.map((cartype, i) => (
             cartype ?
               <DashboardCard theme={theme} match={match} cartype={cartype} cardatas={cardatas} />
               : null))}
         </Row>
+
         <Row>
           <Col xs={12} md={3} style={{ textAlign: 'right' }}>
             <LatestUpdateDateComponent cardatas={cardatas} isdataloaded={isdataloaded} />
           </Col>
-          <Col xs={12} md={6}>
+          <Col xs={12} md={5}>
           </Col>
-          <Col xs={12} md={3}>
+          <Col xs={12} md={4} style={{ textAlign: 'left' }}>
+            <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={Togglemodularscreensmodal}>רשימת מסכים</button>
             <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/${match.params.cartype}/${match.params.carid}/false/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
           </Col>
         </Row>

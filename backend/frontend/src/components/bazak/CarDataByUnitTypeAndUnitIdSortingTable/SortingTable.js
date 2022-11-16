@@ -565,6 +565,8 @@ const SortingTable = (props) => {
 
       tempdata_to_excel[i].latest_recalibration_date = tempdata_to_excel[i].latest_recalibration_date ? tempdata_to_excel[i].latest_recalibration_date.slice(0, 10).split("-").reverse().join("-") : null;
       tempdata_to_excel[i].expected_repair = tempdata_to_excel[i].expected_repair ? tempdata_to_excel[i].expected_repair.slice(0, 10).split("-").reverse().join("-") : null;
+
+      tempdata_to_excel[i].updatedAt_data = tempdata_to_excel[i].updatedAt ? tempdata_to_excel[i].updatedAt.slice(0, 10).split("-").reverse().join("-") : null;
     }
 
     //export to excel -fix 
@@ -584,8 +586,9 @@ const SortingTable = (props) => {
       delete tempdata_to_excel[i].__v;
       delete tempdata_to_excel[i].createdAt;
       delete tempdata_to_excel[i].updatedAt;
+      delete tempdata_to_excel[i].updatedBy;//check!!!!!!!
 
-      //add non-existing fields - 31
+      //add non-existing fields - 32
       if (!tempdata_to_excel[i].carnumber) { tempdata_to_excel[i].carnumber = " " }
       if (!tempdata_to_excel[i].expected_repair) { tempdata_to_excel[i].expected_repair = " " }
       if (!tempdata_to_excel[i].family) { tempdata_to_excel[i].family = " " }
@@ -618,6 +621,7 @@ const SortingTable = (props) => {
       if (!tempdata_to_excel[i].takala_mizdamenet_date) { tempdata_to_excel[i].takala_mizdamenet_date = " " }
       if (!tempdata_to_excel[i].missing_makat_1) { tempdata_to_excel[i].missing_makat_1 = " " }
       if (!tempdata_to_excel[i].missing_makat_2) { tempdata_to_excel[i].missing_makat_2 = " " }
+      if (!tempdata_to_excel[i].updatedAt_data) { tempdata_to_excel[i].updatedAt_data = " " }
     }
     console.log(tempdata_to_excel)
 
@@ -627,7 +631,7 @@ const SortingTable = (props) => {
 
     const headers = {
       carnumber: "צ'", magadal_name: 'מאגד על', magad_name: 'מאגד', mkabaz_name: 'מקבץ', makat_name: 'מק"ט', makat_description_name: 'תיאור מק"ט', family: 'משפחה', pikod_name: 'פיקוד', ogda_name: 'אוגדה', hativa_name: 'חטיבה', gdod_name: 'גדוד', pluga: 'פלוגה', shabzak: 'שבצ"ק', mikum_bimh: 'מיקום בימ"ח', stand: 'מעמד', status: 'סטאטוס', zminot: 'זמינות', kshirot: 'כשירות', mikum: 'מיקום', latest_recalibration_date: 'מועד כיול אחרון'
-      , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון', tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות'
+      , takala_info: 'מידע תקלה', expected_repair: 'צפי תיקון', tipul: 'טיפול', tipul_entry_date: 'תאריך כניסה לטיפול', mikum_tipul: 'מיקום טיפול', harig_tipul: 'חריג טיפול', harig_tipul_date: 'תאריך חריגת טיפול', takala_mizdamenet: 'תקלה מזדמנת', takala_mizdamenet_date: 'תאריך תקלה מזדמנת', missing_makat_1: 'מק"ט חסר', missing_makat_2: 'כמות', updatedAt_data: 'תאריך עדכון אחרון'
     };
     tempdata_to_excel.unshift(headers); // if custom header, then make sure first row of data is custom header 
 
