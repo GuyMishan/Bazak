@@ -31,6 +31,23 @@ import { toast } from "react-toastify";
 
 const ScreenModal = (props) => {
   const [screendata, setScreenData] = useState({})
+  //newScreen
+  const [newScreen, setNewScreen] = useState({})
+
+  function handleChange(evt) {
+    const value = evt.target.value;
+    if (value != "בחר") {
+      setNewScreen({ ...newScreen, [evt.target.name]: value });
+    }
+  }
+
+   const clickSubmit = async event => {
+    let tempNewScreen = { ...newScreen }
+    console.log(tempNewScreen);
+
+    let response = await axios.post(`http://localhost:8000/api/modularscreens/screen`, tempNewScreen)
+    toast.success(`מסך נשמר בהצלחה`);
+  }
 
   const loadscreendata = async () => {
     await axios.get(`http://localhost:8000/api/modularscreens/${props.screenid}`)
@@ -43,11 +60,11 @@ const ScreenModal = (props) => {
       })
   }
 
-  const clickSubmit = event => {
-    CheckFormData()
-  }
+  // const clickSubmit = event => {
+  //   CheckFormData()
+  // }
 
-  const CheckFormData = () => {//check for stuff isnt empty -> specially cartypes/units
+  // const CheckFormData = () => {//check for stuff isnt empty -> specially cartypes/units
     // var flag = true;
     // var ErrorReason = "";
 
@@ -88,7 +105,7 @@ const ScreenModal = (props) => {
     // } else {
     //   toast.error(ErrorReason);
     // }
-  }
+  // }
 
 
   async function CreateCarData() {
@@ -188,7 +205,7 @@ const ScreenModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '80%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '30%', maxWidth: '40%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen
@@ -196,7 +213,30 @@ const ScreenModal = (props) => {
       size=""
       toggle={props.Toggle}>
       <ModalBody>
-BBBBBBBBBBBBBBBBBBBBBBBBBBB
+        <h1 style={{ textAlign: 'center'}}>יצירת מסך</h1>
+      <div>
+        <Col xs={12} md={4}>
+          <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך: </div>
+          <Input type="textarea" name="screenid" value={newScreen.screenid} onChange={handleChange} />
+        </Col>
+        <Col xs={12} md={4}>
+          <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
+          <Input type="textarea" name="name" value={newScreen.name} onChange={handleChange} />
+        </Col>
+        <Col xs={12} md={4}>
+          <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
+          <Input type="select" name="chartsinline" value={newScreen.chartsinline} onChange={handleChange}>
+               <option value={'בחר'}>בחר</option>
+               <option value={'4'}>4</option>
+               <option value={'3'}>3</option>
+               <option value={'2'}>2</option>
+               <option value={'1'}>1</option>
+          </Input>
+        </Col>
+        <Col>
+          <button className='btn-new-blue' style={{margin:'3rem'}} onClick={clickSubmit}>שמור</button>
+        </Col>
+      </div>
       </ModalBody>
     </Modal>
   );
