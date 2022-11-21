@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router()
 
 
-const { create, find, read, update, remove } = require("../../controllers/modularscreens/screen")
+const { create, find, read, update, remove,screensbyuserpersonalnumber } = require("../../controllers/modularscreens/screen")
 
 router.post('/modularscreens/screen', create);
 
@@ -15,5 +15,7 @@ router.put('/modularscreens/screen/:screenId', update)
 router.post('/modularscreens/screen/remove/:id', remove);
 
 //
+
+router.get('/modularscreens/screensbyuserpersonalnumber/:userpersonalnumber', screensbyuserpersonalnumber);
 
 module.exports = router

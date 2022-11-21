@@ -7,7 +7,7 @@ const screenSchema = new mongoose.Schema({
     userpersonalnumber: { type: String },
     charts: { type: Array },
     chartsinline: { type: Number },
-    ramamid: { type: ObjectId, ref: 'User' },
+    ramamid: { type: ObjectId, ref: 'Ramam' },
 }, { timestamps: true });
 
 const Screen = mongoose.model('Screen', screenSchema);
