@@ -98,6 +98,21 @@ function SidebarPikod(props) {
           </NavLink>
         </li>
         <li>
+          <div style={{ padding: "1px 8px", cursor: 'pointer' }} onClick={props.Togglemodularscreensmodal}>
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
+                  : <img src={home_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  דף בחירת מסכים
+                </h4>
+              </Col>
+            </Row>
+          </div>
+        </li>
+        <li>
           <NavLink to={`/zminotpage/pikod/${user.pikodid}/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
