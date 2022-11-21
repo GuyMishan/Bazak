@@ -18,6 +18,8 @@ const userSchema = new mongoose.Schema({
     pikodid: {type:String},
     //
     site_permission: {type:String,default:'צפייה ועריכה'},
+    //
+    mainscreenid: {type:String},
 }, {timestamps: true})
 
 // virtual field

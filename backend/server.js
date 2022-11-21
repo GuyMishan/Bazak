@@ -67,6 +67,11 @@ app.use('/api', assessmentRoutes)
 //
 const ramamRoutes = require("./routes/ramam/ramam");
 app.use('/api', ramamRoutes)
+//modularscreens
+const chartRoutes = require("./routes/modularscreens/chart");
+app.use('/api', chartRoutes)
+const screenRoutes = require("./routes/modularscreens/screen");
+app.use('/api', screenRoutes)
 //surveys routes
 const survey1Routes = require("./routes/surveys/survey1");
 app.use('/api', survey1Routes)
