@@ -30,23 +30,65 @@ import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
 const ScreenModal = (props) => {
+  const { user } = isAuthenticated()
+  //
   const [screendata, setScreenData] = useState({})
-  //newScreen
-  const [newScreen, setNewScreen] = useState({})
 
   function handleChange(evt) {
     const value = evt.target.value;
     if (value != "בחר") {
-      setNewScreen({ ...newScreen, [evt.target.name]: value });
+      setScreenData({ ...screendata, [evt.target.name]: value });
     }
   }
 
-   const clickSubmit = async event => {
-    let tempNewScreen = { ...newScreen }
-    console.log(tempNewScreen);
+   const clickSubmit = async () => {
+    CheckFormData();
+  }
 
-    let response = await axios.post(`http://localhost:8000/api/modularscreens/screen`, tempNewScreen)
-    toast.success(`מסך נשמר בהצלחה`);
+  const CheckFormData = async() => {
+    var flag = true;
+    var ErrorReason = "";
+    console.log(screendata.name, screendata.screenid, screendata.chartsinline);
+    if (((screendata.name == undefined) || (screendata.name == ""))) {
+      ErrorReason += ", חסר שם מסך"
+      flag = false;
+    }
+    if (((screendata.screenid == undefined) || (screendata.screenid == ""))) {
+      ErrorReason += ", חסר מזהה מסך"
+      flag = false;
+    }
+    if (((screendata.chartsinline == undefined) || (screendata.chartsinline == ""))) {
+      ErrorReason += ", חסר מספר תרשימים בשורה "
+      flag = false;
+    }
+
+    if (flag == true) {
+      if (props.screenid != undefined) {
+        UpdateScreen();
+      }
+      else {
+        createNewScreen();
+      }
+    } else {
+      toast.error(ErrorReason);
+    }
+  }
+
+  const createNewScreen = async () =>{
+    let tempscreendata = { ...screendata }
+    console.log(tempscreendata);
+    tempscreendata.userpersonalnumber = user.personalnumber;
+    let response =  axios.post(`http://localhost:8000/api/modularscreens/screen`, tempscreendata)
+     toast.success(`מסך נשמר בהצלחה`);
+     props.ToggleForModal();
+  }
+
+  async function UpdateScreen() {
+    var tempscreenid = props.screenid;
+    let tempscreendata = { ...screendata }
+    let result = await axios.put(`http://localhost:8000/api/modularscreens/screen/${tempscreenid}`, tempscreendata)
+    toast.success(`מסך עודכן בהצלחה`);
+    props.ToggleForModal();
   }
 
   const loadscreendata = async () => {
@@ -58,131 +100,6 @@ const ScreenModal = (props) => {
       .catch((error) => {
         console.log(error);
       })
-  }
-
-  // const clickSubmit = event => {
-  //   CheckFormData()
-  // }
-
-  // const CheckFormData = () => {//check for stuff isnt empty -> specially cartypes/units
-    // var flag = true;
-    // var ErrorReason = "";
-
-    // if (((cardata.carnumber == undefined) || (cardata.carnumber == ""))) {
-    //   ErrorReason += ", שדה חסר צ'"
-    //   flag = false;
-    // }
-
-    // if (((cardata.pikod == undefined) || (cardata.pikod == "")) || ((cardata.ogda == undefined) || (cardata.ogda == "")) || ((cardata.hativa == undefined) || (cardata.hativa == "")) || ((cardata.gdod == undefined) || (cardata.gdod == ""))) {
-    //   ErrorReason += ", פרטי יחידה לא מלאים"
-    //   flag = false;
-    // }
-
-    // if (((cardata.magadal == undefined) || (cardata.magadal == "")) || ((cardata.magad == undefined) || (cardata.magad == "")) || ((cardata.mkabaz == undefined) || (cardata.mkabaz == "")) || ((cardata.makat == undefined) || (cardata.makat == ""))) {
-    //   ErrorReason += ", פרטי סוג הכלי לא מלאים"
-    //   flag = false;
-    // }
-
-    // if (((cardata.zminot == undefined) || (cardata.zminot == "")) || ((cardata.kshirot == undefined) || (cardata.kshirot == ""))) {
-    //   ErrorReason += ",חובה להזין האם הכלי זמין/כשיר"
-    //   flag = false;
-    // }
-
-    // if ((cardata.zminot == 'לא זמין') || (cardata.kshirot == 'לא כשיר')) {
-    //   if (finalspecialkeytwo.length == 0) {
-    //     ErrorReason += "חובה להזין את סיבת אי-הזמינות/אי-הכשירות"
-    //     flag = false;
-    //   }
-    // }
-
-    // if (flag == true) {
-    //   if (props.cardataid != undefined) {
-    //     UpdateCarData();
-    //   }
-    //   else {
-    //     CreateCarData();
-    //   }
-    // } else {
-    //   toast.error(ErrorReason);
-    // }
-  // }
-
-
-  async function CreateCarData() {
-    // let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
-    // if (response.data.length > 0) {
-    //   if ((!response.data[0].gdod) || (response.data[0].gdod == null) && (!response.data[0].hativa) || (response.data[0].hativa == null) && (!response.data[0].ogda) || (response.data[0].ogda == null) && (!response.data[0].pikod) || (response.data[0].pikod == null)) {
-    //     //update cardata
-    //     var tempcardataid = response.data[0]._id;
-    //     let tempcardata = { ...cardata }
-    //     if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
-    //       tempcardata.tipuls = [];
-    //       tempcardata.takala_info = '';
-    //       tempcardata.expected_repair = '';
-    //     }
-    //     else {
-    //       tempcardata.tipuls = finalspecialkeytwo;
-    //     }
-        
-    //     tempcardata.updatedBy = user.personalnumber;
-    //     let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
-    //     //create archivecardata
-    //     delete tempcardata._id;
-    //     let result2 = await axios.post(`http://localhost:8000/api/archivecardata`, tempcardata)
-    //     toast.success(`צ' עודכן בהצלחה`);
-    //     props.ToggleForModal();
-    //   }
-    //   else {
-    //     //find which unit car is already in.
-    //     let cardata_unitstr = "";
-    //     let gdod_result = await axios.get(`http://localhost:8000/api/gdod/${response.data[0].gdod}`);
-    //     let hativa_result = await axios.get(`http://localhost:8000/api/hativa/${response.data[0].hativa}`);
-    //     let ogda_result = await axios.get(`http://localhost:8000/api/ogda/${response.data[0].ogda}`);
-    //     let pikod_result = await axios.get(`http://localhost:8000/api/pikod/${response.data[0].pikod}`);
-    //     cardata_unitstr = pikod_result.data.name + "/" + ogda_result.data.name + "/" + hativa_result.data.name + "/" + gdod_result.data.name;
-    //     toast.error(`צ' כבר שייך ליחידה - ${cardata_unitstr} לא ניתן לשנות יחידה`);
-    //   }
-    // }
-    // else {
-    //   //create cardata
-    //   let tempcardata = { ...cardata }
-    //   tempcardata.updatedBy = user.personalnumber;
-    //   delete tempcardata._id;
-    //   if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
-    //     tempcardata.tipuls = [];
-    //     delete tempcardata.takala_info;
-    //     delete tempcardata.expected_repair;
-    //   }
-    //   else {
-    //     tempcardata.tipuls = finalspecialkeytwo;
-    //   }
-    //   let result = await axios.post(`http://localhost:8000/api/cardata`, tempcardata);
-    //   toast.success(`צ' נוסף בהצלחה`);
-    //   props.ToggleForModal();
-    // }
-  }
-
-  async function UpdateCarData() {
-    // let response = await axios.get(`http://localhost:8000/api/cardata/cardatabycarnumber/${cardata.carnumber}`)
-    //   //update cardata
-    //   var tempcardataid = props.cardataid;
-    //   let tempcardata = { ...cardata }
-    //   if (tempcardata.zminot == 'זמין' && tempcardata.kshirot == 'כשיר') {
-    //     tempcardata.tipuls = [];
-    //     tempcardata.takala_info = '';
-    //     tempcardata.expected_repair = '';
-    //   }
-    //   else {
-    //     tempcardata.tipuls = finalspecialkeytwo;
-    //   }
-    //   tempcardata.updatedBy = user.personalnumber;
-    //   let result = await axios.put(`http://localhost:8000/api/cardata/${tempcardataid}`, tempcardata)
-    //   //create archivecardata
-    //   delete tempcardata._id;
-    //   let result2 = axios.post(`http://localhost:8000/api/archivecardata`, tempcardata);
-    //   toast.success(`צ' עודכן בהצלחה`);
-    //   console.log(tempcardata.updatedBy,result.updatedBy);
-    //   props.ToggleForModal();
   }
   
 
@@ -213,19 +130,23 @@ const ScreenModal = (props) => {
       size=""
       toggle={props.Toggle}>
       <ModalBody>
-        <h1 style={{ textAlign: 'center'}}>יצירת מסך</h1>
+        {props.screendataid ?
+        <h1 style={{ textAlign: 'center'}}>עריכת מסך</h1>
+         :
+         <h1 style={{ textAlign: 'center'}}>יצירת מסך</h1>
+        }
       <div>
         <Col xs={12} md={4}>
           <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך: </div>
-          <Input type="textarea" name="screenid" value={newScreen.screenid} onChange={handleChange} />
+          <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange} />
         </Col>
         <Col xs={12} md={4}>
           <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
-          <Input type="textarea" name="name" value={newScreen.name} onChange={handleChange} />
+          <Input type="textarea" name="name" value={screendata.name} onChange={handleChange} />
         </Col>
         <Col xs={12} md={4}>
           <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
-          <Input type="select" name="chartsinline" value={newScreen.chartsinline} onChange={handleChange}>
+          <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
                <option value={'בחר'}>בחר</option>
                <option value={'4'}>4</option>
                <option value={'3'}>3</option>
@@ -241,4 +162,4 @@ const ScreenModal = (props) => {
     </Modal>
   );
 }
-export default withRouter(ScreenModal);;
+export default withRouter(ScreenModal);

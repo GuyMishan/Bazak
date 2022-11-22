@@ -67,6 +67,11 @@ const ModularScreensModal = (props) => {
     setIsscreenmodalopen(!isscreenmodalopen);
   }
 
+  function ToggleForModal(evt) {
+    setIsscreenmodalopen(!isscreenmodalopen);
+    init(); // update screens
+  }
+
   const clickSubmit = event => {
 
   }
@@ -92,9 +97,9 @@ const ModularScreensModal = (props) => {
 
   return (
     <>
-      <ScreenModal isOpen={isscreenmodalopen} Toggle={Togglescreenmodal} screenid={screenidformodal} />
+      <ScreenModal isOpen={isscreenmodalopen} Toggle={Togglescreenmodal} ToggleForModal={ToggleForModal} screenid={screenidformodal} />
       <Modal
-        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '80%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
         centered
         fullscreen
@@ -124,7 +129,7 @@ const ModularScreensModal = (props) => {
           <Row>
             {filteredscreens.map((screen, i) => (
               screen ?
-                <ScreenCard screen={screen} mode={mode} />
+                <ScreenCard screen={screen} mode={mode} value={screen.screenid} Toggle={Togglescreenmodal}/>//update doesnt work
                 : null))}
           </Row>
 

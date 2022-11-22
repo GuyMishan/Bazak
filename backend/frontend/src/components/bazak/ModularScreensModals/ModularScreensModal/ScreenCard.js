@@ -30,6 +30,7 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 import ScreenModal from '../ScreenModal';
+import ToggleDarkModeButton from 'components/general/Navbars/UserProfileDropdownMenu/ToggleDarkModeButton';
 
 const ScreenCard = (props) => {
     //   const [screens, setScreens] = useState([]);
@@ -81,7 +82,7 @@ const ScreenCard = (props) => {
                 </Link>
             </Col> :
             <Col xs={12} md={3}>
-                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+                <Card value={props.value} onClick={props.Toggle} style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader>
                         <div style={{ textAlign: 'left' }}>
                             <button className='btn-new-delete' style={{ padding: '11px 17px' }} onClick={clickSubmit}>X</button>
