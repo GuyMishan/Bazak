@@ -48,7 +48,6 @@ const ScreenModal = (props) => {
   const CheckFormData = async() => {
     var flag = true;
     var ErrorReason = "";
-    console.log(screendata.name, screendata.screenid, screendata.chartsinline);
     if (((screendata.name == undefined) || (screendata.name == ""))) {
       ErrorReason += ", חסר שם מסך"
       flag = false;
@@ -76,7 +75,6 @@ const ScreenModal = (props) => {
 
   const createNewScreen = async () =>{
     let tempscreendata = { ...screendata }
-    console.log(tempscreendata);
     tempscreendata.userpersonalnumber = user.personalnumber;
     let response =  axios.post(`http://localhost:8000/api/modularscreens/screen`, tempscreendata)
      toast.success(`מסך נשמר בהצלחה`);
@@ -92,7 +90,8 @@ const ScreenModal = (props) => {
   }
 
   const loadscreendata = async () => {
-    await axios.get(`http://localhost:8000/api/modularscreens/${props.screenid}`)
+    var tempscreenid = props.screenid;
+    await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${tempscreenid}`)
       .then(response => {
         let tempscreen = response.data[0];
         setScreenData(tempscreen);
@@ -104,7 +103,7 @@ const ScreenModal = (props) => {
   
 
   function init() {
-    if (props.screendataid != undefined) {
+    if (props.screenid != undefined) {
       loadscreendata();
     }
     else {
@@ -130,7 +129,7 @@ const ScreenModal = (props) => {
       size=""
       toggle={props.Toggle}>
       <ModalBody>
-        {props.screendataid ?
+        {props.screenid ?
         <h1 style={{ textAlign: 'center'}}>עריכת מסך</h1>
          :
          <h1 style={{ textAlign: 'center'}}>יצירת מסך</h1>
@@ -138,7 +137,11 @@ const ScreenModal = (props) => {
       <div>
         <Col xs={12} md={4}>
           <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך: </div>
-          <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange} />
+          {props.screenid ?
+            <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange} disabled/>
+          :
+            <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange}/>
+          }
         </Col>
         <Col xs={12} md={4}>
           <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
