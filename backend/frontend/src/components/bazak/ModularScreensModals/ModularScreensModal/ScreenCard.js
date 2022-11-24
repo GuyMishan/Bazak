@@ -29,8 +29,6 @@ import { signin, authenticate, isAuthenticated } from 'auth/index';
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
-import ScreenModal from '../ScreenModal';
-import ToggleDarkModeButton from 'components/general/Navbars/UserProfileDropdownMenu/ToggleDarkModeButton';
 
 const ScreenCard = (props) => {
     //   const [screens, setScreens] = useState([]);
@@ -49,11 +47,11 @@ const ScreenCard = (props) => {
     //   }
 
     const clickDelete = async () => {
-     let response =  axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
-     toast.success(`מסך נמחק בהצלחה`);
-     props.init();
+        let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
+        toast.success(`מסך נמחק בהצלחה`);
+        props.init();
     }
-    
+
     const changeToHome = event => {
         console.log('changed');
     }
@@ -88,16 +86,16 @@ const ScreenCard = (props) => {
                 </Link>
             </Col> :
             <Col xs={12} md={3}>
-                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px'}}>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader>
                         <div style={{ textAlign: 'left' }}>
                             <button className='btn-new-delete' style={{ padding: '11px 17px' }} onClick={clickDelete}>X</button>
                         </div>
                     </CardHeader>
                     <div style={{ padding: "1px 8px", cursor: 'pointer' }} onClick={props.Toggle}>
-                    <CardBody style={{ textAlign: 'center' }}>
-                        <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>
-                    </CardBody>
+                        <CardBody style={{ textAlign: 'center' }}>
+                            <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>
+                        </CardBody>
                     </div>
                     <CardFooter>
                         <div style={{ textAlign: 'right' }}>

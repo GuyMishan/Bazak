@@ -41,11 +41,11 @@ const ScreenModal = (props) => {
     }
   }
 
-   const clickSubmit = async () => {
+  const clickSubmit = async () => {
     CheckFormData();
   }
 
-  const CheckFormData = async() => {
+  const CheckFormData = async () => {
     var flag = true;
     var ErrorReason = "";
     if (((screendata.name == undefined) || (screendata.name == ""))) {
@@ -73,12 +73,13 @@ const ScreenModal = (props) => {
     }
   }
 
-  const createNewScreen = async () =>{
+  const createNewScreen = async () => {
     let tempscreendata = { ...screendata }
     tempscreendata.userpersonalnumber = user.personalnumber;
-    let response =  axios.post(`http://localhost:8000/api/modularscreens/screen`, tempscreendata)
-     toast.success(`מסך נשמר בהצלחה`);
-     props.ToggleForModal();
+    let response = axios.post(`http://localhost:8000/api/modularscreens/screen`, tempscreendata)
+    toast.success(`מסך נשמר בהצלחה`);
+    props.init();
+    props.ToggleForModal();
   }
 
   async function UpdateScreen() {
@@ -86,6 +87,7 @@ const ScreenModal = (props) => {
     let tempscreendata = { ...screendata }
     let result = await axios.put(`http://localhost:8000/api/modularscreens/screen/${tempscreenid}`, tempscreendata)
     toast.success(`מסך עודכן בהצלחה`);
+    props.init();
     props.ToggleForModal();
   }
 
@@ -100,7 +102,7 @@ const ScreenModal = (props) => {
         console.log(error);
       })
   }
-  
+
 
   function init() {
     if (props.screenid != undefined) {
@@ -130,37 +132,37 @@ const ScreenModal = (props) => {
       toggle={props.Toggle}>
       <ModalBody>
         {props.screenid ?
-        <h1 style={{ textAlign: 'center'}}>עריכת מסך</h1>
-         :
-         <h1 style={{ textAlign: 'center'}}>יצירת מסך</h1>
-        }
-      <div>
-        <Col xs={12} md={4}>
-          <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך: </div>
-          {props.screenid ?
-            <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange} disabled/>
+          <h1 style={{ textAlign: 'center' }}>עריכת מסך</h1>
           :
-            <Input type="textarea" name="screenid" value={screendata.screenid} onChange={handleChange}/>
-          }
-        </Col>
-        <Col xs={12} md={4}>
-          <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
-          <Input type="textarea" name="name" value={screendata.name} onChange={handleChange} />
-        </Col>
-        <Col xs={12} md={4}>
-          <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
-          <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
-               <option value={'בחר'}>בחר</option>
-               <option value={'4'}>4</option>
-               <option value={'3'}>3</option>
-               <option value={'2'}>2</option>
-               <option value={'1'}>1</option>
-          </Input>
-        </Col>
-        <Col>
-          <button className='btn-new-blue' style={{margin:'3rem'}} onClick={clickSubmit}>שמור</button>
-        </Col>
-      </div>
+          <h1 style={{ textAlign: 'center' }}>יצירת מסך</h1>
+        }
+        <div>
+          <Col xs={12} md={4}>
+            <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך: </div>
+            {props.screenid ?
+              <Input type="text" name="screenid" value={screendata.screenid} onChange={handleChange} disabled />
+              :
+              <Input type="text" name="screenid" value={screendata.screenid} onChange={handleChange} />
+            }
+          </Col>
+          <Col xs={12} md={4}>
+            <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
+            <Input type="text" name="name" value={screendata.name} onChange={handleChange} />
+          </Col>
+          <Col xs={12} md={4}>
+            <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
+            <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
+              <option value={'בחר'}>בחר</option>
+              <option value={'4'}>4</option>
+              <option value={'3'}>3</option>
+              <option value={'2'}>2</option>
+              <option value={'1'}>1</option>
+            </Input>
+          </Col>
+          <Col>
+            <button className='btn-new-blue' style={{ margin: '3rem' }} onClick={clickSubmit}>שמור</button>
+          </Col>
+        </div>
       </ModalBody>
     </Modal>
   );
