@@ -3,7 +3,7 @@ const Chart = require("../../models/modularscreens/chart");
 exports.read = async (req, res) => {
   const chart = await Chart.findById(req.params.id);
   if (!chart) {
-    res.status(500).json({ message: 'הרמ"מ לא נמצא' })
+    res.status(500).json({ message: 'השעון לא נמצא' })
   } else {
     res.status(200).send([chart])
   }

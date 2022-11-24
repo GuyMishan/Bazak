@@ -44,7 +44,7 @@ import SidebarOgda from 'components/general/Sidebar/SidebarOgda';
 import SidebarPikod from 'components/general/Sidebar/SidebarPikod';
 import { signout } from "auth/index";
 //
-import ModularScreensModal from 'components/bazak/ModularScreensModals/ModularScreensModal';
+import ModularScreensModal from 'components/bazak/ModularScreensModals/ModularScreensModal/ModularScreensModal';
 
 function Sidebar() {
   const [color, setcolor] = useState("transparent");
