@@ -43,10 +43,10 @@ const ModularScreensModal = (props) => {
 
   const searchOrder = (evt) => {
     if (evt.target.value == "") {
-        setFilteredscreens(screens)
+      setFilteredscreens(screens)
     }
     setFilteredscreens(screens.filter((screen) => screen.name.toString().includes(evt.target.value.toString())))
-}
+  }
 
   function ToggleMode(evt) {
     if (mode == 'normal') {
@@ -57,13 +57,17 @@ const ModularScreensModal = (props) => {
     }
   }
 
-  function Togglescreenmodal(evt) {
-    if (evt.currentTarget.value == '') {
-      setScreenidformodal(undefined)
+  const Togglescreenmodal = (value) => {
+    if (value == undefined) {
+      setScreenidformodal(undefined);
     }
     else {
-      setScreenidformodal(evt.currentTarget.value)
+      setScreenidformodal(value);
     }
+    setIsscreenmodalopen(!isscreenmodalopen);
+  }
+
+  function ToggleForModal(evt) {
     setIsscreenmodalopen(!isscreenmodalopen);
   }
 
@@ -92,9 +96,9 @@ const ModularScreensModal = (props) => {
 
   return (
     <>
-      <ScreenModal isOpen={isscreenmodalopen} Toggle={Togglescreenmodal} screenid={screenidformodal} />
+      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={init} />
       <Modal
-        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '80%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
         centered
         fullscreen
@@ -106,8 +110,8 @@ const ModularScreensModal = (props) => {
             {mode == 'normal' ?
               <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
               : <>
-                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>שמור</button>
-                <button className='btn-new-blue' style={{ marginLeft: '5px' }} value={undefined} onClick={Togglescreenmodal}>צור מסך</button>
+                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
+                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglescreenmodal(undefined)}>צור מסך</button>
               </>}
           </div>
 
@@ -124,7 +128,7 @@ const ModularScreensModal = (props) => {
           <Row>
             {filteredscreens.map((screen, i) => (
               screen ?
-                <ScreenCard screen={screen} mode={mode} />
+                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={init} Toggle={() => Togglescreenmodal(screen.screenid)} />
                 : null))}
           </Row>
 
