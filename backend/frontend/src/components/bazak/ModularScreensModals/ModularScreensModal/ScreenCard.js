@@ -29,22 +29,11 @@ import { signin, authenticate, isAuthenticated } from 'auth/index';
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
+import radioempty from "assets/img/radio-empty.png";
+import radiotick from "assets/img/radio-tick.png";
+
 
 const ScreenCard = (props) => {
-    //   const [screens, setScreens] = useState([]);
-    //   //screen modal
-    //   const [isscreenmodalopen, setIsscreenmodalopen] = useState(false);
-    //   const [screenidformodal, setScreenidformodal] = useState(undefined);
-
-    //   function Togglescreenmodal(evt) {
-    //     if (evt.currentTarget.value == '') {
-    //       setScreenidformodal(undefined)
-    //     }
-    //     else {
-    //       setScreenidformodal(evt.currentTarget.value)
-    //     }
-    //     setIsscreenmodalopen(!isscreenmodalopen);
-    //   }
 
     const clickDelete = async () => {
         let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
@@ -52,27 +41,13 @@ const ScreenCard = (props) => {
         props.init();
     }
 
-    const changeToHome = event => {
-        console.log('changed');
+    const clearusermainscreen = event => {
+        console.log('clearusermainscreen');
     }
 
-    //   function init() {
-    //     getscreensbyuser();
-    //   }
-
-    //   async function getscreensbyuser() {
-    //     let response = await axios.get(`http://localhost:8000/api/modularscreens/screensbyuserpersonalnumber/${props.user.personalnumber}`)
-    //     let tempcardata = response.data;
-    //     setScreens(tempcardata)
-    //   }
-
-    //   useEffect(() => {
-    //     if (props.isOpen == true)
-    //       init();
-    //     else {
-
-    //     }
-    //   }, [props.isOpen])
+    const setusermainscreen = event => {
+        console.log('setusermainscreen');
+    }
 
     return (
         props.mode == 'normal' ?
@@ -99,7 +74,10 @@ const ScreenCard = (props) => {
                     </div>
                     <CardFooter>
                         <div style={{ textAlign: 'right' }}>
-                            <button className='btn-new-delete' style={{ padding: '11px 17px' }} onClick={changeToHome}>O</button>
+                            {props.user.mainscreenid && props.user.mainscreenid == props.screen.screenid ?
+                                <button className='btn-empty' style={{ padding: '0px' }} onClick={clearusermainscreen}><img style={{ height: '30px' }} src={radiotick}></img></button>
+                                : <button className='btn-empty' style={{ padding: '0px' }} onClick={setusermainscreen}><img style={{ height: '30px' }} src={radioempty}></img></button>}
+
                         </div>
                     </CardFooter>
                 </Card>

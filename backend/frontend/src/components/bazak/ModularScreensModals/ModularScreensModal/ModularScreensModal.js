@@ -128,7 +128,7 @@ const ModularScreensModal = (props) => {
           <Row>
             {filteredscreens.map((screen, i) => (
               screen ?
-                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={init} Toggle={() => Togglescreenmodal(screen.screenid)} />
+                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={init} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} />
                 : null))}
           </Row>
 

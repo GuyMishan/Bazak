@@ -3,7 +3,7 @@ const { ObjectId } = mongoose.Schema
 
 const screenSchema = new mongoose.Schema({
     name: { type: String },
-    screenid: {type: String},
+    screenid: { type: String, unique: true },
     lastvisit: { type: Date },
     userpersonalnumber: { type: String },
     charts: { type: Array },
