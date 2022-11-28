@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, withRouter, Redirect } from "react-router-dom";
+import { useParams,Link, withRouter, Redirect } from "react-router-dom";
 // reactstrap components
 import {
     Button,
@@ -31,53 +31,43 @@ import { generate } from 'shortid'
 import { toast } from "react-toastify";
 
 const ScreenCard = (props) => {
-    //   const [screens, setScreens] = useState([]);
-    //   //screen modal
-    //   const [isscreenmodalopen, setIsscreenmodalopen] = useState(false);
-    //   const [screenidformodal, setScreenidformodal] = useState(undefined);
-
-    //   function Togglescreenmodal(evt) {
-    //     if (evt.currentTarget.value == '') {
-    //       setScreenidformodal(undefined)
-    //     }
-    //     else {
-    //       setScreenidformodal(evt.currentTarget.value)
-    //     }
-    //     setIsscreenmodalopen(!isscreenmodalopen);
-    //   }
-
+    const {unitid} = useParams();
+    const {unittype} = useParams();
     const clickDelete = async () => {
-        let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
-        toast.success(`מסך נמחק בהצלחה`);
-        props.init();
+       await findDependedCharts()
+       .then(()=>{
+            let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
+            toast.success(`מסך נמחק בהצלחה`);
+            props.init();
+       })
+    }
+
+    const findDependedCharts = async () =>{
+        var tempscreentid = props.screenid;
+        await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${tempscreentid}`)
+          .then(response => {
+            let tempchart = response.data[0];
+            for(let i=0;i<response.data.length;i++){
+                deleteDependedCharts(response.data[i]);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+    }
+
+    const deleteDependedCharts = async (tempchart) =>{
+        let response = axios.post(`http://localhost:8000/api/modularscreens/chart/remove/${tempchart.chartid}`)
     }
 
     const changeToHome = event => {
         console.log('changed');
     }
 
-    //   function init() {
-    //     getscreensbyuser();
-    //   }
-
-    //   async function getscreensbyuser() {
-    //     let response = await axios.get(`http://localhost:8000/api/modularscreens/screensbyuserpersonalnumber/${props.user.personalnumber}`)
-    //     let tempcardata = response.data;
-    //     setScreens(tempcardata)
-    //   }
-
-    //   useEffect(() => {
-    //     if (props.isOpen == true)
-    //       init();
-    //     else {
-
-    //     }
-    //   }, [props.isOpen])
-
     return (
         props.mode == 'normal' ?
             <Col xs={12} md={3}>
-                <Link to="/signin">
+                <Link to={`/modularchartpage/${unittype}/${unitid}/${props.screenid}/magadal/0`}>
                     <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                         <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
                             <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>

@@ -71,10 +71,6 @@ const ModularScreensModal = (props) => {
     setIsscreenmodalopen(!isscreenmodalopen);
   }
 
-  const clickSubmit = event => {
-
-  }
-
   function init() {
     getscreensbyuser();
   }
@@ -96,7 +92,7 @@ const ModularScreensModal = (props) => {
 
   return (
     <>
-      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={init} />
+      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={()=>init()} />
       <Modal
         style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
@@ -137,4 +133,4 @@ const ModularScreensModal = (props) => {
     </>
   );
 }
-export default withRouter(ModularScreensModal);;
+export default withRouter(ModularScreensModal);

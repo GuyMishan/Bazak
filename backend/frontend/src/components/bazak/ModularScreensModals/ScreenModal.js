@@ -77,18 +77,22 @@ const ScreenModal = (props) => {
     let tempscreendata = { ...screendata }
     tempscreendata.userpersonalnumber = user.personalnumber;
     let response = axios.post(`http://localhost:8000/api/modularscreens/screen`, tempscreendata)
-    toast.success(`מסך נשמר בהצלחה`);
-    props.init();
-    props.ToggleForModal();
+    .then(respone=>{
+      toast.success(`מסך נשמר בהצלחה`);
+      props.init();
+      props.ToggleForModal();
+    })
   }
 
   async function UpdateScreen() {
     var tempscreenid = props.screenid;
     let tempscreendata = { ...screendata }
     let result = await axios.put(`http://localhost:8000/api/modularscreens/screen/${tempscreenid}`, tempscreendata)
-    toast.success(`מסך עודכן בהצלחה`);
-    props.init();
-    props.ToggleForModal();
+    .then(respone=>{
+      toast.success(`מסך עודכן בהצלחה`);
+      props.init();
+      props.ToggleForModal();
+    })
   }
 
   const loadscreendata = async () => {
