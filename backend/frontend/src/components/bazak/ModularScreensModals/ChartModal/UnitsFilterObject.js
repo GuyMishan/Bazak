@@ -60,31 +60,31 @@ const UnitsFilterObject = (props) => {
         setOgdas(temppikodogdas);
     }
 
-    // const loadHativas = async (ogdaid) => {
-    //     let tempogdahativas = [];
-    //     await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaid })
-    //         .then(response => {
-    //             for (let j = 0; j < response.data.length; j++)
-    //                 tempogdahativas.push(response.data[j])
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         })
-    //     setHativas(tempogdahativas);
-    // }
+    const loadHativas = async (ogdaid) => {
+        let tempogdahativas = [];
+        await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaid })
+            .then(response => {
+                for (let j = 0; j < response.data.length; j++)
+                    tempogdahativas.push(response.data[j])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        setHativas(tempogdahativas);
+    }
 
-    // const loadGdods = async (hativaid) => {
-    //     let temphativasgdods = [];
-    //     await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaid })
-    //         .then(response => {
-    //             for (let j = 0; j < response.data.length; j++)
-    //                 temphativasgdods.push(response.data[j])
-    //         })
-    //         .catch((error) => {
-    //             console.log(error);
-    //         })
-    //     setGdods(temphativasgdods);
-    // }
+    const loadGdods = async (hativaid) => {
+        let temphativasgdods = [];
+        await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaid })
+            .then(response => {
+                for (let j = 0; j < response.data.length; j++)
+                    temphativasgdods.push(response.data[j])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+        setGdods(temphativasgdods);
+    }
 
     function init() {
         loadPikods();
@@ -95,15 +95,15 @@ const UnitsFilterObject = (props) => {
         loadOgdas(props.unitfilterobject.pikod);
     }, [props.unitfilterobject.pikod]);
 
-    // useEffect(() => {
-    //   setHativas([]);
-    //   loadHativas(cardata.ogda);
-    // }, [cardata.ogda]);
+    useEffect(() => {
+      setHativas([]);
+      loadHativas(props.unitfilterobject.ogda);
+    }, [props.unitfilterobject.ogda]);
 
-    // useEffect(() => {
-    //   setGdods([]);
-    //   loadGdods(cardata.hativa);
-    // }, [cardata.hativa]);
+    useEffect(() => {
+      setGdods([]);
+      loadGdods(props.unitfilterobject.hativa);
+    }, [props.unitfilterobject.hativa]);
 
     useEffect(() => {
         init();
@@ -169,32 +169,64 @@ const UnitsFilterObject = (props) => {
                                     }} val={props.unitfilterobject.ogda ? props.unitfilterobject.ogda : undefined} isDisabled={true} />
                             </Col>}
                     </> : null}
-                {/*
+                
                 {((props.user.role == "0") || (props.user.role == "4") || (props.user.role == "3")) ?
                     <>
-                        {((unitfilterobject.ogda) && !(unitfilterobject.gdod)) ?
+                        {((props.unitfilterobject.ogda) && !(props.unitfilterobject.gdod)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>חטיבה</h6>
-                                <Select data={hativas} handleChange2={handleChange2} name={'hativa'} val={unitfilterobject.hativa ? unitfilterobject.hativa : undefined} />
+                                <Select data={hativas}
+                                 handleChange2={(selectedOption =>{
+                                    if (selectedOption.value != "בחר") {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = selectedOption.value }))
+                                    }
+                                    else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].hativa }))
+                                    }
+                                 })} val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : undefined} />
                             </Col> :
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                <h6>חטיבה</h6>
-                                <Select data={hativas} handleChange2={handleChange2} name={'hativa'} val={unitfilterobject.hativa ? unitfilterobject.hativa : undefined} isDisabled={true} />
+                            <h6>חטיבה</h6>
+                            <Select data={hativas}
+                             handleChange2={(selectedOption =>{
+                                if (selectedOption.value != "בחר") {
+                                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = selectedOption.value }))
+                                }
+                                else {
+                                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].hativa }))
+                                }
+                             })} val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : undefined} isDisabled={true}/>
                             </Col>}
                     </> : null}
 
                 {((props.user.role == "0") || (props.user.role == "4") || (props.user.role == "3") || (props.user.role == "2")) ?
                     <>
-                        {((unitfilterobject.hativa)) ?
+                        {((props.unitfilterobject.hativa)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>גדוד</h6>
-                                <Select data={gdods} handleChange2={handleChange2} name={'gdod'} val={unitfilterobject.gdod ? unitfilterobject.gdod : undefined} />
+                                <Select data={gdods}
+                                 handleChange2={(selectedOption =>{
+                                    if (selectedOption.value != "בחר") {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = selectedOption.value }))
+                                    }
+                                    else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].gdod }))
+                                    }
+                                 })} val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : undefined} />
                             </Col> :
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                <h6>גדוד</h6>
-                                <Select data={gdods} handleChange2={handleChange2} name={'gdod'} val={unitfilterobject.gdod ? unitfilterobject.gdod : undefined} isDisabled={true} />
+                            <h6>גדוד</h6>
+                                <Select data={gdods}
+                                 handleChange2={(selectedOption =>{
+                                    if (selectedOption.value != "בחר") {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = selectedOption.value }))
+                                    }
+                                    else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].gdod }))
+                                    }
+                                 })} val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : undefined} isDisabled={true}/>
                             </Col>}
-                    </> : null} */}
+                    </> : null} 
             </Row>
 
             <Button type="button" onClick={() => { props.setUnitsfilterarray(currentSpec => currentSpec.filter(x => x.id !== props.unitfilterobject.id)) }}><img src={deletepic} height='20px'></img></Button>

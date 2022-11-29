@@ -34,7 +34,7 @@ const ChartCard = (props) => {
 
     const clickDelete = async () => {
         let response = axios.post(`http://localhost:8000/api/modularscreens/chart/remove/${props.chartid}`)
-        toast.success(`מסך נמחק בהצלחה`);
+        toast.success(`תרשים נמחק בהצלחה`);
         props.init();
     }
 

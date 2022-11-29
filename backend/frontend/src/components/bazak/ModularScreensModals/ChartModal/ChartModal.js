@@ -31,6 +31,7 @@ import { toast } from "react-toastify";
 import Select from 'components/general/Select/AnimatedSelect'
 import deletepic from "assets/img/delete.png";
 import UnitsFilterObject from './UnitsFilterObject';
+import CarTypesObject from './CarTypesObject';
 
 const ChartModal = (props) => {
   const { user } = isAuthenticated()
@@ -61,6 +62,8 @@ const ChartModal = (props) => {
           tempchart.chartid = chartdata.chartid;
         }
         setChartData(tempchart);
+        setUnitsfilterarray(tempchart.units);
+        setCartypesarray(tempchart.tenetree);
         toast.success(`תרשים נמצא`);
       }
       else {//תרשים לא נמצא
@@ -100,11 +103,12 @@ const ChartModal = (props) => {
     }
   }
 
-  const createNewChart = async () => {//chartid must be unique
+  const createNewChart = async () => {
     let tempchartdata = { ...chartdata }
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
     tempchartdata.units = unitsfilterarray;
+    tempchartdata.tenetree = cartypesarray;
     let response = await axios.post(`http://localhost:8000/api/modularscreens/chart`, tempchartdata)
       .then(response => {
         toast.success(`תרשים נשמר בהצלחה`);
@@ -135,10 +139,13 @@ const ChartModal = (props) => {
     var tempchartid = props.chartid;
     let tempchartdata = { ...chartdata }
     tempchartdata.units = unitsfilterarray;
+    tempchartdata.tenetree = cartypesarray;
     let result = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempchartid}`, tempchartdata)
-    toast.success(`תרשים עודכן בהצלחה`);
-    props.init();
-    props.ToggleForModal();
+    .then(respone=>{
+      toast.success(`תרשים עודכן בהצלחה`);
+      props.init();
+      props.ToggleForModal();
+    })
   }
 
   const loadchartdata = async () => {
@@ -148,6 +155,7 @@ const ChartModal = (props) => {
         let tempchart = response.data[0];
         setChartData(tempchart);
         setUnitsfilterarray(tempchart.units);
+        setCartypesarray(tempchart.tenetree);
       })
       .catch((error) => {
         console.log(error);
@@ -228,6 +236,20 @@ const ChartModal = (props) => {
             )
           })}
           {/* unitsfilterarray */}
+
+           {/* cartypesarray */}
+           <Row style={{ padding: '0px' }}>
+            <Col style={{ display: 'flex', justifyContent: 'right', paddingTop: '15px', paddingRight: '0px' }}>
+              <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setCartypesarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף כלים</Button>
+            </Col>
+          </Row>
+
+          {cartypesarray.map((cartypesobject, index) => {
+            return (
+              <CarTypesObject user={user} cartypesobject={cartypesobject} index={index} setCartypesarray={setCartypesarray} />
+            )
+          })}
+          {/* cartypesarray */}
 
           <Row style={{ padding: '0px' }}>
             <Col style={{ padding: '0px' }} xs={12} md={8}>

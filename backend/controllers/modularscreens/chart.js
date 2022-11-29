@@ -28,7 +28,7 @@ exports.create = (req, res) => {
 };
 
 exports.update = (req, res) => {
-  Chart.findByIdAndUpdate(req.params.chartId, req.body)
+  Chart.findOneAndUpdate({chartid: req.params.chartId}, req.body)
     .then((candidatepreference) => res.json(candidatepreference))
     .catch((err) => res.status(400).json("Error: " + err));
 }
