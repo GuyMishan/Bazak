@@ -132,9 +132,11 @@ const ScreenModal = (props) => {
     var tempscreenid = props.screenid;
     let tempscreendata = { ...screendata }
     let result = await axios.put(`http://localhost:8000/api/modularscreens/screen/${tempscreenid}`, tempscreendata)
-    toast.success(`מסך עודכן בהצלחה`);
-    props.init();
-    props.ToggleForModal();
+    .then(respone=>{
+      toast.success(`מסך עודכן בהצלחה`);
+      props.init();
+      props.ToggleForModal();
+    })
   }
 
   const loadscreendata = async () => {

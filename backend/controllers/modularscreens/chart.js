@@ -34,9 +34,23 @@ exports.update = (req, res) => {
 }
 
 exports.remove = (req, res) => {
-  Chart.deleteOne({ _id: req.params.id })
+  Chart.deleteOne({ chartid: req.params.id })
     .then((chart) => res.json(chart))
     .catch((err) => res.status(400).json("Error: " + err));
 };
 
 //
+
+exports.chartsbyscreenid = (req, res) => {
+  Chart.find({ screenid: req.params.screenid })
+    .then((chart) => res.json(chart))
+    .catch((err) => res.status(400).json("Error: " + err));
+};
+
+//
+
+exports.chartbychartid = (req, res) => {
+  Chart.find({chartid: req.params.chartid})
+    .then((chart) => res.json(chart))
+    .catch((err) => res.status(400).json("Error: " + err));
+};

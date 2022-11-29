@@ -40,6 +40,7 @@ import AboutPage from "views/generalpages/aboutpage/AboutPage";
 import StatisticsPage from "views/generalpages/statisticspage/StatisticsPage";
 import AssessmentPage from "views/generalpages/assessmentpage/AssessmentPage";
 import SubUnitsRecentFeeds from "views/generalpages/subunitsrecentfeedspage/SubUnitsRecentFeeds";
+import ModularChartPage from "views/generalpages/modularchartspage/ModularChartPage";
 //excel routes
 import Exceluploadusers from "views/excelpages/ExcelUploadUsers"
 import Exceluploadjobs from "views/excelpages/ExcelUploadJobs"
@@ -73,6 +74,7 @@ ReactDOM.render(
               <LoggedinRoute path="/statisticspage/:unittype/:unitid/:cartype/:carid" exact component={StatisticsPage} />
               <LoggedinRoute path="/assessmentpage" exact component={AssessmentPage} />
               <LoggedinRoute path="/subunitsrecentfeedspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsRecentFeeds} />
+              <LoggedinRoute path="/modularchartpage/:screenid/:unittype/:unitid/:cartype/:carid" exact component={ModularChartPage} />
               {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
 
               {/*////////////////////////////////////////Excel Reading//////////////////////////////////////////////////*/}
