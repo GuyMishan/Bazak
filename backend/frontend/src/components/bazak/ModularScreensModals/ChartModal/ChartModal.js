@@ -31,14 +31,14 @@ import { toast } from "react-toastify";
 import Select from 'components/general/Select/AnimatedSelect'
 import deletepic from "assets/img/delete.png";
 import UnitsFilterObject from './UnitsFilterObject';
-import CarTypesObject from './CarTypesObject';
+import CarTypesFilterObject from './CarTypesFilterObject';
 
 const ChartModal = (props) => {
   const { user } = isAuthenticated()
   //chartdata
   const [chartdata, setChartData] = useState({})
   const [unitsfilterarray, setUnitsfilterarray] = useState([])
-  const [cartypesarray, setCartypesarray] = useState([])
+  const [cartypesfilterarray, setCartypesfilterarray] = useState([])
 
   const [chartidimport, setChartidimport] = useState('')
 
@@ -63,7 +63,7 @@ const ChartModal = (props) => {
         }
         setChartData(tempchart);
         setUnitsfilterarray(tempchart.units);
-        setCartypesarray(tempchart.tenetree);
+        setCartypesfilterarray(tempchart.tenetree);
         toast.success(`תרשים נמצא`);
       }
       else {//תרשים לא נמצא
@@ -107,8 +107,31 @@ const ChartModal = (props) => {
     let tempchartdata = { ...chartdata }
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
-    tempchartdata.units = unitsfilterarray;
-    tempchartdata.tenetree = cartypesarray;
+
+    let tempunitsfilterarray = unitsfilterarray;
+    let tempunitsfilterarray2 = [];
+    for (let i = 0; i < tempunitsfilterarray.length; i++) {
+      let tempobject = {};
+      tempobject.id = tempunitsfilterarray[i].id;
+      let lastKey = Object.keys(tempunitsfilterarray[i]).pop()
+      let lastValue = tempunitsfilterarray[i][Object.keys(tempunitsfilterarray[i]).pop()]
+      tempobject[lastKey] = lastValue;
+      tempunitsfilterarray2.push(tempobject);
+    }
+    tempchartdata.units = tempunitsfilterarray2;
+
+    let tempcartypesfilterarray = cartypesfilterarray;
+    let tempcartypesfilterarray2 = [];
+    for (let i = 0; i < tempcartypesfilterarray.length; i++) {
+      let tempobject = {};
+      tempobject.id = tempcartypesfilterarray[i].id;
+      let lastKey = Object.keys(tempcartypesfilterarray[i]).pop()
+      let lastValue = tempcartypesfilterarray[i][Object.keys(tempcartypesfilterarray[i]).pop()]
+      tempobject[lastKey] = lastValue;
+      tempcartypesfilterarray2.push(tempobject);
+    }
+    tempchartdata.tenetree = tempcartypesfilterarray2;
+
     let response = await axios.post(`http://localhost:8000/api/modularscreens/chart`, tempchartdata)
       .then(response => {
         toast.success(`תרשים נשמר בהצלחה`);
@@ -138,14 +161,37 @@ const ChartModal = (props) => {
   async function UpdateChart() {
     var tempchartid = props.chartid;
     let tempchartdata = { ...chartdata }
-    tempchartdata.units = unitsfilterarray;
-    tempchartdata.tenetree = cartypesarray;
+
+    let tempunitsfilterarray = unitsfilterarray;
+    let tempunitsfilterarray2 = [];
+    for (let i = 0; i < tempunitsfilterarray.length; i++) {
+      let tempobject = {};
+      tempobject.id = tempunitsfilterarray[i].id;
+      let lastKey = Object.keys(tempunitsfilterarray[i]).pop()
+      let lastValue = tempunitsfilterarray[i][Object.keys(tempunitsfilterarray[i]).pop()]
+      tempobject[lastKey] = lastValue;
+      tempunitsfilterarray2.push(tempobject);
+    }
+    tempchartdata.units = tempunitsfilterarray2;
+
+    let tempcartypesfilterarray = cartypesfilterarray;
+    let tempcartypesfilterarray2 = [];
+    for (let i = 0; i < tempcartypesfilterarray.length; i++) {
+      let tempobject = {};
+      tempobject.id = tempcartypesfilterarray[i].id;
+      let lastKey = Object.keys(tempcartypesfilterarray[i]).pop()
+      let lastValue = tempcartypesfilterarray[i][Object.keys(tempcartypesfilterarray[i]).pop()]
+      tempobject[lastKey] = lastValue;
+      tempcartypesfilterarray2.push(tempobject);
+    }
+    tempchartdata.tenetree = tempcartypesfilterarray2;
+    
     let result = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempchartid}`, tempchartdata)
-    .then(respone=>{
-      toast.success(`תרשים עודכן בהצלחה`);
-      props.init();
-      props.ToggleForModal();
-    })
+      .then(respone => {
+        toast.success(`תרשים עודכן בהצלחה`);
+        props.init();
+        props.ToggleForModal();
+      })
   }
 
   const loadchartdata = async () => {
@@ -155,7 +201,7 @@ const ChartModal = (props) => {
         let tempchart = response.data[0];
         setChartData(tempchart);
         setUnitsfilterarray(tempchart.units);
-        setCartypesarray(tempchart.tenetree);
+        setCartypesfilterarray(tempchart.tenetree);
       })
       .catch((error) => {
         console.log(error);
@@ -237,19 +283,19 @@ const ChartModal = (props) => {
           })}
           {/* unitsfilterarray */}
 
-           {/* cartypesarray */}
-           <Row style={{ padding: '0px' }}>
+          {/* cartypesfilterarray */}
+          <Row style={{ padding: '0px' }}>
             <Col style={{ display: 'flex', justifyContent: 'right', paddingTop: '15px', paddingRight: '0px' }}>
-              <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setCartypesarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף כלים</Button>
+              <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setCartypesfilterarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף כלים</Button>
             </Col>
           </Row>
 
-          {cartypesarray.map((cartypesobject, index) => {
+          {cartypesfilterarray.map((cartypesfilterobject, index) => {
             return (
-              <CarTypesObject user={user} cartypesobject={cartypesobject} index={index} setCartypesarray={setCartypesarray} />
+              <CarTypesFilterObject user={user} cartypesfilterobject={cartypesfilterobject} index={index} setCartypesfilterarray={setCartypesfilterarray} />
             )
           })}
-          {/* cartypesarray */}
+          {/* cartypesfilterarray */}
 
           <Row style={{ padding: '0px' }}>
             <Col style={{ padding: '0px' }} xs={12} md={8}>
