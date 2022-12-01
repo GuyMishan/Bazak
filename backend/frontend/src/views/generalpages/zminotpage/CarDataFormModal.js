@@ -288,8 +288,56 @@ const CarDataFormModal = (props) => {
 
     if ((cardata.zminot == 'לא זמין') || (cardata.kshirot == 'לא כשיר')) {
       if (finalspecialkeytwo.length == 0) {
-        ErrorReason += "חובה להזין את סיבת אי-הזמינות/אי-הכשירות"
+        ErrorReason += ",חובה להזין את סיבת אי-הזמינות/אי-הכשירות"
         flag = false;
+      }
+
+      for(let i=0;i<finalspecialkeytwo.length;i++)
+      {
+        if(finalspecialkeytwo[i].type=='tipul'){
+          if(!finalspecialkeytwo[i].tipul){
+            ErrorReason += ",בטיפול - חובה להזין סוג טיפול"
+            flag = false;
+          }
+          if(!finalspecialkeytwo[i].tipul_entry_date){
+            ErrorReason += ",בטיפול - חובה להזין תאריך כניסה לטיפול"
+            flag = false;
+          }
+          if(!finalspecialkeytwo[i].mikum_tipul){
+            ErrorReason += ",בטיפול - חובה להזין מיקום הטיפול"
+            flag = false;
+          }
+        }
+        if(finalspecialkeytwo[i].type=='harig_tipul'){
+          if(!finalspecialkeytwo[i].harig_tipul){
+            ErrorReason += ",בחריג טיפול - חובה להזין חריג טיפול"
+            flag = false;
+          }
+          if(!finalspecialkeytwo[i].harig_tipul_date){
+            ErrorReason += ",בחריג טיפול - חובה להזין תאריך חריגת טיפול"
+            flag = false;
+          }
+        }
+        if(finalspecialkeytwo[i].type=='takala_mizdamenet'){
+          if(!finalspecialkeytwo[i].takala_mizdamenet){
+            ErrorReason += ",בתקלה מזדמנת - חובה להזין תקלה מזדמנת"
+            flag = false;
+          }
+          if(!finalspecialkeytwo[i].takala_mizdamenet_date){
+            ErrorReason += ",בתקלה מזדמנת - חובה להזין תאריך תקלה מזמנת"
+            flag = false;
+          }
+        }
+        if(finalspecialkeytwo[i].type=='hh_stand'){
+          if(!finalspecialkeytwo[i].missing_makat_1){
+            ErrorReason += ',בעומד על ח"ח - חובה להזין מק"ט חסר'
+            flag = false;
+          }
+          if(!finalspecialkeytwo[i].missing_makat_2){
+            ErrorReason += ',בעומד על ח"ח - חובה להזין כמות'
+            flag = false;
+          }
+        }
       }
     }
 

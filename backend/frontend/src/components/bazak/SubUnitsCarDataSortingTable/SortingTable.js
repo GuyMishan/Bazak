@@ -148,7 +148,7 @@ const SortingTable = (props) => {
       let response1 = await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: props.unitid })
       let temp_gdods = response1.data;
       for (let i = 0; i < temp_gdods.length; i++) {
-        temp_data_arr.push({ gdod: temp_gdods[i], cardatas: [] ,maxdate : new Date(1900, 10, 10)});
+        temp_data_arr.push({ gdod: temp_gdods[i], cardatas: [], maxdate: new Date(1900, 10, 10) });
       }
       for (let j = 0; j < temp_data_arr.length; j++) {
         for (let k = 0; k < temp_cartypes.length; k++) {
@@ -204,7 +204,7 @@ const SortingTable = (props) => {
       }
     }
 
-    for (let i = temp_temp_data_arr.length-1; i >= 0; i--) {
+    for (let i = temp_temp_data_arr.length - 1; i >= 0; i--) {
       let is_unit_needed = false;
       for (let j = 0; j < temp_temp_data_arr[i].cardatas.length; j++) {
         if (temp_temp_data_arr[i].cardatas[j].numberofcars != 0) {
@@ -246,7 +246,7 @@ const SortingTable = (props) => {
           <thead>
             <tr>
               <th> </th>
-              {props.unittype == 'hativa' ? <th>תאריך עדכון אחרון</th>:null}
+              {props.unittype == 'hativa' ? <th>תאריך עדכון אחרון</th> : null}
               {cartypes.map((cartype, index) => {
                 return (props.match.params.cartype == 'magadal' ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/${props.match.params.unittype}/${props.match.params.unitid}/magad/${cartype._id}`}>{cartype.name}</Link></th>
                   : props.match.params.cartype == 'magad' ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/${props.match.params.unittype}/${props.match.params.unitid}/mkabaz/${cartype._id}`}>{cartype.name}</Link></th>
@@ -271,19 +271,19 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
+                            {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
                           </p> :
                           ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>
                               {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                               <br></br>
-                              {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
+                              {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
                             </p> :
                             ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
                               <p style={{ color: '#8ac926' }}>
                                 {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                                 <br></br>
-                                {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars}
+                                {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
                               </p> : null
                         : <p>X</p>}
                     </td>)
@@ -295,19 +295,19 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
                           </p> :
                           ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>
                               {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                               <br></br>
-                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
                             </p> :
                             ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
                               <p style={{ color: '#8ac926' }}>
                                 {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                                 <br></br>
-                                {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
+                                {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
                               </p> : null
                         : <p>X</p>}
                     </td>)
