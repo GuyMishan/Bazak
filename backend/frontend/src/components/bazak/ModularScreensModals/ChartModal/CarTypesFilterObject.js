@@ -154,7 +154,7 @@ async function getCurrentParentId(CurrentCarFilterType, CurrentCarFilterId) {
         setMkabazs(temp);
     }
     if (carType == 'magad') {
-        await axios.get(`http://localhost:8000/api/magad/magadsbymagdal/${parentCarId}`)
+        await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${parentCarId}`)
         .then(response => {
             for (let j = 0; j < response.data.length; j++)
             temp.push(response.data[j])
