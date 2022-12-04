@@ -164,24 +164,68 @@ const ChartModal = (props) => {
 
     let tempunitsfilterarray = unitsfilterarray;
     let tempunitsfilterarray2 = [];
+    let lastUnitKey;
+    let lastUnitValue;
     for (let i = 0; i < tempunitsfilterarray.length; i++) {
       let tempobject = {};
       tempobject.id = tempunitsfilterarray[i].id;
-      let lastKey = Object.keys(tempunitsfilterarray[i]).pop()
-      let lastValue = tempunitsfilterarray[i][Object.keys(tempunitsfilterarray[i]).pop()]
-      tempobject[lastKey] = lastValue;
+      if(tempunitsfilterarray[i].pikod){
+        if(tempunitsfilterarray[i].ogda){
+          if(tempunitsfilterarray[i].hativa){
+            if(tempunitsfilterarray[i].gdod){
+              lastUnitKey = 'gdod'
+              lastUnitValue = tempunitsfilterarray[i].gdod
+            }
+            else{
+              lastUnitKey = 'hativa'
+              lastUnitValue = tempunitsfilterarray[i].hativa
+            }
+          }
+          else{
+            lastUnitKey = 'ogda'
+            lastUnitValue = tempunitsfilterarray[i].ogda
+          }
+        }
+        else{
+          lastUnitKey = 'pikod'
+          lastUnitValue = tempunitsfilterarray[i].pikod
+        }
+      }
+      tempobject[lastUnitKey] = lastUnitValue;
       tempunitsfilterarray2.push(tempobject);
     }
     tempchartdata.units = tempunitsfilterarray2;
 
     let tempcartypesfilterarray = cartypesfilterarray;
     let tempcartypesfilterarray2 = [];
+    let lastCarKey;
+    let lastCarValue;
     for (let i = 0; i < tempcartypesfilterarray.length; i++) {
       let tempobject = {};
       tempobject.id = tempcartypesfilterarray[i].id;
-      let lastKey = Object.keys(tempcartypesfilterarray[i]).pop()
-      let lastValue = tempcartypesfilterarray[i][Object.keys(tempcartypesfilterarray[i]).pop()]
-      tempobject[lastKey] = lastValue;
+      if(tempcartypesfilterarray[i].magadal){
+        if(tempcartypesfilterarray[i].magad){
+          if(tempcartypesfilterarray[i].mkabaz){
+            if(tempcartypesfilterarray[i].makat){
+              lastCarKey = 'makat'
+              lastCarValue = tempcartypesfilterarray[i].makat
+            }
+            else{
+              lastCarKey = 'mkabaz'
+              lastCarValue = tempcartypesfilterarray[i].mkabaz
+            }
+          }
+          else{
+            lastCarKey = 'magad'
+            lastCarValue = tempcartypesfilterarray[i].magad
+          }
+        }
+        else{
+          lastCarKey = 'magadal'
+          lastCarValue = tempcartypesfilterarray[i].magadal
+        }
+      }
+      tempobject[lastCarKey] = lastCarValue;
       tempcartypesfilterarray2.push(tempobject);
     }
     tempchartdata.tenetree = tempcartypesfilterarray2;
@@ -212,9 +256,6 @@ const ChartModal = (props) => {
     if (props.chartid != undefined) {
       loadchartdata();
     }
-    else {
-
-    }
   }
 
   useEffect(() => {
@@ -222,6 +263,8 @@ const ChartModal = (props) => {
       init();
     else {
       setChartData({})
+      setUnitsfilterarray([])
+      setCartypesfilterarray([])
       setChartidimport('')
     }
   }, [props.isOpen])

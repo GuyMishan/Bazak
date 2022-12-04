@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router()
 
 
-const {create, find, read, remove,update,mkabazsbymagad} = require("../../controllers/cartypes/mkabaz")
+const {create, find, read, remove, findById,update,mkabazsbymagad} = require("../../controllers/cartypes/mkabaz")
 
 router.post('/mkabaz', create);
 
+router.get('/mkabaz/:id', findById)
 router.get('/mkabaz', find);
 
 router.get('/mkabaz/:id', read);

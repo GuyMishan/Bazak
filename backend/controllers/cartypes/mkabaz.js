@@ -10,6 +10,15 @@ exports.read = async (req, res) => {
 
 }
 
+exports.findById = async(req, res) => {
+  const mkabaz = await Mkabaz.findOne().where({_id:req.params.id})
+  if(!mkabaz){
+      res.status(500).json({success: false})
+  }
+  res.send(mkabaz)
+  
+ }
+
 exports.find = (req, res) => {
   Mkabaz.find().sort({index: 1})
     .then((mkabaz) => res.json(mkabaz))

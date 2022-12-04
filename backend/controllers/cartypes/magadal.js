@@ -10,6 +10,15 @@ exports.read = async (req, res) => {
 
 }
 
+exports.findById = async(req, res) => {
+  const magadal = await Magadal.findOne().where({_id:req.params.id})
+  if(!magadal){
+      res.status(500).json({success: false})
+  }
+  res.send(magadal)
+  
+ }
+
 exports.find = (req, res) => {
   Magadal.find().sort({index: 1})
     .then((magadal) => res.json(magadal))
