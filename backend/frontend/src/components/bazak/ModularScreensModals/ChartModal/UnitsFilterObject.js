@@ -169,6 +169,18 @@ const UnitsFilterObject = (props) => {
         else{
            loadPikods();
         }
+        if(props.user.hativaid){
+            loadGdods(props.user.hativaid );
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = props.user.hativaid }))
+        }
+        if(props.user.ogdaid){
+            loadHativas(props.user.ogdaid);
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = props.user.ogdaid }))
+        }
+        if(props.user.pikodid){
+            loadOgdas(props.user.pikodid );
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = props.user.pikodid }))
+        }
     }
 
     useEffect(() => {
@@ -309,8 +321,9 @@ const UnitsFilterObject = (props) => {
                             </Col>}
                     </> : null} 
             </Row>
-
+            {!props.user.gdodid ?
             <Button type="button" onClick={() => { props.setUnitsfilterarray(currentSpec => currentSpec.filter(x => x.id !== props.unitfilterobject.id)) }}><img src={deletepic} height='20px'></img></Button>
+            : null} 
         </div>
     );
 }
