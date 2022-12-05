@@ -271,6 +271,13 @@ const CarDataFormModal = (props) => {
       flag = false;
     }
 
+    for(var i=0;i<cardata.carnumber.length;i++){
+      if(cardata.carnumber[i]=='-'){
+        ErrorReason += ", מספר צ' לא יכול להכיל את התו -"
+        flag = false;
+      }
+    }
+
     if (((cardata.pikod == undefined) || (cardata.pikod == "")) || ((cardata.ogda == undefined) || (cardata.ogda == "")) || ((cardata.hativa == undefined) || (cardata.hativa == "")) || ((cardata.gdod == undefined) || (cardata.gdod == ""))) {
       ErrorReason += ", פרטי יחידה לא מלאים"
       flag = false;

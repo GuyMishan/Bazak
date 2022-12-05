@@ -37,6 +37,42 @@ const UnitsFilterObject = (props) => {
     const [ogdas, setOgdas] = useState([]);
     const [pikods, setPikods] = useState([]);
 
+    async function unitsFilterHierarchy(CurrentUnitFilterType, CurrentUnitFilterId) {
+        if (CurrentUnitFilterType != 'pikod') {
+            CurrentUnitFilterId = await getCurrentParentId(CurrentUnitFilterType, CurrentUnitFilterId);
+            if (CurrentUnitFilterType == 'gdod') {
+                CurrentUnitFilterType = 'hativa';
+                props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = CurrentUnitFilterId }))
+            }
+            else {
+                if (CurrentUnitFilterType == 'hativa') {
+                    CurrentUnitFilterType = 'ogda';
+                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = CurrentUnitFilterId }))
+                }
+                else {
+                    if (CurrentUnitFilterType == 'ogda') {
+                        CurrentUnitFilterType = 'pikod';
+                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = CurrentUnitFilterId }))
+                    }
+                }
+            }
+            return unitsFilterHierarchy(CurrentUnitFilterType, CurrentUnitFilterId);
+        }
+    }
+
+    async function getCurrentParentId(CurrentUnitFilterType, CurrentUnitFilterId) {
+            let response = await axios.get(`http://localhost:8000/api/${CurrentUnitFilterType}/${CurrentUnitFilterId}`)
+            if (CurrentUnitFilterType == 'gdod') {
+                return response.data.hativa;
+            }
+            if (CurrentUnitFilterType == 'hativa') {
+                return response.data.ogda;
+            }
+            if (CurrentUnitFilterType == 'ogda') {
+                return response.data.pikod;
+            }
+    }
+
     const loadPikods = async () => {
         await axios.get("http://localhost:8000/api/pikod",)
             .then(response => {
@@ -86,8 +122,53 @@ const UnitsFilterObject = (props) => {
         setGdods(temphativasgdods);
     }
 
+    const loadBackwords = async (unitType, unitId) => {
+        let temp = [];
+        let parentUnitId = await getCurrentParentId(unitType, unitId);
+        if (unitType == 'gdod') {
+            await axios.post(`http://localhost:8000/api/gdod/gdodsbyhativaid`, { hativa: parentUnitId })
+            .then(response => {
+                for (let j = 0; j < response.data.length; j++)
+                    temp.push(response.data[j])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            setGdods(temp);
+        }
+        if (unitType == 'hativa') {
+            await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: parentUnitId })
+            .then(response => {
+                for (let j = 0; j < response.data.length; j++)
+                temp.push(response.data[j])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            setHativas(temp);
+        }
+        if (unitType == 'ogda') {
+            await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: parentUnitId })
+            .then(response => {
+                for (let j = 0; j < response.data.length; j++)
+                temp.push(response.data[j])
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+            setOgdas(temp);
+        }
+    }
+
     function init() {
-        loadPikods();
+        if(props.unitfilterobject.gdod != undefined || props.unitfilterobject.hativa != undefined || props.unitfilterobject.ogda != undefined || props.unitfilterobject.pikod != undefined){
+            loadPikods();
+            loadBackwords(Object.keys(props.unitfilterobject)[1],Object.values(props.unitfilterobject)[1]);
+            unitsFilterHierarchy(Object.keys(props.unitfilterobject)[1],Object.values(props.unitfilterobject)[1]);
+        }
+        else{
+           loadPikods();
+        }
     }
 
     useEffect(() => {

@@ -9,6 +9,15 @@ exports.read = async (req, res) => {
   }
 
 }
+exports.findById = async(req, res) => {
+  const makat = await Makat.findOne().where({_id:req.params.id})
+  
+  if(!makat){
+      res.status(500).json({success: false})
+  }
+  res.send(makat)
+  
+ }
 
 exports.find = (req, res) => {
   Makat.find().sort({index: 1})

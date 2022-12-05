@@ -2,7 +2,6 @@ const Pikod = require("../../models/units/pikod");
 
 exports.findById = async(req, res) => {
   const pikod = await Pikod.findOne().where({_id:req.params.id})
-  console.log(pikod.id)
   if(!pikod){
       res.status(500).json({success: false})
   }

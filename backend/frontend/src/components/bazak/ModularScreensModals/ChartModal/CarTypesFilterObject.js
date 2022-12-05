@@ -37,6 +37,42 @@ const CarTypesFilterObject = (props) => {
   const [magads, setMagads] = useState([]);
   const [magadals, setMagadals] = useState([]);
 
+  async function carsFilterHierarchy(CurrentCarFilterType, CurrentCarFilterId) {
+    if (CurrentCarFilterType != 'magadal') {
+        CurrentCarFilterId = await getCurrentParentId(CurrentCarFilterType, CurrentCarFilterId);
+        if (CurrentCarFilterType == 'makat') {
+            CurrentCarFilterType = 'mkabaz';
+            props.setCartypesfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].mkabaz = CurrentCarFilterId }))
+        }
+        else {
+            if (CurrentCarFilterType == 'mkabaz') {
+                CurrentCarFilterType = 'magad';
+                props.setCartypesfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].magad = CurrentCarFilterId }))
+            }
+            else {
+                if (CurrentCarFilterType == 'magad') {
+                    CurrentCarFilterType = 'magadal';
+                    props.setCartypesfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].magadal = CurrentCarFilterId }))
+                }
+            }
+        }
+        return carsFilterHierarchy(CurrentCarFilterType, CurrentCarFilterId);
+    }
+}
+
+async function getCurrentParentId(CurrentCarFilterType, CurrentCarFilterId) {
+        let response = await axios.get(`http://localhost:8000/api/${CurrentCarFilterType}/${CurrentCarFilterId}`)
+        if (CurrentCarFilterType == 'makat') {
+            return response.data.mkabaz;
+        }
+        if (CurrentCarFilterType == 'mkabaz') {
+            return response.data.magad;
+        }
+        if (CurrentCarFilterType == 'magad') {
+            return response.data.magadal;
+        }
+}
+
   const loadMagadals = async () => {
     await axios.get(`http://localhost:8000/api/magadal`)
       .then(response => {
@@ -90,10 +126,55 @@ const CarTypesFilterObject = (props) => {
         })
       setMakats(tempmkabazmakats);
     }
-  }
+  } 
+
+  const loadBackwords = async (carType, carId) => {
+    let temp = [];
+    let parentCarId = await getCurrentParentId(carType, carId);
+    if (carType == 'makat') {
+        await axios.get(`http://localhost:8000/api/makat/makatsbymkabaz/${parentCarId}`)
+        .then(response => {
+            for (let j = 0; j < response.data.length; j++)
+                temp.push(response.data[j])
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        setMakats(temp);
+    }
+    if (carType == 'mkabaz') {
+        await axios.get(`http://localhost:8000/api/mkabaz/mkabazsbymagad/${parentCarId}`)
+        .then(response => {
+            for (let j = 0; j < response.data.length; j++)
+            temp.push(response.data[j])
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        setMkabazs(temp);
+    }
+    if (carType == 'magad') {
+        await axios.get(`http://localhost:8000/api/magad/magadsbymagadal/${parentCarId}`)
+        .then(response => {
+            for (let j = 0; j < response.data.length; j++)
+            temp.push(response.data[j])
+        })
+        .catch((error) => {
+            console.log(error);
+        })
+        setMagads(temp);
+    }
+}
 
   function init() {
-    loadMagadals();
+    if(props.cartypesfilterobject.makat != undefined || props.cartypesfilterobject.mkabaz != undefined || props.cartypesfilterobject.magad != undefined || props.cartypesfilterobject.magadal != undefined){
+      loadMagadals();
+      loadBackwords(Object.keys(props.cartypesfilterobject)[1],Object.values(props.cartypesfilterobject)[1]);
+      carsFilterHierarchy(Object.keys(props.cartypesfilterobject)[1],Object.values(props.cartypesfilterobject)[1]);
+    }
+    else{
+      loadMagadals();
+    }
   }
 
   useEffect(() => {

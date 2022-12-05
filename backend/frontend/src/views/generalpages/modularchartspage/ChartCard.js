@@ -290,6 +290,7 @@ const ChartCard = (props) => { //instate - zamin/kashir
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader style={{ padding: '0px' }}>
                         <div style={{ textAlign: 'left' }}>
+                           <button className='btn-new' style={{ padding: '11px 17px' }} onClick={props.Toggle}>0</button>
                             {props.theme == "white-content" ?
                                 <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.chart.name}</h3>
                                 : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>
