@@ -12,8 +12,8 @@ const chartSchema = new mongoose.Schema({
     units: { type: Array },
     tenetree: { type: Array },
 
-    stand: { type: String },
-    status: { type: String },
+    stand: { type: Array },
+    status: { type: Array },
     index: { type: Number },
 }, { timestamps: true });
 
