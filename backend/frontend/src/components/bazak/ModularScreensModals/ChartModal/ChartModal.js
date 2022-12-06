@@ -396,7 +396,7 @@ const ChartModal = (props) => {
               <Input type="text" name="name" value={chartdata.name} onChange={handleChange} />
             </Col>
           </Row>
-
+          
           {/* unitsfilterarray */}
           {!user.gdodid ?
           <Row style={{ padding: '0px' }}>
