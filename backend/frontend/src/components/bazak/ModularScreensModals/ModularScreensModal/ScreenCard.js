@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useParams,Link, withRouter, Redirect } from "react-router-dom";
+import { useParams, Link, withRouter, Redirect } from "react-router-dom";
 // reactstrap components
 import {
     Button,
@@ -33,58 +33,78 @@ import radioempty from "assets/img/radio-empty.png";
 import radiotick from "assets/img/radio-tick.png";
 
 const ScreenCard = (props) => {
-    const {unitid} = useParams();
-    const {unittype} = useParams();
+    const { unitid } = useParams();
+    const { unittype } = useParams();
 
     const clickDelete = async () => {
-       await findDependedCharts()
-       .then(()=>{
-            let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
-            toast.success(`מסך נמחק בהצלחה`);
-            props.init();
-       })
+        await findDependedCharts()
+            .then(() => {
+                let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
+                toast.success(`מסך נמחק בהצלחה`);
+                props.init();
+            })
     }
 
-    const findDependedCharts = async () =>{
+    const findDependedCharts = async () => {
         var tempscreentid = props.screenid;
         await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${tempscreentid}`)
-          .then(response => {
-            let tempchart = response.data[0];
-            for(let i=0;i<response.data.length;i++){
-                deleteDependedCharts(response.data[i]);
-            }
-          })
-          .catch((error) => {
-            console.log(error);
-          })
+            .then(response => {
+                let tempchart = response.data[0];
+                for (let i = 0; i < response.data.length; i++) {
+                    deleteDependedCharts(response.data[i]);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
-    const linkandclosemodal = async () =>{
+    const linkandclosemodal = async () => {
         props.Togglemodularscreensmodal();
         history.push(`/modularchartpage/${props.screenid}/${unittype}/${unitid}/magadal/0`);
     }
 
-    const deleteDependedCharts = async (tempchart) =>{
+    const deleteDependedCharts = async (tempchart) => {
         let response = axios.post(`http://localhost:8000/api/modularscreens/chart/remove/${tempchart.chartid}`)
     }
 
     const clearusermainscreen = event => {
-        console.log('clearusermainscreen');
+        let tempuser = props.user;
+        tempuser.mainscreenid = null;
+        axios.put(`http://localhost:8000/api/user/update/${props.user._id}`, tempuser)
+            .then(response => {
+                authenticate({ user: response.data })
+                toast.success(`מסך הבית עודכן למסך ברירת המחדל`);
+                props.Togglemodularscreensmodal();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     const setusermainscreen = event => {
-        console.log('setusermainscreen');
+        let tempuser = props.user;
+        tempuser.mainscreenid = props.screen.screenid;
+        axios.put(`http://localhost:8000/api/user/update/${props.user._id}`, tempuser)
+            .then(response => {
+                authenticate({ user: response.data })
+                toast.success(`מסך הבית עודכן בהצלחה`);
+                props.Togglemodularscreensmodal();
+            })
+            .catch((error) => {
+                console.log(error);
+            })
     }
 
     return (
         props.mode == 'normal' ?
-            <Col xs={12} md={3} onClick={linkandclosemodal} style={{cursor:'pointer'}}>
+            <Col xs={12} md={3} onClick={linkandclosemodal} style={{ cursor: 'pointer' }}>
                 {/* <Link to={`/modularchartpage/${props.screenid}/${unittype}/${unitid}/magadal/0`}> */}
-                    <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
-                        <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
-                            <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>
-                        </CardBody>
-                    </Card>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+                    <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
+                        <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>
+                    </CardBody>
+                </Card>
                 {/* </Link> */}
             </Col> :
             <Col xs={12} md={3}>

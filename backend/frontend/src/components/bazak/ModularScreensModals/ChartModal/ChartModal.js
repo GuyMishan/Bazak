@@ -42,7 +42,7 @@ const ChartModal = (props) => {
   //form
   const [chartidimport, setChartidimport] = useState('')
   const [possiblestands, setPossiblestands] = useState([{ label: 'סדיר', value: 'סדיר' }, { label: 'הכן', value: 'הכן' }, { label: 'הח"י', value: 'הח"י' }])
-  const [possiblestatusses, setPossiblestatusses] = useState([{ label: 'פעיל', value: 'פעיל' }, { label: 'מושבת', value: 'מושבת' }, { label: 'מיועד להשבתה', value: 'מיועד להשבתה' }])
+  const [possiblestatusses, setPossiblestatusses] = useState([{ label: 'פעיל', value: 'פעיל' }, { label: 'מושבת', value: 'מושבת' }, { label: 'מיועד להשבתה', value: 'מיועד להשבתה' }, { label: 'עצור', value: 'עצור' }])
 
   const shortid = require('shortid')
   shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
@@ -110,15 +110,15 @@ const ChartModal = (props) => {
       flag = false;
     }
 
-    if (((unitsfilterarray.length==0))) {
-      ErrorReason += ", יחידות לא מוגדרות"
-      flag = false;
-    }
+    // if (((unitsfilterarray.length==0))) {
+    //   ErrorReason += ", יחידות לא מוגדרות"
+    //   flag = false;
+    // }
 
-    if (((cartypesfilterarray.length==0))) {
-      ErrorReason += ", כלים לא מוגדרים"
-      flag = false;
-    }
+    // if (((cartypesfilterarray.length==0))) {
+    //   ErrorReason += ", כלים לא מוגדרים"
+    //   flag = false;
+    // }
 
     if (((chartdata.stand == undefined) || (chartdata.stand.length==0))) {
       ErrorReason += ", מעמד רכבים לא מוגדר"
