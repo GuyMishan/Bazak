@@ -33,8 +33,8 @@ import { toast } from "react-toastify";
 import { buildStyles, CircularProgressbar, CircularProgressbarWithChildren } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from "components/general/CircularProgressBarAnimation/ProgressProvider";
-import arrowhead from "assets/img/arrowhead.png";
-import arrowhead_white from "assets/img/arrowhead_white.png";
+import editpic from "assets/img/edit.png";
+import deletepic from "assets/img/delete.png";
 
 const ChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart, setCardata_by_chart] = useState(0)
@@ -63,20 +63,44 @@ const ChartCard = (props) => { //instate - zamin/kashir
         let temp_cardata_by_chart_instate;
         let temp_cardata_by_chart_not_instate;
 
-        //filter by chartdata
         temp_cardata_by_chart = props.cardatas;
 
-        for (let i = 0; i < props.chart.units.length; i++) {
-            let lastKey = Object.keys(props.chart.units[i]).pop();
-            let lastValue = props.chart.units[i][Object.keys(props.chart.units[i]).pop()]
-            temp_cardata_by_chart = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+        //filter by chartdata
+        if (props.chart.units && props.chart.units.length > 0) {
+            let temp_cardata_by_chart_copy3 = []
+            for (let i = 0; i < props.chart.units.length; i++) {
+                let lastKey = Object.keys(props.chart.units[i]).pop();
+                let lastValue = props.chart.units[i][Object.keys(props.chart.units[i]).pop()]
+                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+                temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
+            }
+            temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
         }
 
-        for (let i = 0; i < props.chart.tenetree.length; i++) {
-            let lastKey = Object.keys(props.chart.tenetree[i]).pop();
-            let lastValue = props.chart.tenetree[i][Object.keys(props.chart.tenetree[i]).pop()]
-            temp_cardata_by_chart = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+        if (props.chart.tenetree && props.chart.tenetree.length > 0) {
+            let temp_cardata_by_chart_copy4 = []
+            for (let i = 0; i < props.chart.tenetree.length; i++) {
+                let lastKey = Object.keys(props.chart.tenetree[i]).pop();
+                let lastValue = props.chart.tenetree[i][Object.keys(props.chart.tenetree[i]).pop()]
+                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+                temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
+            }
+            temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
         }
+
+        let temp_cardata_by_chart_copy1 = []
+        for (let i = 0; i < props.chart.stand.length; i++) {
+            let temp = temp_cardata_by_chart.filter(cardata => ((cardata.stand == props.chart.stand[i])));
+            temp_cardata_by_chart_copy1 = temp_cardata_by_chart_copy1.concat(temp)
+        }
+        temp_cardata_by_chart = temp_cardata_by_chart_copy1;
+
+        let temp_cardata_by_chart_copy2 = []
+        for (let i = 0; i < props.chart.status.length; i++) {
+            let temp = temp_cardata_by_chart.filter(cardata => ((cardata.status == props.chart.status[i])));
+            temp_cardata_by_chart_copy2 = temp_cardata_by_chart_copy2.concat(temp)
+        }
+        temp_cardata_by_chart = temp_cardata_by_chart_copy2;
 
         //filter by zamin/kashir
         if (props.theme == 'white-content') {
@@ -140,7 +164,7 @@ const ChartCard = (props) => { //instate - zamin/kashir
     return (
         props.mode == 'normal' ?
             cardata_by_chart != 0 ?
-                <div style={{width: `${100 / props.screendata.chartsinline }%`, paddingLeft:'15px', paddingRight:'15px'}}>
+                <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px' }}>
                     <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                         <CardHeader style={{ padding: '0px' }}>
                             <div style={{ textAlign: 'right' }}>
@@ -264,16 +288,20 @@ const ChartCard = (props) => { //instate - zamin/kashir
                     </Card>
                 </div> : null
             :
-            <div style={{width: `${100 / props.screendata.chartsinline }%`, paddingLeft:'15px', paddingRight:'15px'}}>
-            <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+            <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px' }}>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader style={{ padding: '0px' }}>
                         <div style={{ textAlign: 'left' }}>
-                           <button className='btn-new' style={{ padding: '11px 17px' }} onClick={props.Toggle}>0</button>
                             {props.theme == "white-content" ?
                                 <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.chart.name}</h3>
                                 : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>
                             }
-                            <button className='btn-new-delete' style={{ padding: '11px 17px', marginTop: '-44px' }} onClick={clickDelete}>X</button>
+                            <div style={{ textAlign: 'left', height: '0px' }}>
+                                <button className='btn-new-delete' style={{ padding: '0px', marginTop: '-44px' }} onClick={clickDelete}><img src={deletepic} style={{ height: "40px" }} ></img></button>
+                            </div>
+                            <div style={{ textAlign: 'right', height: '0px' }}>
+                                <button className='btn-new' style={{ padding: '0px', marginTop: '-44px' }} onClick={props.Toggle}><img src={editpic} style={{ height: "40px" }} ></img></button>
+                            </div>
                         </div>
                     </CardHeader>
                     <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>

@@ -70,7 +70,7 @@ function Sidebar() {
 
   return (
     <>
-      <ModularScreensModal isOpen={ismodularscreensmodalopen} Toggle={Togglemodularscreensmodal} user={user} />
+      <ModularScreensModal isOpen={ismodularscreensmodalopen} Togglemodularscreensmodal={Togglemodularscreensmodal} user={user} />
 
       <ThemeContext.Consumer>
         {({ changeTheme, theme }) => (

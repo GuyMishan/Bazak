@@ -6,7 +6,6 @@ const screenSchema = new mongoose.Schema({
     screenid: { type: String, unique: true },
     lastvisit: { type: Date },
     userpersonalnumber: { type: String },
-    charts: { type: Array },
     chartsinline: { type: Number },
     ramamid: { type: ObjectId, ref: 'Ramam' },
 }, { timestamps: true });

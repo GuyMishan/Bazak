@@ -28,10 +28,10 @@ import { signin, authenticate, isAuthenticated } from 'auth/index';
 import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
-import Select from 'components/general/Select/AnimatedSelect'
 import deletepic from "assets/img/delete.png";
 import UnitsFilterObject from './UnitsFilterObject';
 import CarTypesFilterObject from './CarTypesFilterObject';
+import NormalAnimatedMultiSelect from 'components/general/Select/NormalAnimatedMultiSelect'
 
 const ChartModal = (props) => {
   const { user } = isAuthenticated()
@@ -39,8 +39,10 @@ const ChartModal = (props) => {
   const [chartdata, setChartData] = useState({})
   const [unitsfilterarray, setUnitsfilterarray] = useState([])
   const [cartypesfilterarray, setCartypesfilterarray] = useState([])
-
+  //form
   const [chartidimport, setChartidimport] = useState('')
+  const [possiblestands, setPossiblestands] = useState([{ label: 'סדיר', value: 'סדיר' }, { label: 'הכן', value: 'הכן' }, { label: 'הח"י', value: 'הח"י' }])
+  const [possiblestatusses, setPossiblestatusses] = useState([{ label: 'פעיל', value: 'פעיל' }, { label: 'מושבת', value: 'מושבת' }, { label: 'מיועד להשבתה', value: 'מיועד להשבתה' }, { label: 'עצור', value: 'עצור' }])
 
   const shortid = require('shortid')
   shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
@@ -81,6 +83,21 @@ const ChartModal = (props) => {
     }
   }
 
+  function handleChange8(selectedOption, name) {
+    if (!(selectedOption.value == "בחר")) {
+      let tempvalues = [];
+      for (let i = 0; i < selectedOption.length; i++) {
+        tempvalues.push(selectedOption[i].value);
+      }
+      setChartData({ ...chartdata, [name]: tempvalues });
+    }
+    else {
+      let tempchartdata = { ...chartdata };
+      delete tempchartdata[name];
+      setChartData(tempchartdata);
+    }
+  }
+
   const clickSubmit = async () => {//add יחידות וכלים
     CheckFormData();
   }
@@ -90,6 +107,26 @@ const ChartModal = (props) => {
     var ErrorReason = "";
     if (((chartdata.name == undefined) || (chartdata.name == ""))) {
       ErrorReason += ", חסר שם תרשים"
+      flag = false;
+    }
+
+    // if (((unitsfilterarray.length==0))) {
+    //   ErrorReason += ", יחידות לא מוגדרות"
+    //   flag = false;
+    // }
+
+    // if (((cartypesfilterarray.length==0))) {
+    //   ErrorReason += ", כלים לא מוגדרים"
+    //   flag = false;
+    // }
+
+    if (((chartdata.stand == undefined) || (chartdata.stand.length==0))) {
+      ErrorReason += ", מעמד רכבים לא מוגדר"
+      flag = false;
+    }
+
+    if (((chartdata.status == undefined) || (chartdata.status.length==0))) {
+      ErrorReason += ", סטאטוס רכבים לא מוגדר"
       flag = false;
     }
 
@@ -277,7 +314,7 @@ const ChartModal = (props) => {
       tempcartypesfilterarray2.push(tempobject);
     }
     tempchartdata.tenetree = tempcartypesfilterarray2;
-    
+
     let result = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempchartid}`, tempchartdata)
       .then(respone => {
         toast.success(`תרשים עודכן בהצלחה`);
@@ -394,6 +431,18 @@ const ChartModal = (props) => {
           {/* cartypesfilterarray */}
 
           <Row style={{ padding: '0px' }}>
+            <Col style={{ paddingRight: '0px', justifyContent: 'right', alignContent: 'right', textAlign: 'right' }} xs={12} md={6}>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד</div>
+              <NormalAnimatedMultiSelect data={possiblestands} handleChange2={handleChange8} name={'stand'} val={chartdata.stand}/>
+            </Col>
+
+            <Col style={{ paddingRight: '0px', justifyContent: 'right', alignContent: 'right', textAlign: 'right' }} xs={12} md={6}>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס כלים</div>
+              <NormalAnimatedMultiSelect data={possiblestatusses} handleChange2={handleChange8} name={'status'} val={chartdata.status}/>
+            </Col>
+          </Row>
+
+          <Row style={{ paddingTop: '10px' }}>
             <Col style={{ padding: '0px' }} xs={12} md={8}>
             </Col>
             <Col style={{ padding: '0px' }} xs={12} md={4}>

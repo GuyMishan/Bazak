@@ -86,13 +86,17 @@ const ModularScreensModal = (props) => {
     if (props.isOpen == true)
       init();
     else {
-
+      setMode('normal');
+      setScreens([]);
+      setFilteredscreens([]);
+      setIsscreenmodalopen(false);
+      setScreenidformodal(undefined);
     }
   }, [props.isOpen])
 
   return (
     <>
-      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={()=>init()} />
+      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={()=>init()}/>
       <Modal
         style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
@@ -100,7 +104,7 @@ const ModularScreensModal = (props) => {
         fullscreen
         scrollable
         size=""
-        toggle={props.Toggle}>
+        toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
           <div style={{ textAlign: 'right', marginBottom: '20px' }}>
             {mode == 'normal' ?
@@ -124,7 +128,7 @@ const ModularScreensModal = (props) => {
           <Row>
             {filteredscreens.map((screen, i) => (
               screen ?
-                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={()=>init()} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} />
+                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={()=>init()} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} Togglemodularscreensmodal={props.Togglemodularscreensmodal}/>
                 : null))}
           </Row>
 

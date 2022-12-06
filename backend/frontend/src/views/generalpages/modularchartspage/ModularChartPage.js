@@ -130,6 +130,14 @@ function ModularChartPage(props) {
       <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
       <div>
         <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+
+          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+
+            {props.theme == "white-content" ?
+                <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
+                : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
+          </div>
+
           {mode == 'normal' ?
             <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
             : <>
