@@ -74,7 +74,7 @@ const ScreenCard = (props) => {
         axios.put(`http://localhost:8000/api/user/update/${props.user._id}`, tempuser)
             .then(response => {
                 authenticate({ user: response.data })
-                toast.success(`מסך הבית עודכן למסך ברירת המחדל`);
+                toast.success(`מסך הבית עודכן למסך ברירת המחדל, יש לרענן את הדפדפן`);
                 props.Togglemodularscreensmodal();
             })
             .catch((error) => {
@@ -88,7 +88,7 @@ const ScreenCard = (props) => {
         axios.put(`http://localhost:8000/api/user/update/${props.user._id}`, tempuser)
             .then(response => {
                 authenticate({ user: response.data })
-                toast.success(`מסך הבית עודכן בהצלחה`);
+                toast.success(`מסך הבית עודכן בהצלחה, יש לרענן את הדפדפן`);
                 props.Togglemodularscreensmodal();
             })
             .catch((error) => {
