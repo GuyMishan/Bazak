@@ -54,7 +54,7 @@ function BazakNavbar(props) {
                   <ToggleDarkModeButton color={color} />
                 </Col>
                 <Col xs={12} md={4}>
-                  <BazakNavbarTitle theme={theme} />
+                  <BazakNavbarTitle theme={theme} user={user}/>
                 </Col>
                 <Col xs={12} md={4} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   {theme == "white-content" ?

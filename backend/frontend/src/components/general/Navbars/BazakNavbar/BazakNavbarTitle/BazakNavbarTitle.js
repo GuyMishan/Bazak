@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, withRouter, Redirect } from "react-router-dom";
-
+import { signin, authenticate, isAuthenticated } from 'auth/index';
 import axios from 'axios';
 
 function BazakNavbarTitle(props) {
+    //text
     const [text, setText] = useState("");
 
     async function CalculateText() {
@@ -18,6 +19,7 @@ function BazakNavbarTitle(props) {
     }
 
     useEffect(() => {
+        console.log(props.user.mainscreenid)
         if (props.match.params.unittype != undefined && props.match.params.unitid != undefined)
             CalculateText()
     }, [props.match])
@@ -25,9 +27,11 @@ function BazakNavbarTitle(props) {
     return (
         text ?
             props.match.path.substring(1, 17) != "modularchartpage" ?
-                props.theme == "white-content" ?
-                    <h2 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {text}</h2>
-                    : <h2 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {text}</h2>
+                props.match.path.substring(1, 10) != "dashboard" || (props.match.path.substring(1, 10) == "dashboard" && (props.user.mainscreenid==undefined && props.user.mainscreenid==null)) ?
+                    props.theme == "white-content" ?
+                        <h2 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {text}</h2>
+                        : <h2 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {text}</h2>
+                    : null
                 : null
             : null
     );

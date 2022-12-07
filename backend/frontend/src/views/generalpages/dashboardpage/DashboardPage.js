@@ -24,6 +24,7 @@ import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponen
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
+import ModularChartPage from '../modularchartspage/ModularChartPage';
 
 function DashboardPage({ match, theme }) {
   //user
@@ -181,24 +182,29 @@ function DashboardPage({ match, theme }) {
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
       :
-      <div>
-        <Row>
-          {cartypes.map((cartype, i) => (
-            cartype ?
-              <DashboardCard theme={theme} match={match} cartype={cartype} cardatas={cardatas} />
-              : null))}
-        </Row>
-        <Row>
-          <Col xs={12} md={3} style={{ textAlign: 'right' }}>
-            <LatestUpdateDateComponent cardatas={cardatas} isdataloaded={isdataloaded} />
-          </Col>
-          <Col xs={12} md={6}>
-          </Col>
-          <Col xs={12} md={3}>
-            <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/${match.params.cartype}/${match.params.carid}/false/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
-          </Col>
-        </Row>
-      </div>
+      user.mainscreenid && user.mainscreenid != null ?
+        <>
+        <ModularChartPage screenid={user.mainscreenid} theme={theme}/>
+        </>
+        :
+        <div>
+          <Row>
+            {cartypes.map((cartype, i) => (
+              cartype ?
+                <DashboardCard theme={theme} match={match} cartype={cartype} cardatas={cardatas} />
+                : null))}
+          </Row>
+          <Row>
+            <Col xs={12} md={3} style={{ textAlign: 'right' }}>
+              <LatestUpdateDateComponent cardatas={cardatas} isdataloaded={isdataloaded} />
+            </Col>
+            <Col xs={12} md={6}>
+            </Col>
+            <Col xs={12} md={3}>
+              <Link to={`/zminotpage/${match.params.unittype}/${match.params.unitid}/${match.params.cartype}/${match.params.carid}/false/false`}><button className='btn-new-blue'>טבלת זמינות</button></Link>
+            </Col>
+          </Row>
+        </div>
   );
 }
 

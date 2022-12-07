@@ -97,23 +97,38 @@ function ModularChartPage(props) {
   }
 
   async function getscreendata() {
-    let response = await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${props.match.params.screenid}`)
-    let tempscreen = response.data[0];
-    setScreenData(tempscreen)
+    if (props.match.params.screenid) {
+      let response = await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${props.match.params.screenid}`)
+      let tempscreen = response.data[0];
+      setScreenData(tempscreen)
+    }
+    else {
+      let response = await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${props.screenid}`)
+      let tempscreen = response.data[0];
+      setScreenData(tempscreen)
+    }
   }
 
   async function getchartsbyscreen() {
-    let response = await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${props.match.params.screenid}`)
-    let tempcardata = response.data;
-    setCharts(tempcardata)
-    setFilteredcharts(tempcardata)
+    if (props.match.params.screenid) {
+      let response = await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${props.match.params.screenid}`)
+      let tempcardata = response.data;
+      setCharts(tempcardata)
+      setFilteredcharts(tempcardata)
+    }
+    else {
+      let response = await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${props.screenid}`)
+      let tempcardata = response.data;
+      setCharts(tempcardata)
+      setFilteredcharts(tempcardata)
+    }
   }
 
   useEffect(() => {
     if (reduxcardata.length > 0) {
       init();
     }
-  }, [props.match]);
+  }, [props.match, props.screenid]);
 
   useEffect(() => {
     if (reduxcardata.length > 0 && isdataloaded == false) {
@@ -127,15 +142,18 @@ function ModularChartPage(props) {
 
   return (
     <>
-      <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
+      {props.match.params.screenid ?
+        <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
+        : <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.screenid} init={() => init()} />}
+      
       <div>
         <div style={{ textAlign: 'right', marginBottom: '20px' }}>
 
           <div style={{ textAlign: 'center', marginBottom: '20px' }}>
 
             {props.theme == "white-content" ?
-                <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
-                : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
+              <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
+              : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
           </div>
 
           {mode == 'normal' ?
@@ -159,7 +177,7 @@ function ModularChartPage(props) {
         <Row>
           {filteredcharts.map((chart, i) => (
             chart ?
-              <ChartCard chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata}/>
+              <ChartCard chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata} />
               : null))}
         </Row>
       </div>

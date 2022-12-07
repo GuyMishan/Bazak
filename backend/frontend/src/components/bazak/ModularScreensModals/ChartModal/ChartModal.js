@@ -208,22 +208,55 @@ const ChartModal = (props) => {
       flag = false;
     }
 
-    // if (((unitsfilterarray.length==0))) {
-    //   ErrorReason += ", יחידות לא מוגדרות"
-    //   flag = false;
-    // }
+    if (((unitsfilterarray.length > 0))) {
+      let tempflag1 = true;
+      for (let i = 0; i < unitsfilterarray.length; i++) {
+        if (user.role == '1') {
 
-    // if (((cartypesfilterarray.length==0))) {
-    //   ErrorReason += ", כלים לא מוגדרים"
-    //   flag = false;
-    // }
+        } else if (user.role == '2') {
+          if (!unitsfilterarray[i].gdod) {
+            tempflag1 = false;
+          }
+        } else if (user.role == '3') {
+          if (!unitsfilterarray[i].hativa) {
+            tempflag1 = false;
+          }
+        }
+        else if (user.role == '4') {
+          if (!unitsfilterarray[i].ogda) {
+            tempflag1 = false;
+          }
+        } else if (user.role == '0') {
+          if (!unitsfilterarray[i].pikod) {
+            tempflag1 = false;
+          }
+        }
+      }
+      if (tempflag1 == false) {
+        ErrorReason += ", יחידות לא מוגדרות כראוי"
+        flag = false;
+      }
+    }
 
-    if (((chartdata.stand == undefined) || (chartdata.stand.length==0))) {
+    if (((cartypesfilterarray.length > 0))) {
+      let tempflag2 = true;
+      for (let i = 0; i < cartypesfilterarray.length; i++) {
+        if (!cartypesfilterarray[i].magadal) {
+          tempflag2 = false;
+        }
+      }
+      if (tempflag2 == false) {
+        ErrorReason += ", כלים לא מוגדרים כראוי"
+        flag = false;
+      }
+    }
+
+    if (((chartdata.stand == undefined) || (chartdata.stand.length == 0))) {
       ErrorReason += ", מעמד רכבים לא מוגדר"
       flag = false;
     }
 
-    if (((chartdata.status == undefined) || (chartdata.status.length==0))) {
+    if (((chartdata.status == undefined) || (chartdata.status.length == 0))) {
       ErrorReason += ", סטאטוס רכבים לא מוגדר"
       flag = false;
     }
@@ -245,47 +278,47 @@ const ChartModal = (props) => {
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
 
-  if(user.gdodid){
-    let tempunitsfilterarray= []
-    let tempobject = {};
-    tempobject.id = generate();
-    tempobject['gdod'] = user.gdodid;
-    tempunitsfilterarray.push(tempobject);
-    tempchartdata.units = tempunitsfilterarray;
-  }
-  else{
-    let tempunitsfilterarray = unitsfilterarray;
-    let tempunitsfilterarray2 = [];
-    let lastUnitKey;
-    let lastUnitValue;
-    for (let i = 0; i < tempunitsfilterarray.length; i++) {
+    if (user.gdodid) {
+      let tempunitsfilterarray = []
       let tempobject = {};
-      tempobject.id = tempunitsfilterarray[i].id;
-      if(tempunitsfilterarray[i].pikod){
-        lastUnitKey = 'pikod'
-        lastUnitValue = tempunitsfilterarray[i].pikod
-      }
-
-      if(tempunitsfilterarray[i].ogda){
-        lastUnitKey = 'ogda'
-        lastUnitValue = tempunitsfilterarray[i].ogda
-      }
-
-      if(tempunitsfilterarray[i].hativa){
-        lastUnitKey = 'hativa'
-        lastUnitValue = tempunitsfilterarray[i].hativa
-      }
-
-      if(tempunitsfilterarray[i].gdod){
-        lastUnitKey = 'gdod'
-        lastUnitValue = tempunitsfilterarray[i].gdod
-      }
-
-      tempobject[lastUnitKey] = lastUnitValue;
-      tempunitsfilterarray2.push(tempobject);
+      tempobject.id = generate();
+      tempobject['gdod'] = user.gdodid;
+      tempunitsfilterarray.push(tempobject);
+      tempchartdata.units = tempunitsfilterarray;
     }
-    tempchartdata.units = tempunitsfilterarray2;
-  }
+    else {
+      let tempunitsfilterarray = unitsfilterarray;
+      let tempunitsfilterarray2 = [];
+      let lastUnitKey;
+      let lastUnitValue;
+      for (let i = 0; i < tempunitsfilterarray.length; i++) {
+        let tempobject = {};
+        tempobject.id = tempunitsfilterarray[i].id;
+        if (tempunitsfilterarray[i].pikod) {
+          lastUnitKey = 'pikod'
+          lastUnitValue = tempunitsfilterarray[i].pikod
+        }
+
+        if (tempunitsfilterarray[i].ogda) {
+          lastUnitKey = 'ogda'
+          lastUnitValue = tempunitsfilterarray[i].ogda
+        }
+
+        if (tempunitsfilterarray[i].hativa) {
+          lastUnitKey = 'hativa'
+          lastUnitValue = tempunitsfilterarray[i].hativa
+        }
+
+        if (tempunitsfilterarray[i].gdod) {
+          lastUnitKey = 'gdod'
+          lastUnitValue = tempunitsfilterarray[i].gdod
+        }
+
+        tempobject[lastUnitKey] = lastUnitValue;
+        tempunitsfilterarray2.push(tempobject);
+      }
+      tempchartdata.units = tempunitsfilterarray2;
+    }
 
     let tempcartypesfilterarray = cartypesfilterarray;
     let tempcartypesfilterarray2 = [];
@@ -294,22 +327,22 @@ const ChartModal = (props) => {
     for (let i = 0; i < tempcartypesfilterarray.length; i++) {
       let tempobject = {};
       tempobject.id = tempcartypesfilterarray[i].id;
-      if(tempcartypesfilterarray[i].magadal){
+      if (tempcartypesfilterarray[i].magadal) {
         lastCarKey = 'magadal'
         lastCarValue = tempcartypesfilterarray[i].magadal
       }
 
-      if(tempcartypesfilterarray[i].magad){
+      if (tempcartypesfilterarray[i].magad) {
         lastCarKey = 'magad'
         lastCarValue = tempcartypesfilterarray[i].magad
       }
 
-      if(tempcartypesfilterarray[i].mkabaz){
+      if (tempcartypesfilterarray[i].mkabaz) {
         lastCarKey = 'mkabaz'
         lastCarValue = tempcartypesfilterarray[i].mkabaz
       }
 
-      if(tempcartypesfilterarray[i].makat){
+      if (tempcartypesfilterarray[i].makat) {
         lastCarKey = 'makat'
         lastCarValue = tempcartypesfilterarray[i].makat
       }
@@ -355,26 +388,26 @@ const ChartModal = (props) => {
     for (let i = 0; i < tempunitsfilterarray.length; i++) {
       let tempobject = {};
       tempobject.id = tempunitsfilterarray[i].id;
-      if(tempunitsfilterarray[i].pikod){
+      if (tempunitsfilterarray[i].pikod) {
         lastUnitKey = 'pikod'
         lastUnitValue = tempunitsfilterarray[i].pikod
       }
 
-      if(tempunitsfilterarray[i].ogda){
+      if (tempunitsfilterarray[i].ogda) {
         lastUnitKey = 'ogda'
         lastUnitValue = tempunitsfilterarray[i].ogda
       }
 
-      if(tempunitsfilterarray[i].hativa){
+      if (tempunitsfilterarray[i].hativa) {
         lastUnitKey = 'hativa'
         lastUnitValue = tempunitsfilterarray[i].hativa
       }
 
-      if(tempunitsfilterarray[i].gdod){
+      if (tempunitsfilterarray[i].gdod) {
         lastUnitKey = 'gdod'
         lastUnitValue = tempunitsfilterarray[i].gdod
       }
-      
+
       tempobject[lastUnitKey] = lastUnitValue;
       tempunitsfilterarray2.push(tempobject);
     }
@@ -387,22 +420,22 @@ const ChartModal = (props) => {
     for (let i = 0; i < tempcartypesfilterarray.length; i++) {
       let tempobject = {};
       tempobject.id = tempcartypesfilterarray[i].id;
-      if(tempcartypesfilterarray[i].magadal){
+      if (tempcartypesfilterarray[i].magadal) {
         lastCarKey = 'magadal'
         lastCarValue = tempcartypesfilterarray[i].magadal
       }
 
-      if(tempcartypesfilterarray[i].magad){
+      if (tempcartypesfilterarray[i].magad) {
         lastCarKey = 'magad'
         lastCarValue = tempcartypesfilterarray[i].magad
       }
 
-      if(tempcartypesfilterarray[i].mkabaz){
+      if (tempcartypesfilterarray[i].mkabaz) {
         lastCarKey = 'mkabaz'
         lastCarValue = tempcartypesfilterarray[i].mkabaz
       }
 
-      if(tempcartypesfilterarray[i].makat){
+      if (tempcartypesfilterarray[i].makat) {
         lastCarKey = 'makat'
         lastCarValue = tempcartypesfilterarray[i].makat
       }
@@ -496,12 +529,12 @@ const ChartModal = (props) => {
 
           {/* unitsfilterarray */}
           {!user.gdodid ?
-          <Row style={{ padding: '0px' }}>
-            <Col style={{ display: 'flex', justifyContent: 'right', paddingTop: '15px', paddingRight: '0px' }}>
-              <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setUnitsfilterarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף יחידה</Button>
-            </Col>
-          </Row>
-          :
+            <Row style={{ padding: '0px' }}>
+              <Col style={{ display: 'flex', justifyContent: 'right', paddingTop: '15px', paddingRight: '0px' }}>
+                <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setUnitsfilterarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף יחידה</Button>
+              </Col>
+            </Row>
+            :
             null
           }
 
@@ -511,7 +544,7 @@ const ChartModal = (props) => {
             )
           })}
           {/* unitsfilterarray */}
-            
+
 
           {/* cartypesfilterarray */}
           <Row style={{ padding: '0px' }}>
@@ -530,12 +563,12 @@ const ChartModal = (props) => {
           <Row style={{ padding: '0px' }}>
             <Col style={{ paddingRight: '0px', justifyContent: 'right', alignContent: 'right', textAlign: 'right' }} xs={12} md={6}>
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד</div>
-              <NormalAnimatedMultiSelect data={possiblestands} handleChange2={handleChange8} name={'stand'} val={chartdata.stand}/>
+              <NormalAnimatedMultiSelect data={possiblestands} handleChange2={handleChange8} name={'stand'} val={chartdata.stand} />
             </Col>
 
             <Col style={{ paddingRight: '0px', justifyContent: 'right', alignContent: 'right', textAlign: 'right' }} xs={12} md={6}>
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>סטאטוס כלים</div>
-              <NormalAnimatedMultiSelect data={possiblestatusses} handleChange2={handleChange8} name={'status'} val={chartdata.status}/>
+              <NormalAnimatedMultiSelect data={possiblestatusses} handleChange2={handleChange8} name={'status'} val={chartdata.status} />
             </Col>
           </Row>
 
