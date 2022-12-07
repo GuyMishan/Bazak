@@ -19,16 +19,19 @@ function BazakNavbarTitle(props) {
     }
 
     useEffect(() => {
+        console.log(props.user.mainscreenid)
         if (props.match.params.unittype != undefined && props.match.params.unitid != undefined)
             CalculateText()
     }, [props.match])
 
     return (
         text ?
-            props.match.path.substring(1, 17) != "modularchartpage" && (props.match.path.substring(1, 10) == "dashboard" && (!props.user.mainscreenid || props.user.mainscreenid==null))?
-                props.theme == "white-content" ?
-                    <h2 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {text}</h2>
-                    : <h2 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {text}</h2>
+            props.match.path.substring(1, 17) != "modularchartpage" ?
+                props.match.path.substring(1, 10) != "dashboard" || (props.match.path.substring(1, 10) == "dashboard" && (props.user.mainscreenid==undefined && props.user.mainscreenid==null)) ?
+                    props.theme == "white-content" ?
+                        <h2 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {text}</h2>
+                        : <h2 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {text}</h2>
+                    : null
                 : null
             : null
     );
