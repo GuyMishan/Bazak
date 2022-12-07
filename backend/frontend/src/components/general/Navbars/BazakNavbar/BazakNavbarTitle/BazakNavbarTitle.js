@@ -19,7 +19,6 @@ function BazakNavbarTitle(props) {
     }
 
     useEffect(() => {
-        console.log(props.user.mainscreenid)
         if (props.match.params.unittype != undefined && props.match.params.unitid != undefined)
             CalculateText()
     }, [props.match])
