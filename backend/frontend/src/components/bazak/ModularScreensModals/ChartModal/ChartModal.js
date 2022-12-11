@@ -102,7 +102,7 @@ const ChartModal = (props) => {
     }
   }
 
-  async function importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType) {
+ async function importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType) {
     if (targetUnitId == unitIdByUserRole() && (unitTypeByUnitRole(firstUnitType) < user.role)) {
       return true;
     }else{
@@ -157,7 +157,6 @@ const ChartModal = (props) => {
     }
   }
   async function getTargetParentId(targetUnitId, targetUnitType) {
-    try {
         let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
         if (targetUnitType == 'gdod') {
             return response.data.hativa;
@@ -168,10 +167,6 @@ const ChartModal = (props) => {
         if (targetUnitType == 'ogda') {
             return response.data.pikod;
         }
-    } catch {
-        history.push(`/signin`);
-        return true;
-    }
   }
 
   function handleChange(evt) {
@@ -351,6 +346,7 @@ const ChartModal = (props) => {
       tempcartypesfilterarray2.push(tempobject);
     }
     tempchartdata.tenetree = tempcartypesfilterarray2;
+    console.log(tempchartdata)
     let response = await axios.post(`http://localhost:8000/api/modularscreens/chart`, tempchartdata)
       .then(response => {
         toast.success(`תרשים נשמר בהצלחה`);
