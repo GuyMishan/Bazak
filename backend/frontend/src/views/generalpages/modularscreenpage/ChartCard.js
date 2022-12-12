@@ -294,129 +294,28 @@ const ChartCard = (props) => { //instate - zamin/kashir
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader style={{ padding: '0px' }}>
                         <div style={{ textAlign: 'left' }}>
-                            {props.theme == "white-content" ?
-                                <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.chart.name}</h3>
-                                : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>
-                            }
+                        <div style={{ textAlign: 'right' }}>
+                                {props.theme == "white-content" ?
+                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                }
+                            </div>
                             <div style={{ textAlign: 'left', height: '0px' }}>
-                                <button className='btn-new-delete' style={{ padding: '0px', marginTop: '-44px' }} onClick={clickDelete}><img src={deletepic} style={{ height: "40px" }} ></img></button>
+                                <button className='btn-new-delete' style={{ padding: '0px', marginTop: '-44px',borderRadius: '50%' }} onClick={clickDelete}><img src={deletepic} style={{ height: "40px",padding: '3px' }} ></img></button>
                             </div>
-                            <div style={{ textAlign: 'right', height: '0px' }}>
+                            {/* <div style={{ textAlign: 'right', height: '0px' }}>
                                 <button className='btn-new' style={{ padding: '0px', marginTop: '-44px' }} onClick={props.Toggle}><img src={editpic} style={{ height: "40px" }} ></img></button>
-                            </div>
+                            </div> */}
                         </div>
                     </CardHeader>
                     <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
-                        <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                            {(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 60 ?
-                                <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
-                                    {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
-                                        root: {},
-                                        path: {
-                                            stroke: `#ff2128`,
-                                            strokeLinecap: 'butt',
-                                            transition: 'stroke-dashoffset 0.5s ease 0s',
-                                        },
-                                        trail: {
-                                            stroke: 'rgb(141 141 141 / 30%)',
-                                            strokeLinecap: 'butt',
-                                            transform: 'rotate(0.25turn)',
-                                            transformOrigin: 'center center',
-                                        },
-                                        text: {
-                                            fill: '#ff2128',
-                                            fontSize: '18px',
-                                        },
-                                        background: {
-                                            fill: '#3e98c7',
-                                        },
-                                    }}>
-                                        <div>
-                                            <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
-                                        </div>
-                                        <div style={{ fontSize: 12, marginTop: -2 }}>
-                                            <h5 style={{ margin: '0px' }}>{cardata_by_chart_instate + '/' + cardata_by_chart}</h5>
-                                        </div>
-                                    </CircularProgressbarWithChildren>}
-                                </ProgressProvider>
-                                : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 80 ?
-                                    <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
-                                        {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
-                                            root: {},
-                                            path: {
-                                                stroke: `#ffca3a`,
-                                                strokeLinecap: 'butt',
-                                                transition: 'stroke-dashoffset 0.5s ease 0s',
-                                            },
-                                            trail: {
-                                                stroke: 'rgb(141 141 141 / 30%)',
-                                                strokeLinecap: 'butt',
-                                                transform: 'rotate(0.25turn)',
-                                                transformOrigin: 'center center',
-                                            },
-                                            text: {
-                                                fill: '#ffca3a',
-                                                fontSize: '18px',
-                                            },
-                                            background: {
-                                                fill: '#3e98c7',
-                                            },
-                                        }}>
-                                            <div>
-                                                <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
-                                            </div>
-                                            <div style={{ fontSize: 12, marginTop: -2 }}>
-                                                <h5 style={{ margin: '0px' }}>{cardata_by_chart_instate + '/' + cardata_by_chart}</h5>
-                                            </div>
-                                        </CircularProgressbarWithChildren>}
-                                    </ProgressProvider>
-                                    : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) <= 100 ?
-                                        <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
-                                            {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
-                                                root: {},
-                                                path: {
-                                                    stroke: `#8ac926`,
-                                                    strokeLinecap: 'butt',
-                                                    transition: 'stroke-dashoffset 0.5s ease 0s',
-                                                },
-                                                trail: {
-                                                    stroke: 'rgb(141 141 141 / 30%)',
-                                                    strokeLinecap: 'butt',
-                                                    transform: 'rotate(0.25turn)',
-                                                    transformOrigin: 'center center',
-                                                },
-                                                text: {
-                                                    fill: '#8ac926',
-                                                    fontSize: '18px',
-                                                },
-                                                background: {
-                                                    fill: '#3e98c7',
-                                                },
-                                            }}>
-                                                <div>
-                                                    <h2 style={{ margin: '0px' }}>{`${value.toFixed(0)}%`}</h2>
-                                                </div>
-                                                <div style={{ fontSize: 12, marginTop: -2 }}>
-                                                    <h5 style={{ margin: '0px' }}>{cardata_by_chart_instate + '/' + cardata_by_chart}</h5>
-                                                </div>
-                                            </CircularProgressbarWithChildren>}
-                                        </ProgressProvider>
-                                        : null}
+                        <div style={{ marginLeft: 'auto', marginRight: 'auto' }}>
+                                <button className='btn-new' style={{ padding: '5px' }} onClick={props.Toggle}> ערוך <img src={editpic} style={{ height: "40px",padding: '3px' }} ></img></button>
                         </div>
-
-                        {collapseOpen ?
-                            <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} עומדים על ח"ח: {cardata_by_chart_hhstand}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                            </div>
-                            : null}
                     </CardBody>
+                    <CardFooter>
+
+                    </CardFooter>
                 </Card>
             </div>
     );

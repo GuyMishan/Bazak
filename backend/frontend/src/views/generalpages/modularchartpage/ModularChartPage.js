@@ -201,7 +201,7 @@ function ModularChartPage(props) {
 
   return (
     <>
-      {/* <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} /> */}
+      <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} />
 
       <div>
         <div style={{ textAlign: 'right', marginBottom: '20px' }}>
@@ -212,16 +212,15 @@ function ModularChartPage(props) {
               : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {chartdata.name}</h1>}
           </div>
 
-          {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך</button> */}
-        </div>
-
-        <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Row>
-            <Col xs={12} md={4}>
-              <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-            </Col>
-            <Col xs={12} md={8}>
-            </Col>
+          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+            <>
+              <Col xs={12} md={8}>
+                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך תרשים</button>
+              </Col>
+              <Col xs={12} md={4}>
+                <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+              </Col>
+            </>
           </Row>
         </div>
 

@@ -361,14 +361,20 @@ const ChartModal = (props) => {
     while (flag) {
       tempgeneratedid = shortid.generate();
       tempgeneratedid = tempgeneratedid.substring(0, 5);
-      tempgeneratedid = 'ch-' + tempgeneratedid;
-      let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempgeneratedid}`)
-      if (response.data.length == 0) {
-        flag = false;
-        return tempgeneratedid;
-      }
-      else {
+      if(tempgeneratedid.charAt(0)=='@' || tempgeneratedid.charAt(0)=='$')
+      {
         flag = true;
+      }
+      else{
+        tempgeneratedid = 'ch-' + tempgeneratedid;
+        let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempgeneratedid}`)
+        if (response.data.length == 0) {
+          flag = false;
+          return tempgeneratedid;
+        }
+        else {
+          flag = true;
+        }
       }
     }
   }
@@ -482,7 +488,7 @@ const ChartModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '30%', maxWidth: '40%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '60%', maxWidth: '70%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen
@@ -498,14 +504,14 @@ const ChartModal = (props) => {
         }
         <div>
           <Row style={{ padding: '0px' }}>
-            <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא תרשים: </div>
-              <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} />
-            </Col>
-            <Col xs={12} md={4} style={{ justifyContent: 'center' }}>
-              <button className='btn-new-blue' style={{ margin: '0px', marginTop: '32px' }} onClick={ImportChartfunc}>חפש תרשים</button>
-            </Col>
-          </Row>
+              <Col style={{ padding: '0px' }} xs={12} md={4}>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא תרשים: </div>
+                <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} />
+              </Col>
+              <Col xs={12} md={4} style={{ textAlign: 'right' }}>
+              <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש תרשים</button>
+              </Col>
+            </Row>
 
           {chartdata.chartid ?
             <Row style={{ padding: '0px' }}>
