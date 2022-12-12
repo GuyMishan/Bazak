@@ -201,7 +201,7 @@ function ModularChartPage(props) {
 
   return (
     <>
-      <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} />
+      {/* <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} /> */}
 
       <div>
         <div style={{ textAlign: 'right', marginBottom: '20px' }}>
@@ -215,7 +215,7 @@ function ModularChartPage(props) {
           <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
             <>
               <Col xs={12} md={8}>
-                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך תרשים</button>
+                {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך תרשים</button> */}
               </Col>
               <Col xs={12} md={4}>
                 <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />

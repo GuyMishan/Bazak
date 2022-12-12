@@ -288,7 +288,66 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 : null}
                         </CardBody>
                     </Card>
-                </div> : null
+                </div> : 
+                <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px' }}>
+                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+                    <CardHeader style={{ padding: '0px' }}>
+                        <div style={{ textAlign: 'right' }}>
+                            {props.theme == "white-content" ?
+                                <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                            }
+                        </div>
+                    </CardHeader>
+                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                        <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
+                                <ProgressProvider valueStart={0} valueEnd={0}>
+                                    {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
+                                        root: {},
+                                        path: {
+                                            stroke: `#ff2128`,
+                                            strokeLinecap: 'butt',
+                                            transition: 'stroke-dashoffset 0.5s ease 0s',
+                                        },
+                                        trail: {
+                                            stroke: 'rgb(141 141 141 / 30%)',
+                                            strokeLinecap: 'butt',
+                                            transform: 'rotate(0.25turn)',
+                                            transformOrigin: 'center center',
+                                        },
+                                        text: {
+                                            fill: '#ff2128',
+                                            fontSize: '18px',
+                                        },
+                                        background: {
+                                            fill: '#3e98c7',
+                                        },
+                                    }}>
+                                        <div>
+                                            <h2 style={{ margin: '0px' }}>{`${0}%`}</h2>
+                                        </div>
+                                        <div style={{ fontSize: 12, marginTop: -2 }}>
+                                            <h5 style={{ margin: '0px' }}>{0 + '/' + 0}</h5>
+                                        </div>
+                                    </CircularProgressbarWithChildren>}
+                                </ProgressProvider>
+                        </div>
+
+                        {collapseOpen ?
+                            <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
+                                <h6>{props.chart.name} בטיפול: {0}</h6>
+                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                                <h6>{props.chart.name} חריגי טיפול:  {0}</h6>
+                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                                <h6>{props.chart.name} בתקלות מזדמנות: {0}</h6>
+                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                                <h6>{props.chart.name} עומדים על ח"ח: {0}</h6>
+                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                            </div>
+                            : null}
+                    </CardBody>
+                </Card>
+            </div>
             :
             <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px' }}>
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
