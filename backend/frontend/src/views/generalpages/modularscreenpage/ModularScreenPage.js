@@ -156,21 +156,25 @@ function ModularScreenPage(props) {
               : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
           </div>
 
-          {mode == 'normal' ?
-            <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
-            : <>
-              <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
-              <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglechartmodal(undefined)}>צור תרשים</button>
-            </>}
-        </div>
-
-        <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-          <Row>
-            <Col xs={12} md={4}>
-              <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-            </Col>
-            <Col xs={12} md={8}>
-            </Col>
+          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+            {mode == 'normal' ?
+              <>
+                <Col xs={12} md={8}>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                </Col>
+              </>
+              : <>
+                <Col xs={12} md={8}>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglechartmodal(undefined)}>צור תרשים</button>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                </Col>
+              </>}
           </Row>
         </div>
 

@@ -57,10 +57,10 @@ const ScreenModal = (props) => {
           tempscreen.screenid = screendata.screenid;
         }
         await findDependedCharts(tempscreen)
-        .then(() => {
-          setScreenData(tempscreen);
-          toast.success(`מסך נמצא`);
-        })
+          .then(() => {
+            setScreenData(tempscreen);
+            toast.success(`מסך נמצא`);
+          })
       }
       else {//מסך לא נמצא
         toast.error(`מסך לא נמצא`);
@@ -88,7 +88,6 @@ const ScreenModal = (props) => {
               delete response.data[i].screenid;
               response.data[i].screenid = tempscreenid;
               response.data[i].chartid = await GenerateChartid();
-              if(user.role != '0'){
               for(let j = 0 ; j<response.data[i].units.length; j++){
                 if(response.data[i].units[j].gdod){
                   var targetUnitId = response.data[i].units[j].gdod
@@ -108,7 +107,6 @@ const ScreenModal = (props) => {
                   j=j-1;
                 }
               }
-            }
               tempchartsArray.push(response.data[i]);
             }
             setChartDataArray(tempchartsArray);
@@ -123,14 +121,19 @@ const ScreenModal = (props) => {
     while (flag) {
       tempgeneratedid = shortid.generate();
       tempgeneratedid = tempgeneratedid.substring(0, 5);
-      tempgeneratedid = 'ch-' + tempgeneratedid;
-      let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempgeneratedid}`)
-      if (response.data.length == 0) {
-        flag = false;
-        return tempgeneratedid;
+      if (tempgeneratedid.charAt(0) == '@' || tempgeneratedid.charAt(0) == '$') {
+        flag = true;
       }
       else {
-        flag = true;
+        tempgeneratedid = 'ch-' + tempgeneratedid;
+        let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempgeneratedid}`)
+        if (response.data.length == 0) {
+          flag = false;
+          return tempgeneratedid;
+        }
+        else {
+          flag = true;
+        }
       }
     }
   }
@@ -138,24 +141,24 @@ const ScreenModal = (props) => {
   async function importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType) {
     if (targetUnitId == unitIdByUserRole() && (unitTypeByUnitRole(firstUnitType) < user.role)) {
       return true;
-    }else{
+    } else {
       if (targetUnitType != 'pikod') {
         targetUnitId = await getTargetParentId(targetUnitId, targetUnitType);
         if (targetUnitType == 'gdod') {
-            targetUnitType = 'hativa';
+          targetUnitType = 'hativa';
         }
         else {
-            if (targetUnitType == 'hativa') {
-                targetUnitType = 'ogda';
+          if (targetUnitType == 'hativa') {
+            targetUnitType = 'ogda';
+          }
+          else {
+            if (targetUnitType == 'ogda') {
+              targetUnitType = 'pikod';
             }
-            else {
-                if (targetUnitType == 'ogda') {
-                    targetUnitType = 'pikod';
-                }
-            }
+          }
         }
         return importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType);
-      }else{
+      } else {
         return false;
       }
     }
@@ -163,43 +166,43 @@ const ScreenModal = (props) => {
 
   function unitIdByUserRole() {
     if (user.role === "1") {
-        return user.gdodid;
+      return user.gdodid;
     }
     if (user.role === "2") {
-        return user.hativaid;
+      return user.hativaid;
     }
     if (user.role === "3") {
-        return user.ogdaid;
+      return user.ogdaid;
     }
     if (user.role === "4") {
-        return user.pikodid;
+      return user.pikodid;
     }
   }
   function unitTypeByUnitRole(targetUnitType) {
     if (targetUnitType == "gdod") {
-        return "1";
+      return "1";
     }
     if (targetUnitType == "hativa") {
-        return "2";
+      return "2";
     }
     if (targetUnitType == "ogda") {
-        return "3";
+      return "3";
     }
     if (targetUnitType == "pikod") {
-        return "4";
+      return "4";
     }
   }
   async function getTargetParentId(targetUnitId, targetUnitType) {
-        let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
-        if (targetUnitType == 'gdod') {
-            return response.data.hativa;
-        }
-        if (targetUnitType == 'hativa') {
-            return response.data.ogda;
-        }
-        if (targetUnitType == 'ogda') {
-            return response.data.pikod;
-        }
+    let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
+    if (targetUnitType == 'gdod') {
+      return response.data.hativa;
+    }
+    if (targetUnitType == 'hativa') {
+      return response.data.ogda;
+    }
+    if (targetUnitType == 'ogda') {
+      return response.data.pikod;
+    }
   }
 
 
@@ -240,16 +243,16 @@ const ScreenModal = (props) => {
 
   const createNewScreen = async () => {
     let tempscreendata = { ...screendata }
-    if(!screendata.screenid){
+    if (!screendata.screenid) {
       let tempscreenid = await GenerateScreenid();
       tempscreendata.screenid = tempscreenid;
     }
-    else{
+    else {
       for (let i = 0; i < chartdataarray.length; i++) {
         let response2 = await axios.post(`http://localhost:8000/api/modularscreens/chart`, chartdataarray[i])
-        .then(response2 => {
-          toast.success(`תרשים נשמר בהצלחה`);
-        })
+          .then(response2 => {
+            toast.success(`תרשים נשמר בהצלחה`);
+          })
         setChartDataArray([]);
       }
       tempscreendata.screenid = screendata.screenid;
@@ -267,37 +270,42 @@ const ScreenModal = (props) => {
     while (flag) {
       tempgeneratedid = shortid.generate();
       tempgeneratedid = tempgeneratedid.substring(0, 5);
-      tempgeneratedid = 'sc-' + tempgeneratedid;
-      let response = await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${tempgeneratedid}`)
-      if (response.data.length == 0) {
-        flag = false;
-        return tempgeneratedid;
+      if (tempgeneratedid.charAt(0) == '@' || tempgeneratedid.charAt(0) == '$') {
+        flag = true;
       }
       else {
-        flag = true;
+        tempgeneratedid = 'sc-' + tempgeneratedid;
+        let response = await axios.get(`http://localhost:8000/api/modularscreens/screenbyscreenid/${tempgeneratedid}`)
+        if (response.data.length == 0) {
+          flag = false;
+          return tempgeneratedid;
+        }
+        else {
+          flag = true;
+        }
       }
     }
   }
 
   async function UpdateScreen() {
     var tempscreenid = props.screenid;
-    if(chartdataarray.length>0){
+    if (chartdataarray.length > 0) {
       for (let i = 0; i < chartdataarray.length; i++) {
         let response2 = await axios.post(`http://localhost:8000/api/modularscreens/chart`, chartdataarray[i])
-        .then(response2 => {
-          toast.success(`תרשים נשמר בהצלחה`);
-        })
+          .then(response2 => {
+            toast.success(`תרשים נשמר בהצלחה`);
+          })
         setChartDataArray([]);
       }
     }
     let tempscreendata = { ...screendata }
     tempscreendata.userpersonalnumber = user.personalnumber;
     let result = await axios.put(`http://localhost:8000/api/modularscreens/screen/${tempscreenid}`, tempscreendata)
-    .then(respone=>{
-      toast.success(`מסך עודכן בהצלחה`);
-      props.init();
-      props.ToggleForModal();
-    })
+      .then(respone => {
+        toast.success(`מסך עודכן בהצלחה`);
+        props.init();
+        props.ToggleForModal();
+      })
   }
 
   const loadscreendata = async () => {
@@ -332,7 +340,7 @@ const ScreenModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '30%', maxWidth: '40%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '50%', maxWidth: '60%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen
@@ -340,62 +348,64 @@ const ScreenModal = (props) => {
       size=""
       toggle={props.Toggle}>
       <ModalBody>
-        {props.screenid ?
-          <h1 style={{ textAlign: 'center' }}>עריכת מסך</h1>
-          :
-          <h1 style={{ textAlign: 'center' }}>יצירת מסך</h1>
-        }
-        <div>
+        <Container>
+          {props.screenid ?
+            <h1 style={{ textAlign: 'center' }}>עריכת מסך</h1>
+            :
+            <h1 style={{ textAlign: 'center' }}>יצירת מסך</h1>
+          }
+          <div>
 
-          <Row style={{ padding: '0px' }}>
-            <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא מסך: </div>
-              <Input type="text" value={screenidimport} onChange={handleChangeScreenidimport} />
-            </Col>
-            <Col xs={12} md={4} style={{ justifyContent: 'center' }}>
-              <button className='btn-new-blue' style={{ margin: '0px', marginTop: '32px' }} onClick={ImportScreenfunc}>חפש מסך</button>
-            </Col>
-          </Row>
-
-          {screendata.screenid ?
             <Row style={{ padding: '0px' }}>
-              <Col style={{ padding: '0px' }} xs={12} md={12}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך:  {screendata.screenid}</div>
+              <Col style={{ padding: '0px' }} xs={12} md={4}>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא מסך: </div>
+                <Input type="text" value={screenidimport} onChange={handleChangeScreenidimport} />
+              </Col>
+              <Col xs={12} md={4} style={{ textAlign: 'right' }}>
+                <button className='btn-new-blue' style={{ margin: '0px', marginTop: '34px' }} onClick={ImportScreenfunc}>חפש מסך</button>
               </Col>
             </Row>
-            :
-            null}
 
-          <Row style={{ padding: '0px' }}>
-            <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
-              <Input type="text" name="name" value={screendata.name} onChange={handleChange} />
-            </Col>
-          </Row>
+            {screendata.screenid ?
+              <Row style={{ padding: '0px' }}>
+                <Col style={{ padding: '0px' }} xs={12} md={12}>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך:  {screendata.screenid}</div>
+                </Col>
+              </Row>
+              :
+              null}
 
-          <Row style={{ padding: '0px' }}>
-            <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
-              <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
-                <option value={'בחר'}>בחר</option>
-                <option value={'6'}>6</option>
-                <option value={'5'}>5</option>
-                <option value={'4'}>4</option>
-                <option value={'3'}>3</option>
-                <option value={'2'}>2</option>
-                <option value={'1'}>1</option>
-              </Input>
-            </Col>
-          </Row>
+            <Row style={{ padding: '0px' }}>
+              <Col style={{ padding: '0px' }} xs={12} md={4}>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
+                <Input type="text" name="name" value={screendata.name} onChange={handleChange} />
+              </Col>
+            </Row>
 
-          <Row style={{ padding: '0px' }}>
-            <Col style={{ padding: '0px' }} xs={12} md={8}>
-            </Col>
-            <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <button className='btn-new-blue' style={{ margin: 'auto' }} onClick={clickSubmit}>שמור</button>
-            </Col>
-          </Row>
-        </div>
+            <Row style={{ padding: '0px' }}>
+              <Col style={{ padding: '0px' }} xs={12} md={4}>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
+                <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
+                  <option value={'בחר'}>בחר</option>
+                  <option value={'6'}>6</option>
+                  <option value={'5'}>5</option>
+                  <option value={'4'}>4</option>
+                  <option value={'3'}>3</option>
+                  <option value={'2'}>2</option>
+                  <option value={'1'}>1</option>
+                </Input>
+              </Col>
+            </Row>
+
+            <Row style={{ padding: '0px' }}>
+              <Col style={{ padding: '0px' }} xs={12} md={8}>
+              </Col>
+              <Col style={{ padding: '0px' }} xs={12} md={4}>
+                <button className='btn-new-blue' style={{ margin: 'auto' }} onClick={clickSubmit}>שמור</button>
+              </Col>
+            </Row>
+          </div>
+        </Container>
       </ModalBody>
     </Modal>
   );

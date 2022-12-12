@@ -96,7 +96,7 @@ const ModularScreensModal = (props) => {
 
   return (
     <>
-      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={()=>init()}/>
+      <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={() => init()} />
       <Modal
         style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
@@ -106,29 +106,31 @@ const ModularScreensModal = (props) => {
         size=""
         toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
-          <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
             {mode == 'normal' ?
-              <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
+              <>
+                <Col xs={12} md={8}>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                </Col>
+              </>
               : <>
-                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
-                <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglescreenmodal(undefined)}>צור מסך</button>
+                <Col xs={12} md={8}>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglescreenmodal(undefined)}>צור מסך</button>
+                </Col>
+                <Col xs={12} md={4}>
+                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                </Col>
               </>}
-          </div>
-
-          <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-            <Row>
-              <Col xs={12} md={4}>
-                <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-              </Col>
-              <Col xs={12} md={8}>
-              </Col>
-            </Row>
-          </div>
+          </Row>
 
           <Row>
             {filteredscreens.map((screen, i) => (
               screen ?
-                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={()=>init()} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} Togglemodularscreensmodal={props.Togglemodularscreensmodal}/>
+                <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={() => init()} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} Togglemodularscreensmodal={props.Togglemodularscreensmodal} />
                 : null))}
           </Row>
 
