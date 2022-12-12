@@ -24,7 +24,7 @@ import LatestUpdateDateComponent from 'components/bazak/LatestUpdateDateComponen
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
-import ModularChartPage from '../modularchartspage/ModularChartPage';
+import ModularScreenPage from '../modularscreenpage/ModularScreenPage';
 
 function DashboardPage({ match, theme }) {
   //user
@@ -184,7 +184,7 @@ function DashboardPage({ match, theme }) {
       :
       user.mainscreenid && user.mainscreenid != null ?
         <>
-        <ModularChartPage screenid={user.mainscreenid} theme={theme}/>
+        <ModularScreenPage screenid={user.mainscreenid} theme={theme}/>
         </>
         :
         <div>

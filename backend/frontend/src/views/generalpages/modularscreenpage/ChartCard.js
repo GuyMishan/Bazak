@@ -35,6 +35,8 @@ import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from "components/general/CircularProgressBarAnimation/ProgressProvider";
 import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
+import arrowhead from "assets/img/arrowhead.png";
+import arrowhead_white from "assets/img/arrowhead_white.png";
 
 const ChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart, setCardata_by_chart] = useState(0)
@@ -169,8 +171,8 @@ const ChartCard = (props) => { //instate - zamin/kashir
                         <CardHeader style={{ padding: '0px' }}>
                             <div style={{ textAlign: 'right' }}>
                                 {props.theme == "white-content" ?
-                                    <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.chart.name}</h3>
-                                    : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>
+                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
                                 }
                             </div>
                         </CardHeader>

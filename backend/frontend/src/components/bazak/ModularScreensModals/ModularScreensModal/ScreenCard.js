@@ -61,7 +61,7 @@ const ScreenCard = (props) => {
 
     const linkandclosemodal = async () => {
         props.Togglemodularscreensmodal();
-        history.push(`/modularchartpage/${props.screenid}/${unittype}/${unitid}/magadal/0`);
+        history.push(`/modularscreenpage/${props.screenid}`);
     }
 
     const deleteDependedCharts = async (tempchart) => {
@@ -99,13 +99,11 @@ const ScreenCard = (props) => {
     return (
         props.mode == 'normal' ?
             <Col xs={12} md={3} onClick={linkandclosemodal} style={{ cursor: 'pointer' }}>
-                {/* <Link to={`/modularchartpage/${props.screenid}/${unittype}/${unitid}/magadal/0`}> */}
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
                         <h2 style={{ margin: 'auto' }}>{props.screen.name}</h2>
                     </CardBody>
                 </Card>
-                {/* </Link> */}
             </Col> :
             <Col xs={12} md={3}>
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>

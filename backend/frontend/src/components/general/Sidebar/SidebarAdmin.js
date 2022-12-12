@@ -41,6 +41,9 @@ import info_white from "assets/img/info_white.png";
 import graphpic from "assets/img/graphpic.png";
 import graphpic_white from "assets/img/graphpic_white.png";
 
+import screensicon from "assets/img/screensicon.png";
+import screensicon_white from "assets/img/screensicon_white.png";
+
 import { signout } from "auth/index";
 import history from "../../../history";
 
@@ -100,8 +103,8 @@ function SidebarAdmin(props) {
           <div style={{ padding: "1px 8px", cursor: 'pointer' }} onClick={props.Togglemodularscreensmodal}>
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
-                {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
-                  : <img src={home_white} style={{ height: "20px" }}></img>}
+                {props.theme == 'white' ? <img src={screensicon} style={{ height: "20px" }}></img>
+                  : <img src={screensicon_white} style={{ height: "20px" }}></img>}
               </Col>
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
