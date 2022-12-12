@@ -301,11 +301,8 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 }
                             </div>
                             <div style={{ textAlign: 'left', height: '0px' }}>
-                                <button className='btn-new-delete' style={{ padding: '0px', marginTop: '-44px',borderRadius: '50%' }} onClick={clickDelete}><img src={deletepic} style={{ height: "40px",padding: '3px' }} ></img></button>
+                                <button className='btn-new-delete' style={{ padding: '11px 17px',borderRadius: '50%', marginTop: '-44px' }} onClick={clickDelete}>x</button>
                             </div>
-                            {/* <div style={{ textAlign: 'right', height: '0px' }}>
-                                <button className='btn-new' style={{ padding: '0px', marginTop: '-44px' }} onClick={props.Toggle}><img src={editpic} style={{ height: "40px" }} ></img></button>
-                            </div> */}
                         </div>
                     </CardHeader>
                     <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
