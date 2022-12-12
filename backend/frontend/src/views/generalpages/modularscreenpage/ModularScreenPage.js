@@ -35,7 +35,7 @@ import ChartCard from './ChartCard';
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
 
-function ModularChartPage(props) {
+function ModularScreenPage(props) {
   //user
   const { user } = isAuthenticated()
   //screendata
@@ -185,4 +185,4 @@ function ModularChartPage(props) {
   );
 }
 
-export default withRouter(ModularChartPage);
+export default withRouter(ModularScreenPage);
