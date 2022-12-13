@@ -321,7 +321,7 @@ const UnitsFilterObject = (props) => {
                             </Col>}
                     </> : null} 
             </Row>
-            {!props.user.gdodid ?
+            {props.user.role!='1' ?
             <Button type="button" onClick={() => { props.setUnitsfilterarray(currentSpec => currentSpec.filter(x => x.id !== props.unitfilterobject.id)) }}><img src={deletepic} height='20px'></img></Button>
             : null} 
         </div>
