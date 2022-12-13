@@ -31,6 +31,7 @@ import { generate } from 'shortid'
 import { toast } from "react-toastify";
 import ChartModal from 'components/bazak/ModularScreensModals/ChartModal/ChartModal';
 import ChartCard from './ChartCard';
+import PropagateLoader from "react-spinners/PropagateLoader";
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
@@ -94,6 +95,7 @@ function ModularScreenPage(props) {
   function init() {
     getscreendata();
     getchartsbyscreen();
+    setIsdataloaded(true);
   }
 
   async function getscreendata() {
@@ -141,6 +143,11 @@ function ModularScreenPage(props) {
   }, [])
 
   return (
+    !isdataloaded ?
+    <div style={{ width: '50%', marginTop: '30%' }}>
+      <PropagateLoader color={'#ff4650'} loading={true} size={25} />
+    </div>
+    :
     <>
       {props.match.params.screenid ?
         <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />

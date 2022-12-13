@@ -52,7 +52,7 @@ const ChartModal = (props) => {
     setChartidimport(value);
   }
 
-   const ImportChartfunc = async () => {
+  const ImportChartfunc = async () => {
     let tempchartidimport = chartidimport;
     if (tempchartidimport != '') {
       let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempchartidimport}`)
@@ -67,26 +67,26 @@ const ChartModal = (props) => {
         if (chartdata.screenid) { //for update
           tempchart.screenid = chartdata.screenid;
         }
-        if(user.role != '0'){
+        if (user.role != '0') {
           var flag = true;
-          for(var i=0; i<tempchart.units.length;i++){
-             if(tempchart.units[i].gdod){
+          for (var i = 0; i < tempchart.units.length; i++) {
+            if (tempchart.units[i].gdod) {
               var targetUnitId = tempchart.units[i].gdod
-             }
-             if(tempchart.units[i].hativa){
+            }
+            if (tempchart.units[i].hativa) {
               var targetUnitId = tempchart.units[i].hativa
-             }
-             if(tempchart.units[i].ogda){
+            }
+            if (tempchart.units[i].ogda) {
               var targetUnitId = tempchart.units[i].ogda
-             }
-             if(tempchart.units[i].pikod){
+            }
+            if (tempchart.units[i].pikod) {
               var targetUnitId = tempchart.units[i].pikod
-             }
-             flag = await importHierarchyCheck(Object.keys(tempchart.units[i])[1],targetUnitId, Object.keys(tempchart.units[i])[1]);
-             if(!flag){
-               tempchart.units.splice(i, 1);
-               i=i-1;
-             }
+            }
+            flag = await importHierarchyCheck(Object.keys(tempchart.units[i])[1], targetUnitId, Object.keys(tempchart.units[i])[1]);
+            if (!flag) {
+              tempchart.units.splice(i, 1);
+              i = i - 1;
+            }
           }
         }
         setChartData(tempchart);
@@ -102,27 +102,27 @@ const ChartModal = (props) => {
     }
   }
 
- async function importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType) {
+  async function importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType) {
     if (targetUnitId == unitIdByUserRole() && (unitTypeByUnitRole(firstUnitType) < user.role)) {
       return true;
-    }else{
+    } else {
       if (targetUnitType != 'pikod') {
         targetUnitId = await getTargetParentId(targetUnitId, targetUnitType);
         if (targetUnitType == 'gdod') {
-            targetUnitType = 'hativa';
+          targetUnitType = 'hativa';
         }
         else {
-            if (targetUnitType == 'hativa') {
-                targetUnitType = 'ogda';
+          if (targetUnitType == 'hativa') {
+            targetUnitType = 'ogda';
+          }
+          else {
+            if (targetUnitType == 'ogda') {
+              targetUnitType = 'pikod';
             }
-            else {
-                if (targetUnitType == 'ogda') {
-                    targetUnitType = 'pikod';
-                }
-            }
+          }
         }
         return importHierarchyCheck(targetUnitType, targetUnitId, firstUnitType);
-      }else{
+      } else {
         return false;
       }
     }
@@ -130,43 +130,43 @@ const ChartModal = (props) => {
 
   function unitIdByUserRole() {
     if (user.role === "1") {
-        return user.gdodid;
+      return user.gdodid;
     }
     if (user.role === "2") {
-        return user.hativaid;
+      return user.hativaid;
     }
     if (user.role === "3") {
-        return user.ogdaid;
+      return user.ogdaid;
     }
     if (user.role === "4") {
-        return user.pikodid;
+      return user.pikodid;
     }
   }
   function unitTypeByUnitRole(targetUnitType) {
     if (targetUnitType == "gdod") {
-        return "1";
+      return "1";
     }
     if (targetUnitType == "hativa") {
-        return "2";
+      return "2";
     }
     if (targetUnitType == "ogda") {
-        return "3";
+      return "3";
     }
     if (targetUnitType == "pikod") {
-        return "4";
+      return "4";
     }
   }
   async function getTargetParentId(targetUnitId, targetUnitType) {
-        let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
-        if (targetUnitType == 'gdod') {
-            return response.data.hativa;
-        }
-        if (targetUnitType == 'hativa') {
-            return response.data.ogda;
-        }
-        if (targetUnitType == 'ogda') {
-            return response.data.pikod;
-        }
+    let response = await axios.get(`http://localhost:8000/api/${targetUnitType}/${targetUnitId}`)
+    if (targetUnitType == 'gdod') {
+      return response.data.hativa;
+    }
+    if (targetUnitType == 'hativa') {
+      return response.data.ogda;
+    }
+    if (targetUnitType == 'ogda') {
+      return response.data.pikod;
+    }
   }
 
   function handleChange(evt) {
@@ -273,7 +273,7 @@ const ChartModal = (props) => {
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
 
-    if (user.gdodid) {
+    if (user.role=='1') {
       let tempunitsfilterarray = []
       let tempobject = {};
       tempobject.id = generate();
@@ -361,11 +361,10 @@ const ChartModal = (props) => {
     while (flag) {
       tempgeneratedid = shortid.generate();
       tempgeneratedid = tempgeneratedid.substring(0, 5);
-      if(tempgeneratedid.charAt(0)=='@' || tempgeneratedid.charAt(0)=='$')
-      {
+      if (tempgeneratedid.charAt(0) == '@' || tempgeneratedid.charAt(0) == '$') {
         flag = true;
       }
-      else{
+      else {
         tempgeneratedid = 'ch-' + tempgeneratedid;
         let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempgeneratedid}`)
         if (response.data.length == 0) {
@@ -504,14 +503,14 @@ const ChartModal = (props) => {
         }
         <div>
           <Row style={{ padding: '0px' }}>
-              <Col style={{ padding: '0px' }} xs={12} md={4}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא תרשים: </div>
-                <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} />
-              </Col>
-              <Col xs={12} md={4} style={{ textAlign: 'right' }}>
+            <Col style={{ padding: '0px' }} xs={12} md={4}>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא תרשים: </div>
+              <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} />
+            </Col>
+            <Col xs={12} md={4} style={{ textAlign: 'right' }}>
               <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש תרשים</button>
-              </Col>
-            </Row>
+            </Col>
+          </Row>
 
           {chartdata.chartid ?
             <Row style={{ padding: '0px' }}>
@@ -530,7 +529,7 @@ const ChartModal = (props) => {
           </Row>
 
           {/* unitsfilterarray */}
-          {!user.gdodid ?
+          {user.role != '1' ?
             <Row style={{ padding: '0px' }}>
               <Col style={{ display: 'flex', justifyContent: 'right', paddingTop: '15px', paddingRight: '0px' }}>
                 <Button style={{ width: '100px', padding: '10px' }} type="button" onClick={() => { setUnitsfilterarray(currentSpec => [...currentSpec, { id: generate() }]) }}>הוסף יחידה</Button>

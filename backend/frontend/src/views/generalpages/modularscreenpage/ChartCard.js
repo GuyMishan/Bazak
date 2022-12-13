@@ -360,7 +360,7 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 }
                             </div>
                             <div style={{ textAlign: 'left', height: '0px' }}>
-                                <button className='btn-new-delete' style={{ padding: '11px 17px',borderRadius: '50%', marginTop: '-44px' }} onClick={clickDelete}>x</button>
+                                <button className='btn-new-delete' style={{ padding: '11px 17px',borderRadius: '50%', marginTop: '-44px' }} onClick={clickDelete}>X</button>
                             </div>
                         </div>
                     </CardHeader>
