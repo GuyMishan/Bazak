@@ -222,7 +222,7 @@ function ModularChartPage(props) {
           <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
             <>
               <Col xs={12} md={8}>
-                {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך תרשים</button> */}
+                {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך שעון</button> */}
               </Col>
               <Col xs={12} md={4}>
                 <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />

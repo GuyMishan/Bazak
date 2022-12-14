@@ -118,7 +118,7 @@ const ModularScreensModal = (props) => {
               </>
               : <>
                 <Col xs={12} md={8}>
-                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>שמור</button>
                   <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglescreenmodal(undefined)}>צור מסך</button>
                 </Col>
                 <Col xs={12} md={4}>

@@ -271,19 +271,19 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
+                            {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars }
                           </p> :
                           ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>
                               {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                               <br></br>
-                              {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
+                              {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars }
                             </p> :
                             ((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
                               <p style={{ color: '#8ac926' }}>
                                 {((cardatas.numberofcars_zamin / cardatas.numberofcars) * 100).toFixed(0)}%
                                 <br></br>
-                                {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars + ' זמינים'}
+                                {cardatas.numberofcars_zamin + '/' + cardatas.numberofcars }
                               </p> : null
                         : <p>X</p>}
                     </td>)
@@ -295,19 +295,19 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcar}
                           </p> :
                           ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>
                               {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                               <br></br>
-                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
+                              {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
                             </p> :
                             ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 100 ?
                               <p style={{ color: '#8ac926' }}>
                                 {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                                 <br></br>
-                                {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars + ' כשירים'}
+                                {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
                               </p> : null
                         : <p>X</p>}
                     </td>)

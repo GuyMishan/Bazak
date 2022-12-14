@@ -227,7 +227,7 @@ const ScreenModal = (props) => {
       flag = false;
     }
     if (((screendata.chartsinline == undefined) || (screendata.chartsinline == ""))) {
-      ErrorReason += ", חסר מספר תרשימים בשורה "
+      ErrorReason += ", חסר מספר שעונים בשורה "
       flag = false;
     }
 
@@ -253,7 +253,7 @@ const ScreenModal = (props) => {
       for (let i = 0; i < chartdataarray.length; i++) {
         let response2 = await axios.post(`http://localhost:8000/api/modularscreens/chart`, chartdataarray[i])
           .then(response2 => {
-            toast.success(`תרשים נשמר בהצלחה`);
+            toast.success(`שעון נשמר בהצלחה`);
           })
         setChartDataArray([]);
       }
@@ -295,7 +295,7 @@ const ScreenModal = (props) => {
       for (let i = 0; i < chartdataarray.length; i++) {
         let response2 = await axios.post(`http://localhost:8000/api/modularscreens/chart`, chartdataarray[i])
           .then(response2 => {
-            toast.success(`תרשים נשמר בהצלחה`);
+            toast.success(`שעון נשמר בהצלחה`);
           })
         setChartDataArray([]);
       }
@@ -361,7 +361,7 @@ const ScreenModal = (props) => {
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={4}>
                 <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא מסך: </div>
-                <Input type="text" value={screenidimport} onChange={handleChangeScreenidimport} />
+                <Input type="text" value={screenidimport} onChange={handleChangeScreenidimport} placeholder="ניתן להזין קוד מסך שקיבלת לייבוא!"/>
               </Col>
               <Col xs={12} md={4} style={{ textAlign: 'right' }}>
                 <button className='btn-new-blue' style={{ margin: '0px', marginTop: '34px' }} onClick={ImportScreenfunc}>חפש מסך</button>
@@ -386,7 +386,7 @@ const ScreenModal = (props) => {
 
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={4}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר תרשימים בשורה: </div>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר שעונים בשורה: </div>
                 <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
                   <option value={'בחר'}>בחר</option>
                   <option value={'6'}>6</option>
