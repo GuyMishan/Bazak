@@ -37,6 +37,9 @@ const ScreenCard = (props) => {
     const { unittype } = useParams();
 
     const clickDelete = async () => {
+        if (props.user.mainscreenid === props.screenid){//if current screen is active, clear from home first
+            clearusermainscreen();
+        }
         await findDependedCharts()
             .then(() => {
                 let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
