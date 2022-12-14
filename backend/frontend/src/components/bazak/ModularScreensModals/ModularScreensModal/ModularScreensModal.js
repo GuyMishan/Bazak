@@ -93,7 +93,7 @@ const ModularScreensModal = (props) => {
       setScreenidformodal(undefined);
     }
   }, [props.isOpen])
-
+  console.log(screens)
   return (
     <>
       <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={() => init()} />
@@ -106,7 +106,7 @@ const ModularScreensModal = (props) => {
         size=""
         toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
-          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <Row style={{ textAlign: 'right', marginBottom: screens.length>0 ? '20px': '170px' }}>
             {mode == 'normal' ?
               <>
                 <Col xs={12} md={8}>
