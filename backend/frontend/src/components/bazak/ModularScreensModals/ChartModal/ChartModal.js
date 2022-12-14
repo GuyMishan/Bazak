@@ -202,6 +202,10 @@ const ChartModal = (props) => {
       ErrorReason += ", חסר שם תרשים"
       flag = false;
     }
+    if(chartdata.name.length>40){
+      ErrorReason += ", שם תרשים ארוך מ-40 תווים"
+      flag = false;
+    }
 
     if (((unitsfilterarray.length > 0))) {
       let tempflag1 = true;
@@ -525,6 +529,7 @@ const ChartModal = (props) => {
             <Col style={{ padding: '0px' }} xs={12} md={4}>
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תרשים: </div>
               <Input type="text" name="name" value={chartdata.name} onChange={handleChange} />
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>(שם התרשים לא יכול להיות ארוך יותר מ-40 תווים)</div>
             </Col>
           </Row>
 

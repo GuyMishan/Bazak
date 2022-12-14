@@ -171,8 +171,8 @@ const ChartCard = (props) => { //instate - zamin/kashir
                         <CardHeader style={{ padding: '0px' }}>
                             <div style={{ textAlign: 'right' }}>
                                 {props.theme == "white-content" ?
-                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
-                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>זמינות {props.chart.name}</h3></>
+                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                                 }
                             </div>
                         </CardHeader>
@@ -294,8 +294,8 @@ const ChartCard = (props) => { //instate - zamin/kashir
                     <CardHeader style={{ padding: '0px' }}>
                         <div style={{ textAlign: 'right' }}>
                             {props.theme == "white-content" ?
-                                <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
-                                : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>זמינות {props.chart.name}</h3></>
+                                : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                             }
                         </div>
                     </CardHeader>
@@ -349,18 +349,18 @@ const ChartCard = (props) => { //instate - zamin/kashir
                 </Card>
             </div>
             :
-            <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px' }}>
-                <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+            <div style={{ width: `${100 / props.screendata.chartsinline}%`, paddingLeft: '15px', paddingRight: '15px'}}>
+                <Card style={{boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader style={{ padding: '0px' }}>
+                        <div style={{ textAlign: 'left', height: '0px', marginRight:'3rem' }}>
+                            <button className='btn-new-delete' style={{position:'relative',padding: '11px 17px',borderRadius: '50%'}} onClick={clickDelete}>X</button>
+                        </div>
                         <div style={{ textAlign: 'left' }}>
-                        <div style={{ textAlign: 'right' }}>
+                            <div style={{ textAlign: 'right' }}>
                                 {props.theme == "white-content" ?
-                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
-                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                    <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>זמינות {props.chart.name}</h3></>
+                                    : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                                 }
-                            </div>
-                            <div style={{ textAlign: 'left', height: '0px' }}>
-                                <button className='btn-new-delete' style={{ padding: '11px 17px',borderRadius: '50%', marginTop: '-44px' }} onClick={clickDelete}>X</button>
                             </div>
                         </div>
                     </CardHeader>
