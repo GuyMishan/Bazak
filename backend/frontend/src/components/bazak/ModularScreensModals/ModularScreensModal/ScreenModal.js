@@ -327,7 +327,7 @@ const ScreenModal = (props) => {
       loadscreendata();
     }
     else {
-
+      setScreenData({ ...screendata, ['chartsinline']: '4' });
     }
   }
 
