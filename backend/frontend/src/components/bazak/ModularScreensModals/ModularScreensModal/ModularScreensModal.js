@@ -98,7 +98,7 @@ const ModularScreensModal = (props) => {
     <>
       <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={() => init()} />
       <Modal
-        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: filteredscreens.length>15 ? (Math.ceil((filteredscreens.length-16)/4)*(411/2)+'px') : 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
         centered
         fullscreen
@@ -106,7 +106,7 @@ const ModularScreensModal = (props) => {
         size=""
         toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
-          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <Row style={{ textAlign: 'right', marginBottom: screens.length>0 ? '20px': '170px' }}>
             {mode == 'normal' ?
               <>
                 <Col xs={12} md={8}>
@@ -118,7 +118,7 @@ const ModularScreensModal = (props) => {
               </>
               : <>
                 <Col xs={12} md={8}>
-                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>צא ממצב עריכה</button>
+                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>שמור</button>
                   <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglescreenmodal(undefined)}>צור מסך</button>
                 </Col>
                 <Col xs={12} md={4}>

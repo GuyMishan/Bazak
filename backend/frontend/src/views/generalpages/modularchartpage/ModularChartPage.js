@@ -36,6 +36,9 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
 
+import CarDataByUnitTypeAndUnitIdSortingTable from 'components/bazak/CarDataByUnitTypeAndUnitIdSortingTable/SortingTable';
+import SumCardataComponentChart from 'components/bazak/SumCardataComponentChart/SumCardataComponentChart';
+
 function ModularChartPage(props) {
   //user
   const { user } = isAuthenticated()
@@ -46,6 +49,8 @@ function ModularChartPage(props) {
   const [filteredsubcharts, setFilteredsubcharts] = useState([]);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
+  //modes
+  const [table_mode, setTable_mode] = useState('hidden');// hidden/shown
   //redux
   const dispatch = useDispatch()
   const reduxcardata = useSelector((state) => state.cardata.value)
@@ -63,6 +68,15 @@ function ModularChartPage(props) {
 
   function ToggleForModal(evt) {
     setIschartmodalopen(!ischartmodalopen);
+  }
+
+  function ToggleTable_mode(evt) {
+    if (table_mode == 'hidden') {
+      setTable_mode('shown');
+    }
+    else {
+      setTable_mode('hidden');
+    }
   }
 
   const getReduxCardDataByUnitTypeAndUnitId = async () => {
@@ -207,38 +221,64 @@ function ModularChartPage(props) {
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
       :
-    <>
-      {/* <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} /> */}
+      table_mode == 'hidden' ?
+        <>
+          {/* <ChartModal isOpen={ischartmodalopen} Toggle={() => ToggleForModal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={chartdata.screenid} init={() => init()} /> */}
 
-      <div>
-        <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+          <div>
+            <div style={{ textAlign: 'right', marginBottom: '20px' }}>
 
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            {props.theme == "white-content" ?
-              <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {chartdata.name}</h1>
-              : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {chartdata.name}</h1>}
+              <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+                {props.theme == "white-content" ?
+                  <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {chartdata.name}</h1>
+                  : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {chartdata.name}</h1>}
+              </div>
+
+              <div style={{textAlign:'left',marginBottom:'10px'}}>
+              <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleTable_mode}>תצוגת טבלה</button>
+              </div>
+
+              <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+                <>
+                  <Col xs={12} md={8}>
+                    {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך שעון</button> */}
+                  </Col>
+                  <Col xs={12} md={4}>
+                    <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                  </Col>
+                </>
+              </Row>
+            </div>
+
+            <Row>
+              {filteredsubcharts.map((chart, i) => (
+                chart ?
+                  <SubChartCard chart={chart} init={() => init()} cardatas={reduxcardata} theme={props.theme} />
+                  : null))}
+            </Row>
+
+            <Row>
+              <Col xs={12} md={8} style={{ textAlign: 'right' }}>
+                <SumCardataComponentChart charts={filteredsubcharts} cardatas={reduxcardata} />
+              </Col>
+              <Col xs={12} md={4} style={{ textAlign: 'left' }}>
+              </Col>
+            </Row>
+
           </div>
+        </> : <>
+          <div style={{ textAlign: 'right', marginBottom: '20px' }}>
 
-          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-            <>
-              <Col xs={12} md={8}>
-                {/* <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleForModal}>ערוך תרשים</button> */}
-              </Col>
-              <Col xs={12} md={4}>
-                <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-              </Col>
-            </>
-          </Row>
-        </div>
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
 
-        <Row>
-          {filteredsubcharts.map((chart, i) => (
-            chart ?
-              <SubChartCard chart={chart} init={() => init()} cardatas={reduxcardata} theme={props.theme} />
-              : null))}
-        </Row>
-      </div>
-    </>
+              {props.theme == "white-content" ?
+                <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {chartdata.name}</h1>
+                : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {chartdata.name}</h1>}
+            </div>
+          </div>
+          <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleTable_mode}>תצוגת שעונים</button>
+          <CarDataByUnitTypeAndUnitIdSortingTable charts={filteredsubcharts} />
+        </>
   );
 }
 

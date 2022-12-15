@@ -56,7 +56,7 @@ const ChartCard = (props) => { //instate - zamin/kashir
 
     const clickDelete = async () => {
         let response = axios.post(`http://localhost:8000/api/modularscreens/chart/remove/${props.chartid}`)
-        toast.success(`תרשים נמחק בהצלחה`);
+        toast.success(`שעון נמחק בהצלחה`);
         props.init();
     }
 

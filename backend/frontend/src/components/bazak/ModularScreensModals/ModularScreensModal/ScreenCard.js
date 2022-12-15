@@ -37,6 +37,9 @@ const ScreenCard = (props) => {
     const { unittype } = useParams();
 
     const clickDelete = async () => {
+        if (props.user.mainscreenid === props.screenid){//if current screen is active, clear from home first
+            clearusermainscreen();
+        }
         await findDependedCharts()
             .then(() => {
                 let response = axios.post(`http://localhost:8000/api/modularscreens/screen/remove/${props.screenid}`)
@@ -109,7 +112,7 @@ const ScreenCard = (props) => {
                 <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                     <CardHeader>
                         <div style={{ textAlign: 'left' }}>
-                            <button className='btn-new-delete' style={{ padding: '11px 17px',borderRadius: '50%' }} onClick={clickDelete}>X</button>
+                            <button className='btn-new-delete' style={{ padding: '5px 10px',borderRadius: '50%' }} onClick={clickDelete}>X</button>
                         </div>
                     </CardHeader>
                     <div style={{ padding: "1px 8px", cursor: 'pointer' }} onClick={props.Toggle}>

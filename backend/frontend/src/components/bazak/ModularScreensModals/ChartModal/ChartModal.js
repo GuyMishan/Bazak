@@ -56,7 +56,7 @@ const ChartModal = (props) => {
     let tempchartidimport = chartidimport;
     if (tempchartidimport != '') {
       let response = await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempchartidimport}`)
-      if (response.data.length > 0) {//תרשים נמצא
+      if (response.data.length > 0) {//שעון נמצא
         let tempchart = { ...response.data[0] };
         delete tempchart._id;
         delete tempchart.chartid;
@@ -94,10 +94,10 @@ const ChartModal = (props) => {
         setCartypesfilterarray([]);
         setUnitsfilterarray(tempchart.units);
         setCartypesfilterarray(tempchart.tenetree);
-        toast.success(`תרשים נמצא`);
+        toast.success(`שעון נמצא`);
       }
-      else {//תרשים לא נמצא
-        toast.error(`תרשים לא נמצא`);
+      else {//שעון לא נמצא
+        toast.error(`שעון לא נמצא`);
       }
     }
   }
@@ -199,7 +199,7 @@ const ChartModal = (props) => {
     var flag = true;
     var ErrorReason = "";
     if (((chartdata.name == undefined) || (chartdata.name == ""))) {
-      ErrorReason += ", חסר שם תרשים"
+      ErrorReason += ", חסר שם שעון"
       flag = false;
     }
 
@@ -349,7 +349,7 @@ const ChartModal = (props) => {
     console.log(tempchartdata)
     let response = await axios.post(`http://localhost:8000/api/modularscreens/chart`, tempchartdata)
       .then(response => {
-        toast.success(`תרשים נשמר בהצלחה`);
+        toast.success(`שעון נשמר בהצלחה`);
         props.init();
         props.ToggleForModal();
       })
@@ -448,7 +448,7 @@ const ChartModal = (props) => {
 
     let result = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempchartid}`, tempchartdata)
       .then(respone => {
-        toast.success(`תרשים עודכן בהצלחה`);
+        toast.success(`שעון עודכן בהצלחה`);
         props.init();
         props.ToggleForModal();
       })
@@ -487,7 +487,7 @@ const ChartModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '60%', maxWidth: '70%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '60%', maxWidth: '70%', justifyContent: 'center', alignSelf: 'center', marginTop: (cartypesfilterarray.length+unitsfilterarray.length)>3 ? (cartypesfilterarray.length+unitsfilterarray.length-3)*117/2+'px' : 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen
@@ -497,25 +497,25 @@ const ChartModal = (props) => {
       <ModalBody>
 
         {props.chartid ?
-          <h1 style={{ textAlign: 'center' }}>עריכת תרשים</h1>
+          <h1 style={{ textAlign: 'center' }}>עריכת שעון</h1>
           :
-          <h1 style={{ textAlign: 'center' }}>יצירת תרשים</h1>
+          <h1 style={{ textAlign: 'center' }}>יצירת שעון</h1>
         }
         <div>
           <Row style={{ padding: '0px' }}>
             <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא תרשים: </div>
-              <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} />
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא שעון: </div>
+              <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} placeholder="ניתן להזין קוד שעון שקיבלת לייבוא!"/> 
             </Col>
             <Col xs={12} md={4} style={{ textAlign: 'right' }}>
-              <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש תרשים</button>
+              <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש שעון</button>
             </Col>
           </Row>
 
           {chartdata.chartid ?
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={12}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה תרשים:  {chartdata.chartid}</div>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה שעון:  {chartdata.chartid}</div>
               </Col>
             </Row>
             :
@@ -523,7 +523,7 @@ const ChartModal = (props) => {
 
           <Row style={{ padding: '0px' }}>
             <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם תרשים: </div>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם שעון: </div>
               <Input type="text" name="name" value={chartdata.name} onChange={handleChange} />
             </Col>
           </Row>
