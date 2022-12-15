@@ -515,7 +515,7 @@ const CarDataFormModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '80%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '80%', justifyContent: 'center', alignSelf: 'center', marginTop: finalspecialkeytwo.length>0 ? finalspecialkeytwo.length*114/2+'px' : 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen

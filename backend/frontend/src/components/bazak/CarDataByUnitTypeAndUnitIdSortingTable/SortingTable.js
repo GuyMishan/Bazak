@@ -222,8 +222,13 @@ const SortingTable = (props) => {
 
   function init() {
     setIsdataloaded(false);
-    getCardDataByUnitTypeAndUnitId();
-    fixfilterbyurl();
+    if (!props.charts) {
+      getCardDataByUnitTypeAndUnitId();
+      fixfilterbyurl();
+    }
+    else {
+      //handeled by useffect..
+    }
     ReadLocalStorage();
   }
 
@@ -320,6 +325,61 @@ const SortingTable = (props) => {
           console.log(error);
         })
     }
+  }
+
+  const fixCarDataByCharts = async () => {
+    let temp_cardata_by_chart_final = [];
+    let temp_cardata_by_chart;
+
+    // temp_cardata_by_chart = reduxcardata;
+
+    for (let k = 0; k < props.charts.length; k++) {
+      temp_cardata_by_chart = reduxcardata;
+
+      //filter by chartdata
+      if (props.charts[k].units && props.charts[k].units.length > 0) {
+        let temp_cardata_by_chart_copy3 = []
+        for (let i = 0; i < props.charts[k].units.length; i++) {
+          let lastKey = Object.keys(props.charts[k].units[i]).pop();
+          let lastValue = props.charts[k].units[i][Object.keys(props.charts[k].units[i]).pop()]
+          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
+        }
+        temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
+      }
+
+      if (props.charts[k].tenetree && props.charts[k].tenetree.length > 0) {
+        let temp_cardata_by_chart_copy4 = []
+        for (let i = 0; i < props.charts[k].tenetree.length; i++) {
+          let lastKey = Object.keys(props.charts[k].tenetree[i]).pop();
+          let lastValue = props.charts[k].tenetree[i][Object.keys(props.charts[k].tenetree[i]).pop()]
+          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
+        }
+        temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
+      }
+
+      let temp_cardata_by_chart_copy1 = []
+      for (let i = 0; i < props.charts[k].stand.length; i++) {
+        let temp = temp_cardata_by_chart.filter(cardata => ((cardata.stand == props.charts[k].stand[i])));
+        temp_cardata_by_chart_copy1 = temp_cardata_by_chart_copy1.concat(temp)
+      }
+      temp_cardata_by_chart = temp_cardata_by_chart_copy1;
+
+      let temp_cardata_by_chart_copy2 = []
+      for (let i = 0; i < props.charts[k].status.length; i++) {
+        let temp = temp_cardata_by_chart.filter(cardata => ((cardata.status == props.charts[k].status[i])));
+        temp_cardata_by_chart_copy2 = temp_cardata_by_chart_copy2.concat(temp)
+      }
+      temp_cardata_by_chart = temp_cardata_by_chart_copy2;
+      //
+      temp_cardata_by_chart_final = temp_cardata_by_chart_final.concat(temp_cardata_by_chart)
+    }
+    temp_cardata_by_chart_final = [...new Set(temp_cardata_by_chart_final)]; // removes duplicates
+
+    setOriginaldata(temp_cardata_by_chart_final)
+    setData(temp_cardata_by_chart_final)
+    setIsdataloaded(true)
   }
 
   const fixfilterbyurl = async () => {
@@ -693,6 +753,12 @@ const SortingTable = (props) => {
     FixLocalStorageHeaders();
   }, [hiddenColumns]);
 
+  useEffect(() => {
+    if (props.charts && props.charts.length > 0 && isdataloaded == false) {
+      fixCarDataByCharts();
+    }
+  }, [props.charts]);
+
   //window
   const [windowSize, setWindowSize] = useState(getWindowSize());
 
@@ -729,7 +795,8 @@ const SortingTable = (props) => {
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
           </div>
-          <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button>
+          {!props.charts ? <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button> : null}
+
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
 
           <Row>
@@ -756,9 +823,10 @@ const SortingTable = (props) => {
                       </div>
                     </th>
                   ))}
-                  <th style={{ position: 'sticky', top: '-2px' }}></th>
-                  {props.unittype != 'notype' ? <th style={{ position: 'sticky', top: '-2px' }}></th>
-                    : null}
+                  {!props.charts ? <th style={{ position: 'sticky', top: '-2px' }}></th> : null}
+                  {/* {props.unittype != 'notype' ? <th style={{ position: 'sticky', top: '-2px' }}></th>: null} */}
+                  {props.unittype != 'notype' ? !props.charts ? <th style={{ position: 'sticky', top: '-2px' }}></th>
+                    : null : null}
                 </tr>
               ))}
 
@@ -825,9 +893,9 @@ const SortingTable = (props) => {
                           }
                         })
                       }
-                      <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td>{/*row.original._id=cardata._id*/}
-                      {props.unittype != 'notype' ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
-                        : null}
+                      {!props.charts ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td> : null}
+                      {props.unittype != 'notype' ? !props.charts ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
+                        : null : null}
                       {/* {console.log(row)} */}
                     </tr>
                   )

@@ -35,6 +35,9 @@ import PropagateLoader from "react-spinners/PropagateLoader";
 //redux
 import { useSelector, useDispatch } from 'react-redux'
 import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
+//
+import CarDataByUnitTypeAndUnitIdSortingTable from 'components/bazak/CarDataByUnitTypeAndUnitIdSortingTable/SortingTable';
+import SumCardataComponentChart from 'components/bazak/SumCardataComponentChart/SumCardataComponentChart';
 
 function ModularScreenPage(props) {
   //user
@@ -46,8 +49,9 @@ function ModularScreenPage(props) {
   const [filteredcharts, setFilteredcharts] = useState([]);
   //spinner
   const [isdataloaded, setIsdataloaded] = useState(false);
-  //mode
+  //modes
   const [mode, setMode] = useState('normal');// normal/edit
+  const [table_mode, setTable_mode] = useState('hidden');// hidden/shown
   //redux
   const dispatch = useDispatch()
   const reduxcardata = useSelector((state) => state.cardata.value)
@@ -69,6 +73,15 @@ function ModularScreenPage(props) {
     }
     else {
       setMode('normal');
+    }
+  }
+
+  function ToggleTable_mode(evt) {
+    if (table_mode == 'hidden') {
+      setTable_mode('shown');
+    }
+    else {
+      setTable_mode('hidden');
     }
   }
 
@@ -144,55 +157,82 @@ function ModularScreenPage(props) {
 
   return (
     !isdataloaded ?
-    <div style={{ width: '50%', marginTop: '30%' }}>
-      <PropagateLoader color={'#ff4650'} loading={true} size={25} />
-    </div>
-    :
-    <>
-      {props.match.params.screenid ?
-        <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
-        : <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.screenid} init={() => init()} />}
-      
-      <div>
-        <div style={{ textAlign: 'right', marginBottom: '20px' }}>
-
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-
-            {props.theme == "white-content" ?
-              <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
-              : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
-          </div>
-
-          <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
-            {mode == 'normal' ?
-              <>
-                <Col xs={12} md={8}>
-                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
-                </Col>
-                <Col xs={12} md={4}>
-                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-                </Col>
-              </>
-              : <>
-                <Col xs={12} md={8}>
-                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>שמור</button>
-                  <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglechartmodal(undefined)}>צור שעון</button>
-                </Col>
-                <Col xs={12} md={4}>
-                  <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
-                </Col>
-              </>}
-          </Row>
-        </div>
-
-        <Row>
-          {filteredcharts.map((chart, i) => (
-            chart ?
-              <ChartCard chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata} />
-              : null))}
-        </Row>
+      <div style={{ width: '50%', marginTop: '30%' }}>
+        <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
-    </>
+      :
+      table_mode == 'hidden' ?
+        <>
+          {props.match.params.screenid ?
+            <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
+            : <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.screenid} init={() => init()} />}
+
+          <div>
+            <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+
+              <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+
+                {props.theme == "white-content" ?
+                  <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
+                  : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
+              </div>
+              <div style={{textAlign:'left',marginBottom:'10px'}}>
+              <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleTable_mode}>תצוגת טבלה</button>
+              </div>
+
+              <Row style={{ textAlign: 'right', marginBottom: '20px' }}>
+                {mode == 'normal' ?
+                  <>
+                    <Col xs={12} md={8}>
+                      <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>ערוך</button>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                    </Col>
+                  </>
+                  : <>
+                    <Col xs={12} md={8}>
+                      <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleMode}>שמור</button>
+                      <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={() => Togglechartmodal(undefined)}>צור שעון</button>
+                    </Col>
+                    <Col xs={12} md={4}>
+                      <Input placeholder="חפש..." onChange={(text) => searchOrder(text)} />
+                    </Col>
+                  </>}
+              </Row>
+            </div>
+
+            <Row>
+              {filteredcharts.map((chart, i) => (
+                chart ?
+                  <ChartCard chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata} />
+                  : null))}
+            </Row>
+
+            <Row>
+              <Col xs={12} md={8} style={{ textAlign: 'right' }}>
+                <SumCardataComponentChart charts={filteredcharts} cardatas={reduxcardata} />
+              </Col>
+              <Col xs={12} md={4} style={{ textAlign: 'left' }}>
+              </Col>
+            </Row>
+
+          </div>
+        </> :
+        <>
+          <div style={{ textAlign: 'right', marginBottom: '20px' }}>
+
+            <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+
+              {props.theme == "white-content" ?
+                <h1 style={{ fontWeight: 'bold', color: 'rgb(54,78,104)' }}>זמינות האמל"ח - {screendata.name}</h1>
+                : <h1 style={{ fontWeight: 'bold', color: 'hsla(0,0%,100%,.8)' }}>כשירות האמל"ח - {screendata.name}</h1>}
+            </div>
+          </div>
+          <button className='btn-new-blue' style={{ marginLeft: '5px' }} onClick={ToggleTable_mode}>תצוגת שעונים</button>
+
+          <CarDataByUnitTypeAndUnitIdSortingTable charts={filteredcharts} />
+        </>
   );
 }
 

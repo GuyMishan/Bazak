@@ -487,7 +487,7 @@ const ChartModal = (props) => {
 
   return (
     <Modal
-      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '60%', maxWidth: '70%', justifyContent: 'center', alignSelf: 'center', margin: '0px', margin: 'auto', direction: 'rtl' }}
+      style={{ minHeight: '100%', maxHeight: '100%', minWidth: '60%', maxWidth: '70%', justifyContent: 'center', alignSelf: 'center', marginTop: (cartypesfilterarray.length+unitsfilterarray.length)>3 ? (cartypesfilterarray.length+unitsfilterarray.length-3)*117/2+'px' : 'auto', direction: 'rtl' }}
       isOpen={props.isOpen}
       centered
       fullscreen
