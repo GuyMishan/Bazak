@@ -33,8 +33,8 @@ import ChartModal from 'components/bazak/ModularScreensModals/ChartModal/ChartMo
 import ChartCard from './ChartCard';
 import PropagateLoader from "react-spinners/PropagateLoader";
 //redux
-import { useSelector, useDispatch } from 'react-redux'
-import { getCarDataFunc } from 'redux/features/cardata/cardataSlice'
+import { useSelector, useDispatch } from 'react-redux';
+import { getCarDataFunc } from 'redux/features/cardata/cardataSlice';
 //
 import CarDataByUnitTypeAndUnitIdSortingTable from 'components/bazak/CarDataByUnitTypeAndUnitIdSortingTable/SortingTable';
 import SumCardataComponentChart from 'components/bazak/SumCardataComponentChart/SumCardataComponentChart';
@@ -55,10 +55,15 @@ function ModularScreenPage(props) {
   //redux
   const dispatch = useDispatch()
   const reduxcardata = useSelector((state) => state.cardata.value)
+  //drag&drop
+  const dragChart = useRef();
+  const dragNode = useRef();
+  const [dragging, setDragging] = useState(false);
 
   //screen modal
   const [ischartmodalopen, setIschartmodalopen] = useState(false);
   const [chartidformodal, setChartidformodal] = useState(undefined);
+
 
   const searchOrder = (evt) => {
     if (evt.target.value == "") {
@@ -66,6 +71,39 @@ function ModularScreenPage(props) {
     }
     setFilteredcharts(charts.filter((chart) => chart.name.toString().includes(evt.target.value.toString())))
   }
+
+  const handleDragStart = (e, params) =>{
+     console.log('drag starting..', params);
+     dragChart.current = params;
+     dragNode.current = e.target;
+     dragNode.current.addEventListener('dragend', handleDragEnd);
+     setDragging(true);
+  }
+
+  const handleDragEnter = (e, params) =>{
+      const currentChart = dragChart.current;
+      dragChart.target = params;
+  }
+
+  const handleDragEnd = async() =>{
+   console.log('ending drag...');
+   const currentChart = dragChart.current;
+    let tempchartindex = charts[dragChart.target].index;
+    charts[dragChart.target].index = charts[currentChart].index;
+    charts[currentChart].index = tempchartindex;
+   let response2 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${charts[dragChart.target].chartid}`, charts[dragChart.target])
+            .then(async response2 => {
+              let response3 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${charts[dragChart.current].chartid}`, charts[dragChart.current])
+              .then(response3 => {
+  
+            })
+          })
+   setDragging(false);
+   dragNode.current.removeEventListener('dragend', handleDragEnd);
+   dragChart.current = null;
+   dragNode.current = null;
+   init();
+ }
 
   function ToggleMode(evt) {
     if (mode == 'normal') {
@@ -128,16 +166,92 @@ function ModularScreenPage(props) {
     if (props.match.params.screenid) {
       let response = await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${props.match.params.screenid}`)
       let tempcardata = response.data;
-      setCharts(tempcardata)
-      setFilteredcharts(tempcardata)
+      for(let i=0;i<tempcardata.length;i++){//to fix charts with no index
+        if(tempcardata[i].index == undefined){
+          tempcardata[i].index = i;
+          let response3 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempcardata[i].chartid}`, tempcardata[i])
+              .then(response3 => {
+  
+            })
+        }
+      }
+      quickSort(tempcardata,0,tempcardata.length-1);
+      setCharts(tempcardata);
+      setFilteredcharts(tempcardata);
     }
     else {
       let response = await axios.get(`http://localhost:8000/api/modularscreens/chartsbyscreenid/${props.screenid}`)
       let tempcardata = response.data;
+      for(let i=0;i<tempcardata.length;i++){//to fix charts with no index
+        if(tempcardata[i].index == undefined){
+          tempcardata[i].index = i;
+          let response3 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${tempcardata[i].chartid}`, tempcardata[i])
+              .then(response3 => {
+  
+            })
+        }
+      }
+      quickSort(tempcardata,0,tempcardata.length-1);
       setCharts(tempcardata)
       setFilteredcharts(tempcardata)
     }
   }
+
+  // A utility function to swap two elements
+function swap(arr, i, j) {
+  let temp = arr[i];
+  arr[i] = arr[j];
+  arr[j] = temp;
+}
+
+/* This function takes last element as pivot, places
+ the pivot element at its correct position in sorted
+ array, and places all smaller (smaller than pivot)
+ to left of pivot and all greater elements to right
+ of pivot */
+function partition(arr, low, high) {
+
+  // pivot
+  let pivot = arr[high].index;
+  // Index of smaller element and
+  // indicates the right position
+  // of pivot found so far
+  let i = (low - 1);
+
+  for (let j = low; j <= high - 1; j++) {
+
+      // If current element is smaller 
+      // than the pivot
+      if (arr[j].index < pivot) {
+
+          // Increment index of 
+          // smaller element
+          i++;
+          swap(arr, i, j);
+      }
+  }
+  swap(arr, i + 1, high);
+  return (i + 1);
+}
+
+/* The main function that implements QuickSort
+        arr[] --> Array to be sorted,
+        low --> Starting index,
+        high --> Ending index
+*/
+function quickSort(arr, low, high) {
+  if (low < high) {
+
+      // pi is partitioning index, arr[p]
+      // is now at right place 
+      let pi = partition(arr, low, high);
+
+      // Separately sort elements before
+      // partition and after partition
+      quickSort(arr, low, pi - 1);
+      quickSort(arr, pi + 1, high);
+  }
+}
 
   useEffect(() => {
     if (reduxcardata.length > 0) {
@@ -164,8 +278,8 @@ function ModularScreenPage(props) {
       table_mode == 'hidden' ?
         <>
           {props.match.params.screenid ?
-            <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} />
-            : <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.screenid} init={() => init()} />}
+            <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.match.params.screenid} init={() => init()} index={charts.length}/>
+            : <ChartModal isOpen={ischartmodalopen} Toggle={() => Togglechartmodal()} ToggleForModal={ToggleForModal} chartid={chartidformodal} screenid={props.screenid} init={() => init()} index={charts.length}/>}
 
           <div>
             <div style={{ textAlign: 'right', marginBottom: '20px' }}>
@@ -201,13 +315,15 @@ function ModularScreenPage(props) {
                   </>}
               </Row>
             </div>
-
-            <Row>
-              {filteredcharts.map((chart, i) => (
-                chart ?
-                  <ChartCard chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata} />
-                  : null))}
-            </Row>
+            
+              <Row>
+                {filteredcharts.map((chart, i) => (
+                  chart ?
+                    <div className='draggableChart' draggable onDragStart={(e) => {handleDragStart(e,i)}} onDragEnter={dragging?(e) => {handleDragEnter(e,i)}:null} style={{width:`${100/screendata.chartsinline}%`}}>
+                    <ChartCard  chart={chart} mode={mode} chartid={chart.chartid} init={() => init()} Toggle={() => Togglechartmodal(chart.chartid)} cardatas={reduxcardata} theme={props.theme} screendata={screendata} charts={charts}/>
+                    </div>
+                    : null))}
+              </Row>
 
             <Row>
               <Col xs={12} md={8} style={{ textAlign: 'right' }}>

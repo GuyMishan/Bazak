@@ -276,6 +276,7 @@ const ChartModal = (props) => {
     let tempchartdata = { ...chartdata }
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
+    tempchartdata.index = props.index;
 
     if (user.role=='1') {
       let tempunitsfilterarray = []
