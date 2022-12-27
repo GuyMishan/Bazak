@@ -57,6 +57,7 @@ function ModularScreenPage(props) {
   const reduxcardata = useSelector((state) => state.cardata.value)
   //drag&drop
   const dragChart = useRef();
+  const targetDragChart = useRef();
   const dragNode = useRef();
   const [dragging, setDragging] = useState(false);
 
@@ -82,16 +83,16 @@ function ModularScreenPage(props) {
 
   const handleDragEnter = (e, params) =>{
       const currentChart = dragChart.current;
-      dragChart.target = params;
+      targetDragChart.current = params;
   }
 
   const handleDragEnd = async() =>{
    console.log('ending drag...');
    const currentChart = dragChart.current;
-    let tempchartindex = charts[dragChart.target].index;
-    charts[dragChart.target].index = charts[currentChart].index;
+    let tempchartindex = charts[targetDragChart.current].index;
+    charts[targetDragChart.current].index = charts[currentChart].index;
     charts[currentChart].index = tempchartindex;
-   let response2 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${charts[dragChart.target].chartid}`, charts[dragChart.target])
+   let response2 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${charts[targetDragChart.current].chartid}`, charts[targetDragChart.current])
             .then(async response2 => {
               let response3 = await axios.put(`http://localhost:8000/api/modularscreens/chart/${charts[dragChart.current].chartid}`, charts[dragChart.current])
               .then(response3 => {
