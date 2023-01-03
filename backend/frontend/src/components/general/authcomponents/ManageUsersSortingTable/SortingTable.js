@@ -51,7 +51,7 @@ const SortingTable = ({ match }) => {
   }
 
   const loadUsers = () => {
-    axios.get("http://localhost:8000/api/usersvalidated")
+    axios.get("http://localhost:8000/api/usersvalidatedaggregate")
       .then(response => {
         setData(response.data);
         setOriginaldata(response.data);
@@ -129,7 +129,7 @@ const SortingTable = ({ match }) => {
 
     let myArrayFiltered3 = []; //filter pikod
     if (filter.pikod && filter.pikod.length > 0) {
-      myArrayFiltered3 = myArrayFiltered1.filter(item => filter.pikod.includes(item.pikodid));
+      myArrayFiltered3 = myArrayFiltered1.filter(item => filter.pikod.includes(item.pikod));
     }
     else {
       myArrayFiltered3 = myArrayFiltered1;
@@ -137,7 +137,7 @@ const SortingTable = ({ match }) => {
 
     let myArrayFiltered4 = []; //filter ogda
     if (filter.ogda && filter.ogda.length > 0) {
-      myArrayFiltered4 = myArrayFiltered3.filter(item => filter.ogda.includes(item.ogdaid));
+      myArrayFiltered4 = myArrayFiltered3.filter(item => filter.ogda.includes(item.ogda));
     }
     else {
       myArrayFiltered4 = myArrayFiltered3;
@@ -145,7 +145,7 @@ const SortingTable = ({ match }) => {
 
     let myArrayFiltered5 = []; //filter hativa
     if (filter.hativa && filter.hativa.length > 0) {
-      myArrayFiltered5 = myArrayFiltered4.filter(item => filter.hativa.includes(item.hativaid));
+      myArrayFiltered5 = myArrayFiltered4.filter(item => filter.hativa.includes(item.hativa));
     }
     else {
       myArrayFiltered5 = myArrayFiltered4;
@@ -153,7 +153,7 @@ const SortingTable = ({ match }) => {
 
     let myArrayFiltered6 = []; //filter gdod
     if (filter.gdod && filter.gdod.length > 0) {
-      myArrayFiltered6 = myArrayFiltered5.filter(item => filter.gdod.includes(item.gdodid));
+      myArrayFiltered6 = myArrayFiltered5.filter(item => filter.gdod.includes(item.gdod));
     }
     else {
       myArrayFiltered6 = myArrayFiltered5;
@@ -190,7 +190,7 @@ const SortingTable = ({ match }) => {
       await loadOgdas();
       await loadHativas();
       await loadGdods();
-      const result = await axios.get("http://localhost:8000/api/usersvalidated");
+      const result = await axios.get("http://localhost:8000/api/usersvalidatedaggregate");
       setData(result.data);
       setOriginaldata(result.data);
     })();
@@ -199,7 +199,6 @@ const SortingTable = ({ match }) => {
   useEffect(() => {
     applyfiltersontodata()
   }, [filter]);
-
 
   return (
     <>

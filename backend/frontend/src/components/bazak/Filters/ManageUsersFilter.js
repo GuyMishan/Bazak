@@ -171,7 +171,7 @@ const ManageUsersFilter = (props) => {
                                 }
                             }) : null}
                         </Col>
-                        {/* <Col xs={12} md={8} style={{ textAlign: 'right' }}>
+                        <Col xs={12} md={8} style={{ textAlign: 'right' }}>
                             <Row style={{ paddingTop: '10px', marginBottom: '15px' }}>
                                 {((props.unittype == "admin")) ?
                                     <>
@@ -225,7 +225,7 @@ const ManageUsersFilter = (props) => {
                                             </Col>}
                                     </> : null}
                             </Row>
-                        </Col> */}
+                        </Col>
                     </Row>
                 </Card >
             </Collapse>

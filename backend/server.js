@@ -20,7 +20,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 
 // Configure Mongo
-const db = "mongodb://127.0.0.1/Bazak";
+const db = "mongodb://127.0.0.1/Bazak"; //change!!!
 
 // Connect to Mongo with Mongoose
 mongoose.connect(
