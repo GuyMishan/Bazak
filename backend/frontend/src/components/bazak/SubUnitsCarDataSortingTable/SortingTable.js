@@ -281,6 +281,10 @@ const SortingTable = (props) => {
     return(
       <tr style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
        <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}>סה"כ</th>
+       {props.unittype == 'hativa' ? 
+         <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}></td>
+         :
+         null}
        {elements}
        <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
        {SumAllNumCar != 0 ?
@@ -423,7 +427,7 @@ const SortingTable = (props) => {
                   </td>
               </tr>)
             })}
-            {SumOfCarDataByCarType()}
+             {SumOfCarDataByCarType()}
           </tbody>
         </table>
       </div>
