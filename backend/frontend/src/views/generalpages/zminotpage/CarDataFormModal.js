@@ -782,7 +782,7 @@ const CarDataFormModal = (props) => {
                                       if (e.target.value != "בחר")
                                         setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul_entry_date = tipul_entry_date }))
                                     }}
-                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" />
+                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" min="1900-01-01" max="2040-01-01" />
                                   </div>
                                 </Col>
                                 <Col xs={12} md={4}>
@@ -831,7 +831,7 @@ const CarDataFormModal = (props) => {
                                         if (e.target.value != "בחר")
                                           setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul_date = harig_tipul_date }))
                                       }}
-                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" />
+                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" min="1900-01-01" max="2040-01-01"/>
                                     </div>
                                   </Col>
                                 </Row> : p.type == 'takala_mizdamenet' ? <Row>
@@ -859,7 +859,7 @@ const CarDataFormModal = (props) => {
                                         if (e.target.value != "בחר")
                                           setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet_date = takala_mizdamenet_date }))
                                       }}
-                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" />
+                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" min="1900-01-01" max="2040-01-01"/>
                                     </div>
                                   </Col>
                                 </Row> : p.type == 'hh_stand' ? <Row>
