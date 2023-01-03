@@ -237,8 +237,8 @@ const SortingTable = (props) => {
     let SumNumCar=0;
     let SumNumCarZamin=0;
     if(data.length!=0){
-      for(let j=0;j<data.length;j++){
-        for(let i=0;i<data[j].cardatas.length;i++){
+      for(let j=0;j<data[0].cardatas.length;j++){//כלים
+        for(let i=0;i<data.length;i++){//יחידות
           SumAllNumCar = SumAllNumCar + data[i].cardatas[j].numberofcars;
           SumAllNumCarZamin = SumAllNumCarZamin + data[i].cardatas[j].numberofcars_zamin;
           SumNumCar = SumNumCar + data[i].cardatas[j].numberofcars;
