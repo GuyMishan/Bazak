@@ -85,7 +85,7 @@ function SidebarAdmin(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to="/dashboard/admin/0/magadal/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/dashboard/admin/0/magadal/0/false" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>

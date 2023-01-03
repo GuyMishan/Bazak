@@ -71,19 +71,19 @@ function Signin() {
       console.log(user);
       if (user && user.validated == true) {
         if (user.role === "0") {
-          history.push(`/dashboard/admin/0/magadal/0`);
+          history.push(`/dashboard/admin/0/magadal/0/false`);
         }
         if (user.role === "1") {
-          history.push(`/dashboard/gdod/${user.gdodid}/magadal/0`);
+          history.push(`/dashboard/gdod/${user.gdodid}/magadal/0/false`);
         }
         if (user.role === "2") {
-          history.push(`/dashboard/hativa/${user.hativaid}/magadal/0`);
+          history.push(`/dashboard/hativa/${user.hativaid}/magadal/0/false`);
         }
         if (user.role === "3") {
-          history.push(`/dashboard/ogda/${user.ogdaid}/magadal/0`);
+          history.push(`/dashboard/ogda/${user.ogdaid}/magadal/0/false`);
         }
         if (user.role === "4") {
-          history.push(`/dashboard/pikod/${user.pikodid}/magadal/0`);
+          history.push(`/dashboard/pikod/${user.pikodid}/magadal/0/false`);
         }
       }
       else {
