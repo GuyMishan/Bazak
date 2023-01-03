@@ -270,11 +270,12 @@ const CarDataFormModal = (props) => {
       ErrorReason += ", שדה חסר צ'"
       flag = false;
     }
-
-    for(var i=0;i<cardata.carnumber.length;i++){
-      if(cardata.carnumber[i]=='-'){
-        ErrorReason += ", מספר צ' לא יכול להכיל את התו -"
-        flag = false;
+    else{
+      for(var i=0;i<cardata.carnumber.length;i++){
+        if(cardata.carnumber[i]=='-'){
+          ErrorReason += ", מספר צ' לא יכול להכיל את התו -"
+          flag = false;
+        }
       }
     }
 
@@ -935,7 +936,7 @@ const CarDataFormModal = (props) => {
                 </Col>
                 <Col>
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
-                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} />
+                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} min="1900-01-01" max="2040-01-01"/>
                 </Col>
               </Row>
 
