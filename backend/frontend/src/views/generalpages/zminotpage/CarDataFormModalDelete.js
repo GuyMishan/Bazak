@@ -128,7 +128,7 @@ const CarDataFormModalDelete = (props) => {
                 <h3>האם אתה בטוח שברצונך למחוק את הכלי מהיחידה?</h3>
                 <h3>נתוני הצ' לא ימחקו ויהיה ניתן לשייך אותו ליחידה בעתיד</h3>
                 
-              {(user.role == '0' || user.role == '1' || isgdodsadir == false) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+              {(user.role == '0' || user.role == '1' || isgdodsadir == false) ?
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                 <button className="btn-new-delete" onClick={clickSubmit}>מחק</button>
                 </div> : null}

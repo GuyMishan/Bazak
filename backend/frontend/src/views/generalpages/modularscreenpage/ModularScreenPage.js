@@ -454,6 +454,7 @@ function ModularScreenPage(props) {
         </div>
 
         <Row>
+
           {filteredcharts.map((chart, i) =>
             chart ? (
               mode == "edit" ?

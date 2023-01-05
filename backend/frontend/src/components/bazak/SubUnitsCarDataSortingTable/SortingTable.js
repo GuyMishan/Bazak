@@ -232,26 +232,35 @@ const SortingTable = (props) => {
     let elements = [];
     let SumNumCarArr=[];
     let SumNumCarZaminArr=[];
+    let SumNumCarKashirArr=[];
     let SumAllNumCar = 0;
     let SumAllNumCarZamin = 0;
+    let SumAllNumCarKashir = 0;
     let SumNumCar=0;
     let SumNumCarZamin=0;
+    let SumNumCarKashir=0;
+
     if(data.length!=0){
       for(let j=0;j<data[0].cardatas.length;j++){//כלים
         for(let i=0;i<data.length;i++){//יחידות
           SumAllNumCar = SumAllNumCar + data[i].cardatas[j].numberofcars;
           SumAllNumCarZamin = SumAllNumCarZamin + data[i].cardatas[j].numberofcars_zamin;
+          SumAllNumCarKashir = SumAllNumCarKashir + data[i].cardatas[j].numberofcars_kashir;
           SumNumCar = SumNumCar + data[i].cardatas[j].numberofcars;
           SumNumCarZamin = SumNumCarZamin + data[i].cardatas[j].numberofcars_zamin;
+          SumNumCarKashir = SumNumCarKashir + data[i].cardatas[j].numberofcars_kashir;
         }
         SumNumCarArr[j] = SumNumCar;
         SumNumCarZaminArr[j] = SumNumCarZamin;
+        SumNumCarKashirArr[j] = SumNumCarKashir;
         SumNumCar = 0;
         SumNumCarZamin = 0;
+        SumNumCarKashir = 0;
       }
     }
 
     for(let x=0;x<SumNumCarArr.length;x++){
+    props.theme == 'white-content' ?
       elements.push(
         <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
         {SumNumCarArr[x] != 0 ?
@@ -276,6 +285,32 @@ const SortingTable = (props) => {
         : <p>X</p>}
         </td>
       )
+      :
+      elements.push(
+        <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+        {SumNumCarArr[x] != 0 ?
+        ((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0) <= 60 ?
+        <p style={{ color: '#ff2128' }}>
+         {((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0)}%
+         <br></br>
+         {SumNumCarKashirArr[x] + '/' + SumNumCarArr[x] }
+        </p> :
+        ((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0) <= 80 ?
+        <p style={{ color: '#ffca3a' }}>
+         {((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0)}%
+         <br></br>
+         {SumNumCarKashirArr[x] + '/' + SumNumCarArr[x] }
+        </p> :
+        ((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0) <= 100 ?
+        <p style={{ color: '#8ac926' }}>
+         {((SumNumCarKashirArr[x] / SumNumCarArr[x]) * 100).toFixed(0)}%
+         <br></br>
+         {SumNumCarKashirArr[x] + '/' + SumNumCarArr[x] }
+        </p> : null
+        : <p>X</p>}
+        </td>
+      )
+
     }
 
     return(
@@ -286,6 +321,7 @@ const SortingTable = (props) => {
          :
          null}
        {elements}
+     {props.theme == 'white-content' ? 
        <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
        {SumAllNumCar != 0 ?
         ((SumAllNumCarZamin / SumAllNumCar) * 100).toFixed(0) <= 60 ?
@@ -308,6 +344,29 @@ const SortingTable = (props) => {
         </p> : null
         : <p>X</p>}
        </td>
+      :
+       <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+        {SumAllNumCar != 0 ?
+        ((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0) <= 60 ?
+        <p style={{ color: '#ff2128' }}>
+         {((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0)}%
+         <br></br>
+         {SumAllNumCarKashir + '/' + SumAllNumCar }
+        </p> :
+        ((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0) <= 80 ?
+        <p style={{ color: '#ffca3a' }}>
+         {((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0)}%
+         <br></br>
+         {SumAllNumCarKashir + '/' + SumAllNumCar }
+        </p> :
+        ((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0) <= 100 ?
+        <p style={{ color: '#8ac926' }}>
+         {((SumAllNumCarKashir / SumAllNumCar) * 100).toFixed(0)}%
+         <br></br>
+         {SumAllNumCarKashir + '/' + SumAllNumCar }
+        </p> : null
+        : <p>X</p>}
+       </td>}
       </tr>
     )
   }
@@ -344,9 +403,11 @@ const SortingTable = (props) => {
             {data.map((data, index) => {
               let SumNumCar = 0;
               let SumNumCarZamin = 0;
+              let SumNumCarKashir = 0;
               for(let i=0;i<data.cardatas.length;i++){
                 SumNumCar = SumNumCar + data.cardatas[i].numberofcars;
                 SumNumCarZamin = SumNumCarZamin + data.cardatas[i].numberofcars_zamin;
+                SumNumCarKashir = SumNumCarKashir + data.cardatas[i].numberofcars_kashir;
               }
               return (<tr>
                 {props.unittype == 'admin' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/pikod/${data.pikod._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.pikod.name}</Link></th>
@@ -403,6 +464,7 @@ const SortingTable = (props) => {
                         : <p>X</p>}
                     </td>)
                   }) : null}
+                  {props.theme == 'white-content' ?
                   <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
                       {SumNumCar != 0 ?
                         ((SumNumCarZamin / SumNumCar) * 100).toFixed(0) <= 60 ?
@@ -425,6 +487,29 @@ const SortingTable = (props) => {
                               </p> : null
                         : <p>X</p>}
                   </td>
+                  :
+                  <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+                      {SumNumCar != 0 ?
+                        ((SumNumCarKashir / SumNumCar) * 100).toFixed(0) <= 60 ?
+                          <p style={{ color: '#ff2128' }}>
+                            {((SumNumCarKashir / SumNumCar) * 100).toFixed(0)}%
+                            <br></br>
+                            {SumNumCarKashir + '/' + SumNumCar }
+                          </p> :
+                          ((SumNumCarKashir / SumNumCar) * 100).toFixed(0) <= 80 ?
+                            <p style={{ color: '#ffca3a' }}>
+                              {((SumNumCarKashir / SumNumCar) * 100).toFixed(0)}%
+                              <br></br>
+                              {SumNumCarKashir + '/' + SumNumCar }
+                            </p> :
+                            ((SumNumCarKashir / SumNumCar) * 100).toFixed(0) <= 100 ?
+                              <p style={{ color: '#8ac926' }}>
+                                {((SumNumCarKashir / SumNumCar) * 100).toFixed(0)}%
+                                <br></br>
+                                {SumNumCarKashir + '/' + SumNumCar }
+                              </p> : null
+                        : <p>X</p>}
+                  </td>}
               </tr>)
             })}
              {SumOfCarDataByCarType()}
