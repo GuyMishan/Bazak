@@ -76,6 +76,9 @@ function AdminSignInForm() {
         if (user.role === "4") {
           history.push(`/dashboard/pikod/${user.pikodid}/magadal/0/false`);
         }
+        if (user.role === "5") {
+          history.push(`/dashboard/general/5/magadal/0/false`);
+        }
       }
       else {
         toast.success("משתמש לא מאושר מערכת");

@@ -146,11 +146,14 @@ const ModularScreensModal = (props) => {
               if (isAuthenticated().user.role == "4") {
                 history.push(`/dashboard/gdod/${isAuthenticated().user.gdodid}/magadal/0/true`);
               }
+              if (isAuthenticated().user.role == "5") {
+                history.push(`/dashboard/general/5/magadal/0/true`);
+              }
             }} style={{ cursor: 'pointer' }}>
 
             <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
                 <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
-                    <h2 style={{ margin: 'auto' }}>דף הבית</h2>
+                    <h2 style={{ margin: 'auto' }}>מסך ברירת מחדל</h2>
                 </CardBody>
             </Card>
             </Col>

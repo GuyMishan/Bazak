@@ -69,8 +69,7 @@ import {
 
 import { isAuthenticated } from "auth/index";
 
-function SidebarOgda(props) {
-  const { user } = isAuthenticated();
+function SidebarAdmin(props) {
 
   const clickSubmit = (event) => {
     event.preventDefault();
@@ -86,7 +85,7 @@ function SidebarOgda(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to={`/dashboard/ogda/${user.ogdaid}/magadal/0/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/dashboard/general/5/magadal/0/false" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -116,7 +115,7 @@ function SidebarOgda(props) {
           </div>
         </li>
         <li>
-          <NavLink to={`/zminotpage/ogda/${user.ogdaid}/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/general/5/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -131,7 +130,7 @@ function SidebarOgda(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/subunitspage/ogda/${user.ogdaid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/subunitspage/general/5/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -146,7 +145,7 @@ function SidebarOgda(props) {
           </NavLink>
         </li>
         {/* <li>
-          <NavLink to={`/statisticspage/ogda/${user.ogdaid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/statisticspage/admin/0/magadal/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={graphpic} style={{ height: "20px" }}></img>
@@ -161,7 +160,7 @@ function SidebarOgda(props) {
           </NavLink>
         </li> */}
         <li>
-          <NavLink to={`/unittreepage/ogda/${user.ogdaid}`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/unittreepage/general/5`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
@@ -191,7 +190,7 @@ function SidebarOgda(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/subunitsrecentfeedspage/ogda/${user.ogdaid}/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/subunitsrecentfeedspage/general/5/magadal/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
@@ -221,7 +220,7 @@ function SidebarOgda(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/ogda/${user.ogdaid}/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/general/5/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -230,6 +229,21 @@ function SidebarOgda(props) {
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   כלים מושבתים
+                </h4>
+              </Col>
+            </Row>
+          </NavLink>
+        </li>
+        <li>
+          <NavLink to={`/zminotpage/general/5/magadal/0/false/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+            <Row style={{ direction: "rtl" }}>
+              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
+                {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
+                  : <img src={table_white} style={{ height: "20px" }}></img>}
+              </Col>
+              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
+                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
+                  כלים עצורים
                 </h4>
               </Col>
             </Row>
@@ -255,4 +269,4 @@ function SidebarOgda(props) {
   );
 }
 
-export default SidebarOgda;
+export default SidebarAdmin;

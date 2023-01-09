@@ -113,7 +113,7 @@ export async function HierarchyCheck(targetUnitId, targetUnitType) {
     }
 
     async function hierarchyCheck(targetUnitId, targetUnitType) {
-        if (targetUnitType == 'notype' || isAuthenticated().user.role == '0') {
+        if (targetUnitType == 'notype' || isAuthenticated().user.role == '0' || isAuthenticated().user.role == '5') {
             return true;
         }
         if (targetUnitType == 'admin' && isAuthenticated().user.role != '0') {

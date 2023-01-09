@@ -22,6 +22,7 @@ import AssessmentComponent from "./AssessmentComponent";
 import AssessmentFormModal from "./AssessmentFormModal"
 import editpic from "assets/img/edit.png";
 import editpic_black from "assets/img/edit_black.png";
+import { isPending } from '@reduxjs/toolkit';
 
 function AssessmentPage(props) {
     const { user } = isAuthenticated()
@@ -32,12 +33,25 @@ function AssessmentPage(props) {
     const [assessmentdataidformodal, setAssessmentdataidformodal] = useState(undefined);
     //
     const [pikods, setPikods] = useState([]);
+    const [pikodid, setPikodid] = useState();
     //spinner
     const [isdataloaded, setIsdataloaded] = useState(false);
 
     async function init() {
         GetAssessments();
         loadPikods();
+        if(user.role == '3'){
+            getParentId(user.ogdaid);
+        }
+    }
+
+    async function getParentId(targetUnitId) {
+
+     let response = await axios.get(`http://localhost:8000/api/ogda/${targetUnitId}`)
+     .then(response => {
+        console.log(response.data.pikod)
+        setPikodid(response.data.pikod);
+    })
     }
 
     async function GetAssessments() {
@@ -101,7 +115,7 @@ function AssessmentPage(props) {
                                 <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
                                     <Row>
                                         <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
-                                            {(user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod)) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+                                            {user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) || (user.role == '3' && user.ogdaid && pikodid == assessment.pikod) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
                                                 <div style={{ display: 'flex', justifyContent: 'right' }}>
                                                     {props.theme == 'white-content' ? <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic_black} style={{ height: "100%" }}></img></button>
                                                         : <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic} style={{ height: "100%" }} ></img></button>}

@@ -123,6 +123,9 @@ export default function SignUpForm() {
         if (user.role === "4") {
           history.push(`/dashboard/pikod/${user.pikodid}/magadal/0/false`);
         }
+        if (user.role === "5") {
+          history.push(`/dashboard/general/5/magadal/0/false`);
+        }
       }
   }
 
@@ -188,6 +191,13 @@ export default function SignUpForm() {
     event.preventDefault();
     //check and fix roles
     if (data.role === "0") {
+      delete data.gdodid;
+      delete data.hativaid;
+      delete data.ogdaid;
+      delete data.pikodid;
+    } 
+    if (data.role === "5") {
+      data.site_permission = 'צפייה';
       delete data.gdodid;
       delete data.hativaid;
       delete data.ogdaid;
@@ -357,6 +367,7 @@ export default function SignUpForm() {
                     >
                       <option value="">הרשאה</option>
                       <option value="0">מנהל מערכת</option>
+                      {/* <option value="5">משתמש כלל צה"ל</option> */}
                       <option value="1">הרשאת גדוד</option>
                       <option value="2">הרשאת חטיבה</option>
                       <option value="3">הרשאת אוגדה</option>
@@ -365,7 +376,9 @@ export default function SignUpForm() {
                   </FormGroup>
 
                   {data.role === "0" ? (
-                    <div>מנהל מערכת</div>
+                    <div style={{textAlign:'right', paddingTop: "10px"}}>מנהל מערכת</div>
+                  ) : data.role === "5" ? (
+                    <div style={{textAlign:'right', paddingTop: "10px"}}>משתמש כלל צה"ל</div>
                   ) : data.role === "1" ? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
@@ -403,10 +416,10 @@ export default function SignUpForm() {
                       </FormGroup>
                     </>
                   ) : data.role === "" ? (
-                    <div>נא להכניס הרשאה</div>
+                    <div style={{textAlign:'right', paddingTop: "10px"}}>נא להכניס הרשאה</div>
                   ) : null}
                   
-                  {data.role != "" ? (
+                  {data.role != "" && data.role != "0" && data.role != "5" ? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         הרשאת עריכה
