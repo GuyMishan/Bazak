@@ -106,7 +106,7 @@ const ModularScreensModal = (props) => {
         size=""
         toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
-          <Row style={{ textAlign: 'right', marginBottom: screens.length>0 ? '20px': '170px' }}>
+          <Row style={{ textAlign: 'right', marginBottom: (mode != 'normal' && (screens.length == 0)) ? '170px': '20px' }}>
             {mode == 'normal' ?
               <>
                 <Col xs={12} md={8}>
@@ -134,16 +134,16 @@ const ModularScreensModal = (props) => {
               if (isAuthenticated().user.role == "0") {
                 history.push(`/dashboard/admin/0/magadal/0/true`);
               }
-              if (isAuthenticated().user.role == "1") {
+              if (isAuthenticated().user.role == "4") {
                 history.push(`/dashboard/pikod/${isAuthenticated().user.pikodid}/magadal/0/true`);
               }
-              if (isAuthenticated().user.role == "2") {
+              if (isAuthenticated().user.role == "3") {
                 history.push(`/dashboard/ogda/${isAuthenticated().user.ogdaid}/magadal/0/true`);
               }
-              if (isAuthenticated().user.role == "3") {
+              if (isAuthenticated().user.role == "2") {
                 history.push(`/dashboard/hativa/${isAuthenticated().user.hativaid}/magadal/0/true`);
               }
-              if (isAuthenticated().user.role == "4") {
+              if (isAuthenticated().user.role == "1") {
                 history.push(`/dashboard/gdod/${isAuthenticated().user.gdodid}/magadal/0/true`);
               }
               if (isAuthenticated().user.role == "5") {
