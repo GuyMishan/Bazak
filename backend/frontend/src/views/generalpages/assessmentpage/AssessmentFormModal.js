@@ -41,7 +41,7 @@ const AssessmentFormModal = (props) => {
     setSingleFile(e.target.files[0]);
   };
   //
-  const [pikods, setPikods] = useState([]);
+  const [units, setUnits] = useState([]);
 
   const loadassessmentdata = async () => {
     await axios.get(`http://localhost:8000/api/assessment/${props.assessmentdataid}`)
@@ -56,14 +56,26 @@ const AssessmentFormModal = (props) => {
       })
   }
 
-  const loadPikods = async () => {
+  const loadUnits = async () => {
+    let units =[];
     await axios.get("http://localhost:8000/api/pikod",)
-      .then(response => {
-        setPikods(response.data);
+      .then(async response => {
+        // setUnits(response.data);
+        units = units.concat(response.data);
+        await axios.get("http://localhost:8000/api/ogda",)
+        .then(response => {
+          // setUnits(response.data);
+          units = units.concat(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        })
       })
       .catch((error) => {
         console.log(error);
       })
+     
+    setUnits(units);
   }
 
   function handleChange(evt) {
@@ -170,7 +182,7 @@ const AssessmentFormModal = (props) => {
     else {
 
     }
-    loadPikods();
+    loadUnits();
     //loadogdas maybe to be added
   }
 
@@ -204,12 +216,12 @@ const AssessmentFormModal = (props) => {
                 <Row>
                   {(!(assessmentdata.pikod)) ?
                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>פיקוד</div>
-                      <Select data={pikods} handleChange2={handleChange2} name={'pikod'} val={assessmentdata.pikod ? assessmentdata.pikod : undefined} />
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>יחידה</div>
+                      <Select data={units} handleChange2={handleChange2} name={'pikod'} val={assessmentdata.pikod ? assessmentdata.pikod : undefined} />
                     </Col> :
                     <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>פיקוד</div>
-                      <Select data={pikods} handleChange2={handleChange2} name={'pikod'} val={assessmentdata.pikod ? assessmentdata.pikod : undefined} />
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>יחידה</div>
+                      <Select data={units} handleChange2={handleChange2} name={'pikod'} val={assessmentdata.pikod ? assessmentdata.pikod : undefined} />
                     </Col>}
 
                   <Col>

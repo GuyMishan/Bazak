@@ -32,14 +32,14 @@ function AssessmentPage(props) {
     const [isassessmentdataformopen, setIsassessmentdataformopen] = useState(false);
     const [assessmentdataidformodal, setAssessmentdataidformodal] = useState(undefined);
     //
-    const [pikods, setPikods] = useState([]);
-    const [pikodid, setPikodid] = useState();
+    const [units, setUnits] = useState([]);
+    const [unitid, setUnitid] = useState();
     //spinner
     const [isdataloaded, setIsdataloaded] = useState(false);
 
     async function init() {
         GetAssessments();
-        loadPikods();
+        loadUnits();
         if(user.role == '3'){
             getParentId(user.ogdaid);
         }
@@ -50,7 +50,7 @@ function AssessmentPage(props) {
      let response = await axios.get(`http://localhost:8000/api/ogda/${targetUnitId}`)
      .then(response => {
         console.log(response.data.pikod)
-        setPikodid(response.data.pikod);
+        setUnitid(response.data.pikod);
     })
     }
 
@@ -80,15 +80,27 @@ function AssessmentPage(props) {
         init();
     }
 
-    const loadPikods = async () => {
+    const loadUnits = async () => {
+        let units =[];
         await axios.get("http://localhost:8000/api/pikod",)
+          .then(async response => {
+            // setUnits(response.data);
+            units = units.concat(response.data);
+            await axios.get("http://localhost:8000/api/ogda",)
             .then(response => {
-                setPikods(response.data);
+              // setUnits(response.data);
+              units = units.concat(response.data);
             })
             .catch((error) => {
-                console.log(error);
+              console.log(error);
             })
-    }
+          })
+          .catch((error) => {
+            console.log(error);
+          })
+         
+        setUnits(units);
+      }
 
     useEffect(() => {
         init();
@@ -115,7 +127,7 @@ function AssessmentPage(props) {
                                 <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
                                     <Row>
                                         <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
-                                            {user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) || (user.role == '3' && user.ogdaid && pikodid == assessment.pikod) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+                                            {user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) || (user.role == '3' && user.ogdaid && unitid == assessment.pikod) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
                                                 <div style={{ display: 'flex', justifyContent: 'right' }}>
                                                     {props.theme == 'white-content' ? <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic_black} style={{ height: "100%" }}></img></button>
                                                         : <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic} style={{ height: "100%" }} ></img></button>}
@@ -123,7 +135,7 @@ function AssessmentPage(props) {
                                         </Col>
 
                                         <Col xs={12} md={9} style={{ textAlign: 'center', padding: '0px' }}>
-                                            <AssessmentComponent theme={props.theme} match={props.match} assessment={assessment} pikods={pikods} />
+                                            <AssessmentComponent theme={props.theme} match={props.match} assessment={assessment} units={units} />
                                         </Col>
                                     </Row>
                                 </Col>
