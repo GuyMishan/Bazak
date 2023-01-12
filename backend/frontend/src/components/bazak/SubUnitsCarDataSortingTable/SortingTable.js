@@ -314,7 +314,7 @@ const SortingTable = (props) => {
     }
 
     return(
-      <tr style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+      <tr style={{ width: `${100 / 3}%`, minWidth: '150px', backgroundColor: 'rgba(228, 228, 228, 0.5)'}}>
        <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}>סה"כ</th>
        {props.unittype == 'hativa' ? 
          <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}></td>
@@ -465,7 +465,7 @@ const SortingTable = (props) => {
                     </td>)
                   }) : null}
                   {props.theme == 'white-content' ?
-                  <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+                  <td style={{ width: `${100 / 3}%`, minWidth: '150px', backgroundColor: 'rgba(228, 228, 228, 0.5)' }}>
                       {SumNumCar != 0 ?
                         ((SumNumCarZamin / SumNumCar) * 100).toFixed(0) <= 60 ?
                           <p style={{ color: '#ff2128' }}>
@@ -488,7 +488,7 @@ const SortingTable = (props) => {
                         : <p>X</p>}
                   </td>
                   :
-                  <td style={{ width: `${100 / 3}%`, minWidth: '150px' }}>
+                  <td style={{ width: `${100 / 3}%`, minWidth: '150px', backgroundColor: 'rgba(228, 228, 228, 0.5)' }}>
                       {SumNumCar != 0 ?
                         ((SumNumCarKashir / SumNumCar) * 100).toFixed(0) <= 60 ?
                           <p style={{ color: '#ff2128' }}>
