@@ -29,6 +29,8 @@ const CarDataFilter = (props) => {
     const [zminots, setZminots] = useState([])
 
     const [kshirots, setKshirots] = useState([])
+
+    const [stands, setStands] = useState([])
     //units
     const [gdods, setGdods] = useState([]);
     const [hativas, setHativas] = useState([]);
@@ -57,6 +59,14 @@ const CarDataFilter = (props) => {
         tempzminots.push('זמין');
         tempzminots.push('לא זמין');
         setZminots(tempzminots)
+    }
+
+    const getStands = async () => {
+        let tempstands = [];
+        tempstands.push('סדיר');
+        tempstands.push('הכן');
+        tempstands.push('הח"י');
+        setStands(tempstands)
     }
 
     const getMagadals = async () => {
@@ -196,6 +206,7 @@ const CarDataFilter = (props) => {
     function init() {
         getKshirots();
         getZminots();
+        getStands();
         getMagadals();
         loadPikods();
     }
@@ -240,7 +251,7 @@ const CarDataFilter = (props) => {
             <Collapse isOpen={collapseOpen}>
                 <Card style={{ background: 'rgb(228,228,228,0.2)' }}>
                     <Row style={{ margin: '0px' }}>
-                        <Col xs={12} md={2} style={{ textAlign: 'right' }}>
+                        <Col xs={12} md={1} style={{ textAlign: 'right' }}>
                             <h4 style={{ fontWeight: 'bold' }}>זמינות</h4>
                             {zminots ? zminots.map((zminot, index) => {
                                 {
@@ -254,7 +265,7 @@ const CarDataFilter = (props) => {
                                 }
                             }) : null}
                         </Col>
-                        <Col xs={12} md={2} style={{ textAlign: 'right' }}>
+                        <Col xs={12} md={1} style={{ textAlign: 'right' }}>
                             <h4 style={{ fontWeight: 'bold' }}>כשירות</h4>
                             {kshirots ? kshirots.map((kshirot, index) => {
                                 {
@@ -263,6 +274,20 @@ const CarDataFilter = (props) => {
                                             {props.filter.kshirotfilter && props.filter.kshirotfilter.indexOf(kshirot) != -1 ?
                                                 <button className="btn-empty" name={'kshirot'} value={kshirot} onClick={props.setfilterfunction}><h6 style={{ color: 'blue', }}>{kshirot}</h6></button>
                                                 : <button className="btn-empty" name={'kshirot'} value={kshirot} onClick={props.setfilterfunction}><h6 style={{ fontWeight: 'unset' }}>{kshirot}</h6></button>}
+                                        </Row>
+                                    )
+                                }
+                            }) : null}
+                        </Col>
+                        <Col xs={12} md={1} style={{ textAlign: 'right' }}>
+                            <h4 style={{ fontWeight: 'bold' }}>מעמד</h4>
+                            {stands ? stands.map((stand, index) => {
+                                {
+                                    return (
+                                        <Row>
+                                            {props.filter.standfilter && props.filter.standfilter.indexOf(stand) != -1 ?
+                                                <button className="btn-empty" name={'stand'} value={stand} onClick={props.setfilterfunction}><h6 style={{ color: 'blue', }}>{stand}</h6></button>
+                                                : <button className="btn-empty" name={'stand'} value={stand} onClick={props.setfilterfunction}><h6 style={{ fontWeight: 'unset' }}>{stand}</h6></button>}
                                         </Row>
                                     )
                                 }

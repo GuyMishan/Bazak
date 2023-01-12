@@ -42,6 +42,7 @@ import SidebarGdod from 'components/general/Sidebar/SidebarGdod';
 import SidebarHativa from 'components/general/Sidebar/SidebarHativa';
 import SidebarOgda from 'components/general/Sidebar/SidebarOgda';
 import SidebarPikod from 'components/general/Sidebar/SidebarPikod';
+import SidebarGeneral from 'components/general/Sidebar/SidebarGeneral';
 import { signout } from "auth/index";
 //
 import ModularScreensModal from 'components/bazak/ModularScreensModals/ModularScreensModal/ModularScreensModal';
@@ -90,7 +91,9 @@ function Sidebar() {
 
                 user.role === "3" ? <SidebarOgda theme={color} Togglemodularscreensmodal={Togglemodularscreensmodal}/> :
 
-                  user.role === "4" ? <SidebarPikod theme={color} Togglemodularscreensmodal={Togglemodularscreensmodal}/> : null
+                  user.role === "4" ? <SidebarPikod theme={color} Togglemodularscreensmodal={Togglemodularscreensmodal}/> :
+
+                   user.role === "5" ? <SidebarGeneral theme={color} Togglemodularscreensmodal={Togglemodularscreensmodal}/> : null
           }
           <div style={{ textAlign: 'center', position: 'absolute', bottom: 0, width: '100%', marginBottom: '15px' }}>
             {color == 'white' ? <img src={Logo100} style={{ height: "100px" }}></img>

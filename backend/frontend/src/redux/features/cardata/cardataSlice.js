@@ -54,6 +54,10 @@ export const getCarDataFunc = (data) => async (dispatch) => {// gets user
       unittype = 'pikod';
       unitid = data.pikodid;
       break;
+    case '5':
+      unittype = 'general';
+      unitid = '5';
+      break;
   }
 
   await axios.get(`http://localhost:8000/api/cardata/cardatabyunittypeandunitid/${unittype}/${unitid}`)

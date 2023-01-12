@@ -459,6 +459,22 @@ const SortingTable = (props) => {
         setFilter({ ...filter, zminotfilter: [evt.currentTarget.value] })
       }
     }
+    if (evt.currentTarget.name == 'stand') {
+      if (filter.standfilter) {
+        let tempstandfilter = [...filter.standfilter]
+        const index = tempstandfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempstandfilter.splice(index, 1);
+        }
+        else {
+          tempstandfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, standfilter: tempstandfilter })
+      }
+      else {
+        setFilter({ ...filter, standfilter: [evt.currentTarget.value] })
+      }
+    }
   }
 
   function handleChange8(selectedOption, name) {
@@ -503,12 +519,24 @@ const SortingTable = (props) => {
       myArrayFiltered2 = myArrayFiltered1;
     }
 
-    let myArrayFiltered3 = []; //filter pikod
-    if (filter.pikod && filter.pikod.length > 0) {
-      myArrayFiltered3 = myArrayFiltered2.filter(item => filter.pikod.includes(item.pikod));
+    let myArrayFiltered22 = []; //filter standfilter
+    if (filter.standfilter && filter.standfilter.length > 0) {
+      myArrayFiltered22 = myArrayFiltered2.filter((el) => {
+        return filter.standfilter.some((f) => {
+          return f === el.stand;
+        });
+      });
     }
     else {
-      myArrayFiltered3 = myArrayFiltered2;
+      myArrayFiltered22 = myArrayFiltered2;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered22.filter(item => filter.pikod.includes(item.pikod));
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered22;
     }
 
     let myArrayFiltered4 = []; //filter ogda
@@ -795,12 +823,14 @@ const SortingTable = (props) => {
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
           </div>
-          {!props.charts ? <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button> : null}
+          {(user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+          !props.charts ? <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button> : null
+          :null}
 
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
 
           <Row>
-            <Col xs={12} md={6} style={{ textAlign: 'right', left: '20rem', marginTop: '1rem' }}>
+            <Col xs={12} md={6} style={{ textAlign: 'right', left: (user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? '20rem': '11.5rem', marginTop: '1rem' }}>
               <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
             </Col>
           </Row>
@@ -823,7 +853,7 @@ const SortingTable = (props) => {
                       </div>
                     </th>
                   ))}
-                  {!props.charts ? <th style={{ position: 'sticky', top: '-2px' }}></th> : null}
+                  {!props.charts && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? <th style={{ position: 'sticky', top: '-2px' }}></th> : null}
                   {/* {props.unittype != 'notype' ? <th style={{ position: 'sticky', top: '-2px' }}></th>: null} */}
                   {props.unittype != 'notype' ? !props.charts ? <th style={{ position: 'sticky', top: '-2px' }}></th>
                     : null : null}
@@ -893,10 +923,14 @@ const SortingTable = (props) => {
                           }
                         })
                       }
+                      {(user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+                      <>
                       {!props.charts ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>עדכן</button></div></td> : null}
                       {props.unittype != 'notype' ? !props.charts ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-delete" value={row.original._id} onClick={ToggleDelete}>מחק</button></div></td>
                         : null : null}
-                      {/* {console.log(row)} */}
+                      </>
+                      :
+                      !props.charts ? <td role="cell"> <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}><button className="btn-new-blue" value={row.original._id} onClick={Toggle}>צפה</button></div></td> : null}
                     </tr>
                   )
                 })

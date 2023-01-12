@@ -67,7 +67,7 @@ ReactDOM.render(
               {/*///////////////////////////////////////////Admin Routes/////////////////////////////////////////////////*/}
 
               {/*///////////////////////////////////////////LoggedIn Routes/////////////////////////////////////////////////*/}
-              <LoggedinRoute path="/dashboard/:unittype/:unitid/:cartype/:carid" exact component={DashboardPage} />
+              <LoggedinRoute path="/dashboard/:unittype/:unitid/:cartype/:carid/:isfromunittree" exact component={DashboardPage} />
               <LoggedinRoute path="/subunitspage/:unittype/:unitid/:cartype/:carid" exact component={SubUnitsPage} />
               <LoggedinRoute path="/zminotpage/:unittype/:unitid/:cartype/:carid/:ismushbat/:isstopped" exact component={ZminotPage} />
               <LoggedinRoute path="/unittreepage/:unittype/:unitid" exact component={UnitTreePage} />

@@ -45,7 +45,7 @@ function AssessmentComponent(props) {
                     {props.assessment.englishname ? CheckImgPath(props.assessment.englishname) == true ? <img style={{ height: '300px', width: '300px' }} src={require(`assets/img/unitsimg/${props.assessment.englishname}.png`)}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img> : <img style={{ height: '300px', width: '300px' }} src={tzahalpng}></img>}
                 </div>
             </a>
-            <h1>{props.pikods.map((pikod, index) => (pikod._id == props.assessment.pikod ? pikod.name : null))}</h1>
+            <h1>{props.units.map((unit, index) => (unit._id == props.assessment.pikod ? unit.name : null))}</h1>
         </>
     );
 }

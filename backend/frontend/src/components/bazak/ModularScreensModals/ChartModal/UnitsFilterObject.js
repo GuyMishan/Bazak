@@ -205,7 +205,7 @@ const UnitsFilterObject = (props) => {
     return (
         <div>
             <Row style={{ padding: '0px',paddingTop:'5px' }}>
-                {((props.user.role == "0")) ?
+                {((props.user.role == "0" || props.user.role == "5")) ?
                     <>
                         {(!(props.unitfilterobject.ogda)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -234,7 +234,7 @@ const UnitsFilterObject = (props) => {
                             </Col>}
                     </> : null}
 
-                {((props.user.role == "0") || (props.user.role == "4")) ?
+                {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4")) ?
                     <>
                         {((props.unitfilterobject.pikod) && !(props.unitfilterobject.hativa)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -263,7 +263,7 @@ const UnitsFilterObject = (props) => {
                             </Col>}
                     </> : null}
                 
-                {((props.user.role == "0") || (props.user.role == "4") || (props.user.role == "3")) ?
+                {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4") || (props.user.role == "3")) ?
                     <>
                         {((props.unitfilterobject.ogda) && !(props.unitfilterobject.gdod)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -292,7 +292,7 @@ const UnitsFilterObject = (props) => {
                             </Col>}
                     </> : null}
 
-                {((props.user.role == "0") || (props.user.role == "4") || (props.user.role == "3") || (props.user.role == "2")) ?
+                {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4") || (props.user.role == "3") || (props.user.role == "2")) ?
                     <>
                         {((props.unitfilterobject.hativa)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
