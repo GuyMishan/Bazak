@@ -447,7 +447,7 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcar}
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
                           </p> :
                           ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>
