@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef } from 'react';
 
-import { Link, withRouter, Redirect } from "react-router-dom";
+import {useParams, Link, withRouter, Redirect } from "react-router-dom";
 
 // reactstrap components
 import {
@@ -29,6 +29,8 @@ import ModularScreenPage from '../modularscreenpage/ModularScreenPage';
 function DashboardPage({ match, theme }) {
   //user
   const { user } = isAuthenticated()
+  //is from unit tree
+  const { isfromunittree } = useParams()
   //cardatas
   const [cardatas, setCardatas] = useState([])
   const [cartypes, setCartypes] = useState([]);
@@ -182,7 +184,7 @@ function DashboardPage({ match, theme }) {
         <PropagateLoader color={'#ff4650'} loading={true} size={25} />
       </div>
       :
-      user.mainscreenid && user.mainscreenid != null ?
+      user.mainscreenid && user.mainscreenid != null && isfromunittree == "false" ?
         <>
         <ModularScreenPage screenid={user.mainscreenid} theme={theme}/>
         </>

@@ -85,7 +85,7 @@ function SidebarAdmin(props) {
       </div>
       <Nav style={{ textAlign: "right" }}>
         <li>
-          <NavLink to="/dashboard/admin/0/magadal/0/false" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/dashboard/general/5/magadal/0/false" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={home} style={{ height: "20px" }}></img>
@@ -115,7 +115,7 @@ function SidebarAdmin(props) {
           </div>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/general/5/magadal/0/false/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -130,7 +130,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/subunitspage/admin/0/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/subunitspage/general/5/magadal/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -160,7 +160,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li> */}
         <li>
-          <NavLink to={`/unittreepage/admin/0`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/unittreepage/general/5`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
@@ -190,7 +190,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to="/subunitsrecentfeedspage/admin/0/magadal/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to="/subunitsrecentfeedspage/general/5/magadal/0" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={shortlist} style={{ height: "20px" }}></img>
@@ -220,7 +220,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/general/5/magadal/0/true/false`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -235,7 +235,7 @@ function SidebarAdmin(props) {
           </NavLink>
         </li>
         <li>
-          <NavLink to={`/zminotpage/admin/0/magadal/0/false/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
+          <NavLink to={`/zminotpage/general/5/magadal/0/false/true`} style={{ margin: '0px' }} activeClassName="sidebar_active_link">
             <Row style={{ direction: "rtl" }}>
               <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
                 {props.theme == 'white' ? <img src={table} style={{ height: "20px" }}></img>
@@ -244,21 +244,6 @@ function SidebarAdmin(props) {
               <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
                 <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
                   כלים עצורים
-                </h4>
-              </Col>
-            </Row>
-          </NavLink>
-        </li>
-        <li>
-          <NavLink to="/manageusers" style={{ margin: '0px' }} activeClassName="sidebar_active_link">
-            <Row style={{ direction: "rtl" }}>
-              <Col xs={12} md={3} style={{ paddingLeft: "0px", textAlign: 'center', alignSelf: 'center' }}>
-                {props.theme == 'white' ? <img src={editusers} style={{ height: "20px" }}></img>
-                  : <img src={editusers_white} style={{ height: "20px" }}></img>}
-              </Col>
-              <Col xs={12} md={9} style={{ paddingRight: "0px" }}>
-                <h4 style={{ margin: "0px", paddingTop: '6px', paddingBottom: '6px' }}>
-                  ניהול הרשאות
                 </h4>
               </Col>
             </Row>

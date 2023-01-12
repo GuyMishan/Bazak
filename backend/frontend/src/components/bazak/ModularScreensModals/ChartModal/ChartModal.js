@@ -67,7 +67,7 @@ const ChartModal = (props) => {
         if (chartdata.screenid) { //for update
           tempchart.screenid = chartdata.screenid;
         }
-        if (user.role != '0') {
+        if (user.role != '0' || user.role != '5') {
           var flag = true;
           for (var i = 0; i < tempchart.units.length; i++) {
             if (tempchart.units[i].gdod) {
@@ -225,7 +225,7 @@ const ChartModal = (props) => {
           if (!unitsfilterarray[i].ogda) {
             tempflag1 = false;
           }
-        } else if (user.role == '0') {
+        } else if (user.role == '0' || user.role == '5') {
           if (!unitsfilterarray[i].pikod) {
             tempflag1 = false;
           }

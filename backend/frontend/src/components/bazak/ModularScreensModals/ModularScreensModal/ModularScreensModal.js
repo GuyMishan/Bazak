@@ -106,7 +106,7 @@ const ModularScreensModal = (props) => {
         size=""
         toggle={props.Togglemodularscreensmodal}>
         <ModalBody>
-          <Row style={{ textAlign: 'right', marginBottom: screens.length>0 ? '20px': '170px' }}>
+          <Row style={{ textAlign: 'right', marginBottom: (mode != 'normal' && (screens.length == 0)) ? '170px': '20px' }}>
             {mode == 'normal' ?
               <>
                 <Col xs={12} md={8}>
@@ -128,6 +128,36 @@ const ModularScreensModal = (props) => {
           </Row>
 
           <Row>
+          {mode == "normal" ?
+            <Col xs={12} md={3} onClick={()=>{
+              props.Togglemodularscreensmodal();
+              if (isAuthenticated().user.role == "0") {
+                history.push(`/dashboard/admin/0/magadal/0/true`);
+              }
+              if (isAuthenticated().user.role == "4") {
+                history.push(`/dashboard/pikod/${isAuthenticated().user.pikodid}/magadal/0/true`);
+              }
+              if (isAuthenticated().user.role == "3") {
+                history.push(`/dashboard/ogda/${isAuthenticated().user.ogdaid}/magadal/0/true`);
+              }
+              if (isAuthenticated().user.role == "2") {
+                history.push(`/dashboard/hativa/${isAuthenticated().user.hativaid}/magadal/0/true`);
+              }
+              if (isAuthenticated().user.role == "1") {
+                history.push(`/dashboard/gdod/${isAuthenticated().user.gdodid}/magadal/0/true`);
+              }
+              if (isAuthenticated().user.role == "5") {
+                history.push(`/dashboard/general/5/magadal/0/true`);
+              }
+            }} style={{ cursor: 'pointer' }}>
+
+            <Card style={{ boxShadow: 'rgb(123 123 123 / 20%) 0px 2px 5px 5px' }}>
+                <CardBody style={{ textAlign: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
+                    <h2 style={{ margin: 'auto' }}>מסך ברירת מחדל</h2>
+                </CardBody>
+            </Card>
+            </Col>
+           :null}
             {filteredscreens.map((screen, i) => (
               screen ?
                 <ScreenCard screen={screen} mode={mode} screenid={screen.screenid} init={() => init()} Toggle={() => Togglescreenmodal(screen.screenid)} user={props.user} Togglemodularscreensmodal={props.Togglemodularscreensmodal} />

@@ -270,11 +270,12 @@ const CarDataFormModal = (props) => {
       ErrorReason += ", שדה חסר צ'"
       flag = false;
     }
-
-    for(var i=0;i<cardata.carnumber.length;i++){
-      if(cardata.carnumber[i]=='-'){
-        ErrorReason += ", מספר צ' לא יכול להכיל את התו -"
-        flag = false;
+    else{
+      for(var i=0;i<cardata.carnumber.length;i++){
+        if(cardata.carnumber[i]=='-'){
+          ErrorReason += ", מספר צ' לא יכול להכיל את התו -"
+          flag = false;
+        }
       }
     }
 
@@ -528,6 +529,7 @@ const CarDataFormModal = (props) => {
             <CardTitle tag="h4" style={{ direction: 'rtl', textAlign: 'center', fontWeight: "bold" }}>טופס זמינות כלי</CardTitle>{/*headline*/}
           </CardHeader>
           <CardBody style={{ direction: 'rtl' }}>
+          {(user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
             <Container>
               <Row>
                 {props.cardataid ?
@@ -781,7 +783,7 @@ const CarDataFormModal = (props) => {
                                       if (e.target.value != "בחר")
                                         setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul_entry_date = tipul_entry_date }))
                                     }}
-                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" />
+                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" min="1900-01-01" max="2040-01-01" />
                                   </div>
                                 </Col>
                                 <Col xs={12} md={4}>
@@ -830,7 +832,7 @@ const CarDataFormModal = (props) => {
                                         if (e.target.value != "בחר")
                                           setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul_date = harig_tipul_date }))
                                       }}
-                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" />
+                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" min="1900-01-01" max="2040-01-01"/>
                                     </div>
                                   </Col>
                                 </Row> : p.type == 'takala_mizdamenet' ? <Row>
@@ -858,7 +860,7 @@ const CarDataFormModal = (props) => {
                                         if (e.target.value != "בחר")
                                           setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet_date = takala_mizdamenet_date }))
                                       }}
-                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" />
+                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" min="1900-01-01" max="2040-01-01"/>
                                     </div>
                                   </Col>
                                 </Row> : p.type == 'hh_stand' ? <Row>
@@ -935,16 +937,322 @@ const CarDataFormModal = (props) => {
                 </Col>
                 <Col>
                   <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
-                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} />
+                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} min="1900-01-01" max="2040-01-01"/>
                 </Col>
               </Row>
 
-              {(user.role == '0' || user.role == '1' || isgdodsadir == false) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+              {(user.role == '0' || user.role == '1' || isgdodsadir == false) ?
                 <div style={{ textAlign: 'center', paddingTop: '20px' }}>
                   <button className="btn" onClick={clickSubmit}>עדכן</button>
                 </div> : null}
             </Container>
-          </CardBody>
+          :
+            <Container>
+              <Row>
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>צ'</h6>
+                  <Input placeholder="צ'" type="string" name="carnumber" value={cardata.carnumber} onChange={handleChange} disabled />
+                </Col>
+
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>משפחה</h6>
+                  <Input placeholder="משפחה" type="string" name="family" value={cardata.family} onChange={handleChange} disabled/>
+                </Col>
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6 style={{}}>סטאטוס הכלי</h6>
+                  <Input placeholder="סטאטוס הכלי" type="select" name="status" value={cardata.status} onChange={handleChange} disabled>
+                    <option value={"בחר"}>{"בחר"}</option>
+                    <option value={"פעיל"}>{"פעיל"}</option>
+                    <option value={"מושבת"}>{"מושבת"}</option>
+                    <option value={"מיועד להשבתה"}>{"מיועד להשבתה"}</option>
+                    {user.role == '0' ? <option value={"עצור"}>{"עצור"}</option> : null}
+                  </Input>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6>מאגד על</h6>
+                  <Select data={magadals} handleChange2={handleChange2} name={'magadal'} val={cardata.magadal ? cardata.magadal : undefined} isDisabled={true} />
+                </Col>
+
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6>מאגד</h6>
+                  <Select data={magads} handleChange2={handleChange2} name={'magad'} val={cardata.magad ? cardata.magad : undefined} isDisabled={true} />
+                </Col>
+
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6>מקבץ</h6>
+                  <Select data={mkabazs} handleChange2={handleChange2} name={'mkabaz'} val={cardata.mkabaz ? cardata.mkabaz : undefined} isDisabled={true} />
+                </Col>
+
+                <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                  <h6>מק"ט</h6>
+                  <Select data={makats} handleChange2={handleChange2} name={'makat'} val={cardata.makat ? cardata.makat : undefined} isDisabled={true} />
+                </Col>
+              </Row>
+
+              <Row style={{ paddingTop: '10px' }}>
+                {((props.unittype == "admin") || (props.unittype == "notype")) ?
+                  <>
+                      <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <h6>פיקוד</h6>
+                        <Select data={pikods} handleChange2={handleChange2} name={'pikod'} val={cardata.pikod ? cardata.pikod : undefined} isDisabled={true} />
+                      </Col>
+                  </> : null}
+
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod")) ?
+                  <>
+                      <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <h6>אוגדה</h6>
+                        <Select data={ogdas} handleChange2={handleChange2} name={'ogda'} val={cardata.ogda ? cardata.ogda : undefined} isDisabled={true} />
+                      </Col>
+                  </> : null}
+
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
+                  <>
+                      <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <h6>חטיבה</h6>
+                        <Select data={hativas} handleChange2={handleChange2} name={'hativa'} val={cardata.hativa ? cardata.hativa : undefined} isDisabled={true} />
+                      </Col>
+                  </> : null}
+
+                {((props.unittype == "admin") || (props.unittype == "notype") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
+                  <>
+                      <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                        <h6>גדוד</h6>
+                        <Select data={gdods} handleChange2={handleChange2} name={'gdod'} val={cardata.gdod ? cardata.gdod : undefined} isDisabled={true} />
+                      </Col>
+                  </> : null}
+              </Row>
+
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלוגה</div>
+                  <Input placeholder="פלוגה" type="string" name="pluga" value={cardata.pluga} onChange={handleChange} disabled/>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>שבצ"ק</div>
+                  <Input placeholder={`שבצ"ק`} type="string" name="shabzak" value={cardata.shabzak} onChange={handleChange} disabled/>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום בימ"ח</div>
+                  <Input placeholder={`מיקום בימ"ח`} type="string" name="mikum_bimh" value={cardata.mikum_bimh} onChange={handleChange} disabled/>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד הכלי</div>
+                  <Input placeholder="מעמד הכלי" type="select" name="stand" value={cardata.stand} onChange={handleChange} disabled>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'סדיר'}>סדיר</option>
+                    <option value={'הכן'}>הכן</option>
+                    <option value={'הח"י'}>הח"י</option>
+                  </Input>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
+                  <Input style={{ border: '2px solid' }} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange} disabled>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'זמין'}>זמין</option>
+                    <option value={'לא זמין'}>לא זמין</option>
+                  </Input>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
+                  <Input style={{ border: '2px solid' }} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange} disabled>
+                    <option value={'בחר'}>בחר</option>
+                    <option value={'כשיר'}>כשיר</option>
+                    <option value={'לא כשיר'}>לא כשיר</option>
+                  </Input>
+                </Col>
+              </Row>
+
+              {cardata.kshirot == 'לא כשיר' || cardata.zminot == 'לא זמין' ?
+                <>
+                  {/* tipuls */}
+                  <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>סיבות אי זמינות</div>
+
+                  <div>
+                      {finalspecialkeytwo.map((p, index) => {
+                        return (
+                          <div>
+                            {p.type == 'tipul' ?
+                              <Row>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>סוג הטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const tipul = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul = tipul }))
+                                    }}
+                                      value={p.tipul} type="select" placeholder="סוג הטיפול" disabled>
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={'רישוי שנתי'}>{'רישוי שנתי'}</option>
+                                      <option value={'חצי תקופתי'}>{'חצי תקופתי'}</option>
+                                      <option value={'תקופתי מורחב'}>{'תקופתי מורחב'}</option>
+                                      <option value={'תקופתי'}>{'תקופתי'}</option>
+                                      <option value={'טיפול שבועי'}>{'טיפול שבועי'}</option>
+                                      <option value={'טיפול חודשי'}>{'טיפול חודשי'}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>תאריך כניסה לטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const tipul_entry_date = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].tipul_entry_date = tipul_entry_date }))
+                                    }}
+                                      value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" min="1900-01-01" max="2040-01-01" disabled/>
+                                  </div>
+                                </Col>
+                                <Col xs={12} md={4}>
+                                  <div>
+                                    <p style={{ margin: '0px', float: 'right' }}>מיקום הטיפול</p>
+                                    <Input onChange={(e) => {
+                                      const mikum_tipul = e.target.value;
+                                      if (e.target.value != "בחר")
+                                        setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].mikum_tipul = mikum_tipul }))
+                                    }}
+                                      value={p.mikum_tipul} type="select" placeholder="מיקום הטיפול" disabled>
+                                      <option value={"בחר"}>{"בחר"}</option>
+                                      <option value={"ביחידה"}>{"ביחידה"}</option>
+                                      <option value={"אגד ארצי"}>{"אגד ארצי"}</option>
+                                      <option value={`מש"א`}>{`מש"א`}</option>
+                                      <option value={"אחזקות חוץ"}>{"אחזקות חוץ"}</option>
+                                    </Input>
+                                  </div>
+                                </Col>
+                              </Row> : p.type == 'harig_tipul' ?
+                                <Row>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>חריג טיפול</p>
+                                      <Input onChange={(e) => {
+                                        const harig_tipul = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul = harig_tipul }))
+                                      }}
+                                        value={p.harig_tipul} type="select" placeholder="חריג טיפול" disabled>
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        <option value={'רישוי שנתי'}>{'רישוי שנתי'}</option>
+                                        <option value={'חצי תקופתי'}>{'חצי תקופתי'}</option>
+                                        <option value={'תקופתי מורחב'}>{'תקופתי מורחב'}</option>
+                                        <option value={'תקופתי'}>{'תקופתי'}</option>
+                                        <option value={'טיפול שבועי'}>{'טיפול שבועי'}</option>
+                                        <option value={'טיפול חודשי'}>{'טיפול חודשי'}</option>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תאריך חריגת טיפול</p>
+                                      <Input onChange={(e) => {
+                                        const harig_tipul_date = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].harig_tipul_date = harig_tipul_date }))
+                                      }}
+                                        value={p.harig_tipul_date} type="date" placeholder="תאריך חריגת טיפול" min="1900-01-01" max="2040-01-01" disabled/>
+                                    </div>
+                                  </Col>
+                                </Row> : p.type == 'takala_mizdamenet' ? <Row>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תקלה מזדמנת</p>
+                                      <Input onChange={(e) => {
+                                        const takala_mizdamenet = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet = takala_mizdamenet }))
+                                      }}
+                                        value={p.takala_mizdamenet} type="select" placeholder="תקלה מזדמנת" disabled>
+                                        <option value={"בחר"}>{"בחר"}</option>
+                                        <option value={'קלה'}>{'קלה'}</option>
+                                        <option value={'בינונית'}>{'בינונית'}</option>
+                                        <option value={'קשה'}>{'קשה'}</option>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={4}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>תאריך תקלה מזמנת</p>
+                                      <Input onChange={(e) => {
+                                        const takala_mizdamenet_date = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].takala_mizdamenet_date = takala_mizdamenet_date }))
+                                      }}
+                                        value={p.takala_mizdamenet_date} type="date" placeholder="תאריך תקלה מזמנת" min="1900-01-01" max="2040-01-01" disabled/>
+                                    </div>
+                                  </Col>
+                                </Row> : p.type == 'hh_stand' ? <Row>
+                                  <Col xs={12} md={6}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>מק"ט חסר</p>
+                                      <Input onChange={(e) => {
+                                        const missing_makat_1 = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_1 = missing_makat_1 }))
+                                      }}
+                                        value={p.missing_makat_1} type="string" placeholder={`מק"ט חסר`} disabled>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                  <Col xs={12} md={6}>
+                                    <div>
+                                      <p style={{ margin: '0px', float: 'right' }}>כמות</p>
+                                      <Input onChange={(e) => {
+                                        const missing_makat_2 = e.target.value;
+                                        if (e.target.value != "בחר")
+                                          setFinalSpecialKeytwo(currentSpec => produce(currentSpec, v => { v[index].missing_makat_2 = missing_makat_2 }))
+                                      }}
+                                        value={p.missing_makat_2} type="string" placeholder={`כמות`} disabled>
+                                      </Input>
+                                    </div>
+                                  </Col>
+                                </Row> : null}
+                          </div>
+                        )
+                      })}
+                  </div>
+                  {/* tipuls */}
+
+                  <Row>
+                    <Col>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>מהות התקלה</div>
+                      <Input placeholder="מהות התקלה" type="textarea" name="takala_info" value={cardata.takala_info} onChange={handleChange} disabled/>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col>
+                      <div style={{ textAlign: 'right', paddingTop: '10px' }}>צפי תיקון</div>
+                      <Input placeholder="צפי תיקון" type="select" name="expected_repair" value={cardata.expected_repair} onChange={handleChange} disabled>
+                        <option value={"בחר"}>{"בחר"}</option>
+                        <option value={"עד 6 שעות"}>{"עד 6 שעות"}</option>
+                        <option value={"עד 12 שעות"}>{"עד 12 שעות"}</option>
+                        <option value={"מעל 12 שעות"}>{"מעל 12 שעות"}</option>
+                        <option value={"מעל 24 שעות"}>{"מעל 24 שעות"}</option>
+                      </Input>
+                    </Col>
+                  </Row>
+                </>
+                : null}
+
+              <Row>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
+                  <Input placeholder="מיקום" type="string" name="mikum" value={cardata.mikum} onChange={handleChange} disabled/>
+                </Col>
+                <Col>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
+                  <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} min="1900-01-01" max="2040-01-01" disabled/>
+                </Col>
+              </Row>
+            </Container>}
+         </CardBody>
         </Card>
       </ModalBody>
     </Modal>

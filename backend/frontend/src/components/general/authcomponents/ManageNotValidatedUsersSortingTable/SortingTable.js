@@ -156,9 +156,11 @@ const SortingTable = ({ match }) => {
                               return <td>משתמש אוגדה</td>
                             if (cell.value == '4')
                               return <td>משתמש פיקוד</td>
+                            if (cell.value == '5')
+                            return <td>משתמש כלל צה"ל</td>
                           }
                           if (cell.column.id == "unit") {
-                            if (row.original.role == '0')
+                            if (row.original.role == '0' || row.original.role == '5')
                               return <td></td>
                             if (row.original.role == '1')
                               return row.original.gdodid ? <td {...cell.getCellProps()}>{gdods.map((gdod, index) => (gdod._id == row.original.gdodid ? gdod.name : null))}</td> : <td {...cell.getCellProps()}></td>
