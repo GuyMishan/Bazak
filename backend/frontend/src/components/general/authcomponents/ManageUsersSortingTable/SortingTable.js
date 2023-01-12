@@ -5,11 +5,15 @@ import { COLUMNS } from "./coulmns";
 import { GlobalFilter } from './GlobalFilter'
 import axios from 'axios'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel';
+import ManageUsersFilter from "components/bazak/Filters/ManageUsersFilter";
 
 const SortingTable = ({ match }) => {
   const columns = useMemo(() => COLUMNS, []);
 
   const [data, setData] = useState([])
+  const [originaldata, setOriginaldata] = useState([])
+  //filter
+  const [filter, setFilter] = useState([])
   //units
   const [gdods, setGdods] = useState([]);
   const [hativas, setHativas] = useState([]);
@@ -47,32 +51,122 @@ const SortingTable = ({ match }) => {
   }
 
   const loadUsers = () => {
-    axios.get("http://localhost:8000/api/usersvalidated")
+    axios.get("http://localhost:8000/api/usersvalidatedaggregate")
       .then(response => {
         setData(response.data);
+        setOriginaldata(response.data);
       })
       .catch((error) => {
         console.log(error);
       })
   }
 
-  useEffect(() => {
-    (async () => {
-      await loadPikods();
-      await loadOgdas();
-      await loadHativas();
-      await loadGdods();
-      const result = await axios.get("http://localhost:8000/api/usersvalidated");
-      setData(result.data);
-    })();
-  }, []);
+  const setfilterfunction = (evt) => {
+    if (evt.currentTarget.name == 'role') {
+      if (filter.rolefilter) {
+        let temprolefilter = [...filter.rolefilter]
+        const index = temprolefilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          temprolefilter.splice(index, 1);
+        }
+        else {
+          temprolefilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, rolefilter: temprolefilter })
+      }
+      else {
+        setFilter({ ...filter, rolefilter: [evt.currentTarget.value] })
+      }
+    }
+  }
+
+  function handleChange8(selectedOption, name) {
+    if (!(selectedOption.value == "בחר")) {
+      let tempvalues = [];
+      for (let i = 0; i < selectedOption.length; i++) {
+        tempvalues.push(selectedOption[i].value);
+      }
+      setFilter({ ...filter, [name]: tempvalues });
+    }
+    else {
+      let tempfilter = { ...filter };
+      delete tempfilter[name];
+      setFilter(tempfilter);
+    }
+  }
+
+  const applyfiltersontodata = () => {
+    let tempdatabeforefilter = originaldata;
+
+    let myArrayFiltered1 = []; //filter rolefilter
+    if (filter.rolefilter && filter.rolefilter.length > 0) {
+
+      myArrayFiltered1 = tempdatabeforefilter.filter((el) => {
+        return filter.rolefilter.some((f) => {
+          let ff;
+          if (f == 'הרשאת אדמין') {
+            ff = '0';
+          }
+          if (f == 'הרשאת פיקוד') {
+            ff = '4';
+          }
+          if (f == 'הרשאת אוגדה') {
+            ff = '3';
+          }
+          if (f == 'הרשאת חטיבה') {
+            ff = '2';
+          }
+          if (f == 'הרשאת גדוד') {
+            ff = '1';
+          }
+          return ff === el.role;
+        });
+      });
+    }
+    else {
+      myArrayFiltered1 = tempdatabeforefilter;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered1.filter(item => filter.pikod.includes(item.pikod));
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered1;
+    }
+
+    let myArrayFiltered4 = []; //filter ogda
+    if (filter.ogda && filter.ogda.length > 0) {
+      myArrayFiltered4 = myArrayFiltered3.filter(item => filter.ogda.includes(item.ogda));
+    }
+    else {
+      myArrayFiltered4 = myArrayFiltered3;
+    }
+
+    let myArrayFiltered5 = []; //filter hativa
+    if (filter.hativa && filter.hativa.length > 0) {
+      myArrayFiltered5 = myArrayFiltered4.filter(item => filter.hativa.includes(item.hativa));
+    }
+    else {
+      myArrayFiltered5 = myArrayFiltered4;
+    }
+
+    let myArrayFiltered6 = []; //filter gdod
+    if (filter.gdod && filter.gdod.length > 0) {
+      myArrayFiltered6 = myArrayFiltered5.filter(item => filter.gdod.includes(item.gdod));
+    }
+    else {
+      myArrayFiltered6 = myArrayFiltered5;
+    }
+
+    setData(myArrayFiltered6)
+  }
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     footerGroups,
-
     page,
     prepareRow,
     canPreviousPage,
@@ -88,9 +182,23 @@ const SortingTable = ({ match }) => {
   } = useTable({
     columns, data, initialState: { pageIndex: 0 },
   },
-
     useGlobalFilter, useFilters, useSortBy, usePagination);
 
+  useEffect(() => {
+    (async () => {
+      await loadPikods();
+      await loadOgdas();
+      await loadHativas();
+      await loadGdods();
+      const result = await axios.get("http://localhost:8000/api/usersvalidatedaggregate");
+      setData(result.data);
+      setOriginaldata(result.data);
+    })();
+  }, []);
+
+  useEffect(() => {
+    applyfiltersontodata()
+  }, [filter]);
 
   return (
     <>
@@ -107,6 +215,9 @@ const SortingTable = ({ match }) => {
       </div>
       <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
       <div className="table-responsive" style={{ overflow: 'auto' }}>
+        {/*filter */}
+        <ManageUsersFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={'admin'} handleChange8={handleChange8} />
+
         <table id="table-to-xls-users" {...getTableProps()}>
           <thead>
             {headerGroups.map((headerGroup) => (

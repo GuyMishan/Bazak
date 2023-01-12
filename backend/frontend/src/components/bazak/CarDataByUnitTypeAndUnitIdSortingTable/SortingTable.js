@@ -459,6 +459,22 @@ const SortingTable = (props) => {
         setFilter({ ...filter, zminotfilter: [evt.currentTarget.value] })
       }
     }
+    if (evt.currentTarget.name == 'stand') {
+      if (filter.standfilter) {
+        let tempstandfilter = [...filter.standfilter]
+        const index = tempstandfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempstandfilter.splice(index, 1);
+        }
+        else {
+          tempstandfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, standfilter: tempstandfilter })
+      }
+      else {
+        setFilter({ ...filter, standfilter: [evt.currentTarget.value] })
+      }
+    }
   }
 
   function handleChange8(selectedOption, name) {
@@ -503,12 +519,24 @@ const SortingTable = (props) => {
       myArrayFiltered2 = myArrayFiltered1;
     }
 
-    let myArrayFiltered3 = []; //filter pikod
-    if (filter.pikod && filter.pikod.length > 0) {
-      myArrayFiltered3 = myArrayFiltered2.filter(item => filter.pikod.includes(item.pikod));
+    let myArrayFiltered22 = []; //filter standfilter
+    if (filter.standfilter && filter.standfilter.length > 0) {
+      myArrayFiltered22 = myArrayFiltered2.filter((el) => {
+        return filter.standfilter.some((f) => {
+          return f === el.stand;
+        });
+      });
     }
     else {
-      myArrayFiltered3 = myArrayFiltered2;
+      myArrayFiltered22 = myArrayFiltered2;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered22.filter(item => filter.pikod.includes(item.pikod));
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered22;
     }
 
     let myArrayFiltered4 = []; //filter ogda
