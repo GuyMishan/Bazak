@@ -88,7 +88,7 @@ const ScreenModal = (props) => {
               delete response.data[i].screenid;
               response.data[i].screenid = tempscreenid;
               response.data[i].chartid = await GenerateChartid();
-            if(user.role != '0' || user.role != '5'){
+            if(user.role != '0'){
               for(let j = 0 ; j<response.data[i].units.length; j++){
                 if(response.data[i].units[j].gdod){
                   var targetUnitId = response.data[i].units[j].gdod

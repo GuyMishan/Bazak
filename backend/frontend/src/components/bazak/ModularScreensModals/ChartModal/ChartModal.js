@@ -67,25 +67,20 @@ const ChartModal = (props) => {
         if (chartdata.screenid) { //for update
           tempchart.screenid = chartdata.screenid;
         }
-        if (user.role != '0' || user.role != '5') {
+        if (user.role != '0') {
           var flag = true;
           for (var i = 0; i < tempchart.units.length; i++) {
-            if (tempchart.units[i].gdod) {
-              var targetUnitId = tempchart.units[i].gdod
-            }
-            if (tempchart.units[i].hativa) {
-              var targetUnitId = tempchart.units[i].hativa
-            }
-            if (tempchart.units[i].ogda) {
-              var targetUnitId = tempchart.units[i].ogda
-            }
-            if (tempchart.units[i].pikod) {
-              var targetUnitId = tempchart.units[i].pikod
-            }
-            flag = await importHierarchyCheck(Object.keys(tempchart.units[i])[1], targetUnitId, Object.keys(tempchart.units[i])[1]);
-            if (!flag) {
+             var targetUnitId = Object.values(tempchart.units[i])[1]
+              for(let j=0;j<Object.values(tempchart.units[i])[1].length;j++){
+                flag = await importHierarchyCheck(Object.keys(tempchart.units[i])[1], targetUnitId[j], Object.keys(tempchart.units[i])[1]);
+                if (!flag) {
+                  Object.values(tempchart.units[i])[1].splice(j, 1);
+                  j = j - 1;
+                }
+              }
+            if(Object.values(tempchart.units[i])[1].length == 0){
               tempchart.units.splice(i, 1);
-              i = i - 1;
+              i = i -1;
             }
           }
         }
@@ -282,7 +277,7 @@ const ChartModal = (props) => {
       let tempunitsfilterarray = []
       let tempobject = {};
       tempobject.id = generate();
-      tempobject['gdod'] = user.gdodid;
+      tempobject['gdod'] = [user.gdodid];
       tempunitsfilterarray.push(tempobject);
       tempchartdata.units = tempunitsfilterarray;
     }

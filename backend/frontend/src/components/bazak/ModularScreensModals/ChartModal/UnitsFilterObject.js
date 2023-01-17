@@ -28,6 +28,8 @@ import { produce } from 'immer'
 import { generate } from 'shortid'
 import { toast } from "react-toastify";
 import Select from 'components/general/Select/AnimatedSelect'
+import NormalAnimatedMultiSelect from 'components/general/Select/NormalAnimatedMultiSelect'
+
 import deletepic from "assets/img/delete.png";
 
 const UnitsFilterObject = (props) => {
@@ -38,26 +40,44 @@ const UnitsFilterObject = (props) => {
     const [pikods, setPikods] = useState([]);
 
     async function unitsFilterHierarchy(CurrentUnitFilterType, CurrentUnitFilterId) {
+        let tempCurrentUnitFilterId = [...CurrentUnitFilterId];
+        let temp2 = [];
         if (CurrentUnitFilterType != 'pikod') {
-            CurrentUnitFilterId = await getCurrentParentId(CurrentUnitFilterType, CurrentUnitFilterId);
+            for(let i=0;i<tempCurrentUnitFilterId.length;i++){
+                await getCurrentParentId(CurrentUnitFilterType, tempCurrentUnitFilterId[i])
+                .then(response =>{
+                 let flag = false;
+                    for(let j=0;j<temp2.length;j++){
+                        if(temp2[j] == response){
+                            flag = true;
+                        }
+                    }
+                    if(flag == false){
+                        temp2.push(response);
+                    }
+                }
+                )
+            }
+            tempCurrentUnitFilterId = temp2;
             if (CurrentUnitFilterType == 'gdod') {
                 CurrentUnitFilterType = 'hativa';
-                props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = CurrentUnitFilterId }))
+                props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = tempCurrentUnitFilterId }))
             }
             else {
                 if (CurrentUnitFilterType == 'hativa') {
                     CurrentUnitFilterType = 'ogda';
-                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = CurrentUnitFilterId }))
+                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = tempCurrentUnitFilterId }))
                 }
                 else {
                     if (CurrentUnitFilterType == 'ogda') {
                         CurrentUnitFilterType = 'pikod';
-                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = CurrentUnitFilterId }))
+                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = tempCurrentUnitFilterId }))
                     }
                 }
             }
-            return unitsFilterHierarchy(CurrentUnitFilterType, CurrentUnitFilterId);
+            return unitsFilterHierarchy(CurrentUnitFilterType, tempCurrentUnitFilterId);
         }
+        
     }
 
     async function getCurrentParentId(CurrentUnitFilterType, CurrentUnitFilterId) {
@@ -74,9 +94,13 @@ const UnitsFilterObject = (props) => {
     }
 
     const loadPikods = async () => {
+        let fullresposne = [];
         await axios.get("http://localhost:8000/api/pikod",)
             .then(response => {
-                setPikods(response.data);
+                for(let j = 0; j < response.data.length; j++){
+                    fullresposne[j] = { label: response.data[j].name, value: response.data[j]._id}
+                }
+                setPikods(fullresposne);
             })
             .catch((error) => {
                 console.log(error);
@@ -84,108 +108,71 @@ const UnitsFilterObject = (props) => {
     }
 
     const loadOgdas = async (pikodid) => {
+        if(pikodid){
         let temppikodogdas = [];
         await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: pikodid })
             .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    temppikodogdas.push(response.data[j])
+                for(let j = 0; j < response.data.length; j++){
+                    temppikodogdas[j] = { label: response.data[j].name, value: response.data[j]._id}
+                }
+                setOgdas(temppikodogdas);
             })
             .catch((error) => {
                 console.log(error);
             })
-        setOgdas(temppikodogdas);
+        }
     }
 
     const loadHativas = async (ogdaid) => {
         let tempogdahativas = [];
         await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: ogdaid })
             .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    tempogdahativas.push(response.data[j])
+                for(let j = 0; j < response.data.length; j++){
+                    tempogdahativas[j] = { label: response.data[j].name, value: response.data[j]._id}
+                }
+                setHativas(tempogdahativas);
             })
             .catch((error) => {
                 console.log(error);
             })
-        setHativas(tempogdahativas);
     }
 
     const loadGdods = async (hativaid) => {
         let temphativasgdods = [];
         await axios.post("http://localhost:8000/api/gdod/gdodsbyhativaid", { hativa: hativaid })
             .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    temphativasgdods.push(response.data[j])
+                for(let j = 0; j < response.data.length; j++){
+                    temphativasgdods[j] = { label: response.data[j].name, value: response.data[j]._id}
+                }
+                setGdods(temphativasgdods);
             })
             .catch((error) => {
                 console.log(error);
             })
-        setGdods(temphativasgdods);
-    }
-
-    const loadBackwords = async (unitType, unitId) => {
-        let temp = [];
-        let parentUnitId = await getCurrentParentId(unitType, unitId);
-        if (unitType == 'gdod') {
-            await axios.post(`http://localhost:8000/api/gdod/gdodsbyhativaid`, { hativa: parentUnitId })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                    temp.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            setGdods(temp);
-        }
-        if (unitType == 'hativa') {
-            await axios.post("http://localhost:8000/api/hativa/hativasbyogdaid", { ogda: parentUnitId })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                temp.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            setHativas(temp);
-        }
-        if (unitType == 'ogda') {
-            await axios.post("http://localhost:8000/api/ogda/ogdasbypikodid", { pikod: parentUnitId })
-            .then(response => {
-                for (let j = 0; j < response.data.length; j++)
-                temp.push(response.data[j])
-            })
-            .catch((error) => {
-                console.log(error);
-            })
-            setOgdas(temp);
-        }
     }
 
     function init() {
+        loadPikods();
         if(props.unitfilterobject.gdod != undefined || props.unitfilterobject.hativa != undefined || props.unitfilterobject.ogda != undefined || props.unitfilterobject.pikod != undefined){
-            loadPikods();
-            loadBackwords(Object.keys(props.unitfilterobject)[1],Object.values(props.unitfilterobject)[1]);
             unitsFilterHierarchy(Object.keys(props.unitfilterobject)[1],Object.values(props.unitfilterobject)[1]);
-        }
-        else{
-           loadPikods();
         }
         if(props.user.hativaid){
             loadGdods(props.user.hativaid );
-            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = props.user.hativaid }))
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = [props.user.hativaid] }))
         }
         if(props.user.ogdaid){
             loadHativas(props.user.ogdaid);
-            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = props.user.ogdaid }))
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = [props.user.ogdaid] }))
         }
         if(props.user.pikodid){
             loadOgdas(props.user.pikodid );
-            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = props.user.pikodid }))
+            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = [props.user.pikodid] }))
         }
     }
 
     useEffect(() => {
-        setOgdas([]);
-        loadOgdas(props.unitfilterobject.pikod);
+      setOgdas([]);
+      loadOgdas(props.unitfilterobject.pikod);
     }, [props.unitfilterobject.pikod]);
 
     useEffect(() => {
@@ -206,123 +193,191 @@ const UnitsFilterObject = (props) => {
         <div>
             <Row style={{ padding: '0px',paddingTop:'5px' }}>
                 {((props.user.role == "0" || props.user.role == "5")) ?
-                    <>
-                        {(!(props.unitfilterobject.ogda)) ?
-                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                <h6>פיקוד</h6>
-                                <Select data={pikods}
-                                    handleChange2={(selectedOption) => {
-                                        if (selectedOption.value != "בחר") {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = selectedOption.value }))
+                      <>
+                        {(!(props.unitfilterobject.ogda) || !(props.unitfilterobject.ogda.length > 0)) ?
+                        <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                            <h6>פיקוד</h6>
+
+                                <NormalAnimatedMultiSelect data={pikods}
+                                 handleChange2={(selectedOption) => {
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
                                         }
-                                        else {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].pikod }))
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = tempvalues }))
+                                      }
+                                      else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].pikod }))
+                                      }
+                                }}
+                                 name={'pikods'} 
+                                 val={props.unitfilterobject.pikod ? props.unitfilterobject.pikod : []} />
+
+                        </Col> 
+                        :
+                        <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
+                               <h6>פיקוד</h6>
+
+                                 <NormalAnimatedMultiSelect data={pikods}
+                                 handleChange2={(selectedOption) => {
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                        tempvalues.push(selectedOption[i].value);
                                         }
-                                    }} val={props.unitfilterobject.pikod ? props.unitfilterobject.pikod : undefined} />
-                            </Col> :
-                            <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                                <h6>פיקוד</h6>
-                                <Select data={pikods}
-                                    handleChange2={(selectedOption) => {
-                                        if (selectedOption.value != "בחר") {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = selectedOption.value }))
-                                        }
-                                        else {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].pikod }))
-                                        }
-                                    }} val={props.unitfilterobject.pikod ? props.unitfilterobject.pikod : undefined} isDisabled={true} />
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].pikod = tempvalues }))
+                                    }
+                                    else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].pikod }))
+                                    }
+                                 }}
+                                 name={'pikods'} 
+                                 val={props.unitfilterobject.pikod ? props.unitfilterobject.pikod : []} isDisabled={true}/>
                             </Col>}
                     </> : null}
 
                 {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4")) ?
                     <>
-                        {((props.unitfilterobject.pikod) && !(props.unitfilterobject.hativa)) ?
+                        {((props.unitfilterobject.pikod) && (props.unitfilterobject.pikod.length > 0) && (!(props.unitfilterobject.hativa) || !(props.unitfilterobject.hativa.length > 0))) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>אוגדה</h6>
-                                <Select data={ogdas}
-                                    handleChange2={(selectedOption) => {
-                                        if (selectedOption.value != "בחר") {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = selectedOption.value }))
+
+                                <NormalAnimatedMultiSelect data={ogdas}
+                                 handleChange2={(selectedOption) => {
+
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
                                         }
-                                        else {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].ogda }))
-                                        }
-                                    }} val={props.unitfilterobject.ogda ? props.unitfilterobject.ogda : undefined} />
-                            </Col> :
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = tempvalues }))
+                                      }
+                                      else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].ogda }))
+                                      }
+                                }}
+                                 name={'ogdas'} 
+                                 val={props.unitfilterobject.ogda ? props.unitfilterobject.ogda : []} />
+                            </Col>
+                            :
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>אוגדה</h6>
-                                <Select data={ogdas}
-                                    handleChange2={(selectedOption) => {
-                                        if (selectedOption.value != "בחר") {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = selectedOption.value }))
+
+                                <NormalAnimatedMultiSelect data={ogdas}
+                                 name={'ogdas'} 
+                                 handleChange2={(selectedOption) => {
+
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
                                         }
-                                        else {
-                                            props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].ogda }))
-                                        }
-                                    }} val={props.unitfilterobject.ogda ? props.unitfilterobject.ogda : undefined} isDisabled={true} />
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].ogda = tempvalues }))
+                                      }
+                                      else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].ogda }))
+                                      }
+                                }}
+                                 val={props.unitfilterobject.ogda ? props.unitfilterobject.ogda : []} isDisabled={true}/>
                             </Col>}
+
                     </> : null}
                 
                 {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4") || (props.user.role == "3")) ?
                     <>
-                        {((props.unitfilterobject.ogda) && !(props.unitfilterobject.gdod)) ?
+                        {((props.unitfilterobject.ogda) && (props.unitfilterobject.ogda.length > 0) && (!(props.unitfilterobject.gdod) || !(props.unitfilterobject.gdod.length > 0))) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>חטיבה</h6>
-                                <Select data={hativas}
-                                 handleChange2={(selectedOption =>{
-                                    if (selectedOption.value != "בחר") {
-                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = selectedOption.value }))
-                                    }
-                                    else {
+
+                                <NormalAnimatedMultiSelect data={hativas}
+                                 handleChange2={(selectedOption) => {
+
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
+                                        }
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = tempvalues }))
+                                      }
+                                      else {
                                         props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].hativa }))
-                                    }
-                                 })} val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : undefined} />
-                            </Col> :
+                                      }
+                                }}
+                                 name={'hativas'} 
+                                 val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : []} />
+                            </Col>
+                        :
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                            <h6>חטיבה</h6>
-                            <Select data={hativas}
-                             handleChange2={(selectedOption =>{
-                                if (selectedOption.value != "בחר") {
-                                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = selectedOption.value }))
-                                }
-                                else {
-                                    props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].hativa }))
-                                }
-                             })} val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : undefined} isDisabled={true}/>
+                                <h6>חטיבה</h6>
+
+                                <NormalAnimatedMultiSelect data={hativas}
+                                 handleChange2={(selectedOption) => {
+
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
+                                        }
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].hativa = tempvalues }))
+                                      }
+                                      else {
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].hativa }))
+                                      }
+                                }}
+                                 name={'hativas'} 
+                                 val={props.unitfilterobject.hativa ? props.unitfilterobject.hativa : []} isDisabled={true}/>
                             </Col>}
                     </> : null}
 
                 {((props.user.role == "0") || props.user.role == "5" || (props.user.role == "4") || (props.user.role == "3") || (props.user.role == "2")) ?
                     <>
-                        {((props.unitfilterobject.hativa)) ?
+                        {((props.unitfilterobject.hativa) && (props.unitfilterobject.hativa.length > 0)) ?
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
                                 <h6>גדוד</h6>
-                                <Select data={gdods}
-                                 handleChange2={(selectedOption =>{
-                                    if (selectedOption.value != "בחר") {
-                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = selectedOption.value }))
-                                    }
-                                    else {
+
+                                <NormalAnimatedMultiSelect data={gdods}
+                                 handleChange2={(selectedOption) => {
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
+                                        }
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = tempvalues }))
+                                      }
+                                      else {
                                         props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].gdod }))
-                                    }
-                                 })} val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : undefined} />
-                            </Col> :
+                                      }
+                                }}
+                                 name={'gdods'} 
+                                 val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : []} />
+                            </Col>
+                        :
                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
-                            <h6>גדוד</h6>
-                                <Select data={gdods}
-                                 handleChange2={(selectedOption =>{
-                                    if (selectedOption.value != "בחר") {
-                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = selectedOption.value }))
-                                    }
-                                    else {
+                                <h6>גדוד</h6>
+
+                                <NormalAnimatedMultiSelect data={gdods}
+                                 handleChange2={(selectedOption) => {
+                                    if (selectedOption.length != 0) {
+                                        let tempvalues = [];
+                                        for (let i = 0; i < selectedOption.length; i++) {
+                                          tempvalues.push(selectedOption[i].value);
+                                        }
+                                        props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { v[props.index].gdod = tempvalues }))
+                                      }
+                                      else {
                                         props.setUnitsfilterarray(currentSpec => produce(currentSpec, v => { delete v[props.index].gdod }))
-                                    }
-                                 })} val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : undefined} isDisabled={true}/>
+                                      }
+                                }}
+                                 name={'gdods'} 
+                                 val={props.unitfilterobject.gdod ? props.unitfilterobject.gdod : []} isDisabled={true}/>
                             </Col>}
                     </> : null} 
             </Row>
             {props.user.role!='1' ?
-            <Button type="button" onClick={() => { props.setUnitsfilterarray(currentSpec => currentSpec.filter(x => x.id !== props.unitfilterobject.id)) }}><img src={deletepic} height='20px'></img></Button>
+            <Button type="button" onClick={() => {
+                props.setUnitsfilterarray(currentSpec => currentSpec.filter(x => x.id !== props.unitfilterobject.id));
+            }}><img src={deletepic} height='20px'></img></Button>
             : null} 
         </div>
     );
