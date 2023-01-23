@@ -60,27 +60,30 @@ const SubChartCard = (props) => { //instate - zamin/kashir
         let temp_cardata_by_chart_not_instate;
 
         temp_cardata_by_chart = props.cardatas;
-
+        
         //filter by chartdata
         if (props.chart.units && props.chart.units.length > 0) {
             let temp_cardata_by_chart_copy3 = []
             for (let i = 0; i < props.chart.units.length; i++) {
                 let lastKey = Object.keys(props.chart.units[i]).pop();
                 let lastValue = props.chart.units[i][Object.keys(props.chart.units[i]).pop()]
-                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+                let temp = [];
+                for(let j=0;j<lastValue.length;j++){
+                    temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+                }
                 temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
             }
             temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
         }
 
-        if (props.chart.tenetree && props.chart.tenetree.length > 0) {
+        if (props.chart.tenetree && props.chart.tenetree != undefined) {
             let temp_cardata_by_chart_copy4 = []
-            for (let i = 0; i < props.chart.tenetree.length; i++) {
-                let lastKey = Object.keys(props.chart.tenetree[i]).pop();
-                let lastValue = props.chart.tenetree[i][Object.keys(props.chart.tenetree[i]).pop()]
-                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
-                temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
-            }
+            let temp = [];
+            let lastKey = Object.keys(props.chart.tenetree).pop();
+            let lastValue = props.chart.tenetree[lastKey]
+            // console.log(lastKey,lastValue)
+            temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue))));
+            temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
             temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
         }
 
@@ -164,14 +167,14 @@ const SubChartCard = (props) => { //instate - zamin/kashir
                     <CardHeader style={{ padding: '0px' }}>
                         <div style={{ textAlign: 'right' }}>
                             {props.theme == "white-content" ?
-                                Object.keys(props.chart.tenetree[0]).pop() == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/magad/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
-                                    : Object.keys(props.chart.tenetree[0]).pop() == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/mkabaz/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
-                                        : Object.keys(props.chart.tenetree[0]).pop() == 'mkabaz' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/makat/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                Object.keys(props.chart.tenetree).pop() == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/magad/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                    : Object.keys(props.chart.tenetree).pop() == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/mkabaz/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
+                                        : Object.keys(props.chart.tenetree).pop() == 'mkabaz' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/makat/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>זמינות {props.chart.name}</h3></>
                                             : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>זמינות {props.chart.name}</h3>
 
-                                : Object.keys(props.chart.tenetree[0]).pop() == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/magad/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
-                                    : Object.keys(props.chart.tenetree[0]).pop() == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/mkabaz/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
-                                        : Object.keys(props.chart.tenetree[0]).pop() == 'mkabaz' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/makat/${props.chart.tenetree[0][Object.keys(props.chart.tenetree[0]).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                : Object.keys(props.chart.tenetree).pop() == 'magadal' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/magad/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                    : Object.keys(props.chart.tenetree).pop() == 'magad' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/mkabaz/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
+                                        : Object.keys(props.chart.tenetree).pop() == 'mkabaz' ? <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.match.params.chartid}/makat/${props.chart.tenetree[Object.keys(props.chart.tenetree).pop()]}`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px' }}>כשירות {props.chart.name}</h3></>
                                             : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>}
                         </div>
                     </CardHeader>

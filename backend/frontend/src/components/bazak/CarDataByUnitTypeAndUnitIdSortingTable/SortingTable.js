@@ -341,8 +341,11 @@ const SortingTable = (props) => {
         let temp_cardata_by_chart_copy3 = []
         for (let i = 0; i < props.charts[k].units.length; i++) {
           let lastKey = Object.keys(props.charts[k].units[i]).pop();
-          let lastValue = props.charts[k].units[i][Object.keys(props.charts[k].units[i]).pop()]
-          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          let lastValue = props.charts[k].units[i][Object.keys(props.charts[k].units[i]).pop()];
+          let temp = [];
+          for(let j=0;j<lastValue.length;j++){
+            temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+          }
           temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
         }
         temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
@@ -353,7 +356,10 @@ const SortingTable = (props) => {
         for (let i = 0; i < props.charts[k].tenetree.length; i++) {
           let lastKey = Object.keys(props.charts[k].tenetree[i]).pop();
           let lastValue = props.charts[k].tenetree[i][Object.keys(props.charts[k].tenetree[i]).pop()]
-          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          let temp = [];
+          for(let j=0;j<lastValue.length;j++){
+            temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+          }
           temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
         }
         temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates

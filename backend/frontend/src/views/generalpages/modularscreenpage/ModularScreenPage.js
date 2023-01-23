@@ -507,7 +507,6 @@ function ModularScreenPage(props) {
       >
         תצוגת שעונים
       </button>
-
       <CarDataByUnitTypeAndUnitIdSortingTable charts={filteredcharts} />
     </>
   );
