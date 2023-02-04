@@ -46,7 +46,9 @@ const SubChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart_intipul, setCardata_by_chart_intipul] = useState(0)
     const [cardata_by_chart_harigtipul, setCardata_by_chart_harigtipul] = useState(0)
     const [cardata_by_chart_takalotmizdamnot, setCardata_by_chart_takalotmizdamnot] = useState(0)
-    const [cardata_by_chart_hhstand, setCardata_by_chart_hhstand] = useState(0)
+    const [cardata_by_chart_hhstand_intipul, setCardata_by_chart_hhstand_intipul] = useState(0)
+    const [cardata_by_chart_hhstand_harigtipul, setCardata_by_chart_hhstand_harigtipul] = useState(0)
+    const [cardata_by_chart_hhstand_takalotmizdamnot, setCardata_by_chart_hhstand_takalotmizdamnot] = useState(0)
     //
     const [collapseOpen, setcollapseOpen] = useState(false);
 
@@ -81,7 +83,6 @@ const SubChartCard = (props) => { //instate - zamin/kashir
             let temp = [];
             let lastKey = Object.keys(props.chart.tenetree).pop();
             let lastValue = props.chart.tenetree[lastKey]
-            // console.log(lastKey,lastValue)
             temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue))));
             temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
             temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
@@ -115,25 +116,35 @@ const SubChartCard = (props) => { //instate - zamin/kashir
         let temp_cardata_by_chart_intipul = [];
         let temp_cardata_by_chart_harigtipul = [];
         let temp_cardata_by_chart_takalotmizdamnot = [];
-        let temp_cardata_by_chart_hhstand = [];
+        let temp_cardata_by_chart_hhstand_intipul = [];
+        let temp_cardata_by_chart_hhstand_harigtipul = [];
+        let temp_cardata_by_chart_hhstand_takalotmizdamnot = [];
         for (let i = 0; i < temp_cardata_by_chart_not_instate.length; i++) {
             let is_intipul = false;
             let is_harigtipul = false;
             let is_takalotmizdamnot = false;
-            let is_hhstand = false;
+            let is_hhstand_intipul = false;
+            let is_hhstand_harigtipul = false;
+            let is_hhstand_takalotmizdamnot = false;
 
             for (let j = 0; j < temp_cardata_by_chart_not_instate[i].tipuls.length; j++) {
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'tipul') {
                     is_intipul = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_intipul = true;
+                    }
                 }
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'harig_tipul') {
                     is_harigtipul = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_harigtipul = true;
+                    }
                 }
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'takala_mizdamenet') {
                     is_takalotmizdamnot = true;
-                }
-                if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'hh_stand') {
-                    is_hhstand = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_takalotmizdamnot = true;
+                    }
                 }
             }
             if (is_intipul)
@@ -142,8 +153,12 @@ const SubChartCard = (props) => { //instate - zamin/kashir
                 temp_cardata_by_chart_harigtipul.push(temp_cardata_by_chart_not_instate[i])
             if (is_takalotmizdamnot)
                 temp_cardata_by_chart_takalotmizdamnot.push(temp_cardata_by_chart_not_instate[i])
-            if (is_hhstand)
-                temp_cardata_by_chart_hhstand.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_intipul)
+                temp_cardata_by_chart_hhstand_intipul.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_harigtipul)
+                temp_cardata_by_chart_hhstand_harigtipul.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_takalotmizdamnot)
+                temp_cardata_by_chart_hhstand_takalotmizdamnot.push(temp_cardata_by_chart_not_instate[i])
         }
 
         setCardata_by_chart(temp_cardata_by_chart.length)
@@ -153,7 +168,9 @@ const SubChartCard = (props) => { //instate - zamin/kashir
         setCardata_by_chart_intipul(temp_cardata_by_chart_intipul.length);
         setCardata_by_chart_harigtipul(temp_cardata_by_chart_harigtipul.length);
         setCardata_by_chart_takalotmizdamnot(temp_cardata_by_chart_takalotmizdamnot.length);
-        setCardata_by_chart_hhstand(temp_cardata_by_chart_hhstand.length);
+        setCardata_by_chart_hhstand_intipul(temp_cardata_by_chart_hhstand_intipul.length);
+        setCardata_by_chart_hhstand_harigtipul(temp_cardata_by_chart_hhstand_harigtipul.length);
+        setCardata_by_chart_hhstand_takalotmizdamnot(temp_cardata_by_chart_hhstand_takalotmizdamnot.length);
     }
 
     useEffect(() => {
@@ -278,14 +295,15 @@ const SubChartCard = (props) => { //instate - zamin/kashir
 
                         {collapseOpen ?
                             <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.chart.name} עומדים על ח"ח: {cardata_by_chart_hhstand}</h6>
-                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_intipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_harigtipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_takalotmizdamnot})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                             </div>
                             : null}
                     </CardBody>
