@@ -75,6 +75,9 @@ app.use('/api', screenRoutes)
 //surveys routes
 const survey1Routes = require("./routes/surveys/survey1");
 app.use('/api', survey1Routes)
+//
+const tipulRoutes = require("./routes/tipuls/tipul");
+app.use('/api', tipulRoutes)
 
 if (process.env.NODE_ENV === 'production') {
   //set static folder

@@ -98,7 +98,7 @@ const ModularScreensModal = (props) => {
     <>
       <ScreenModal isOpen={isscreenmodalopen} Toggle={() => Togglescreenmodal()} ToggleForModal={ToggleForModal} screenid={screenidformodal} init={() => init()} />
       <Modal
-        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', margin: filteredscreens.length>15 ? (Math.ceil((filteredscreens.length-16)/4)*(411/2)+'px') : 'auto', direction: 'rtl' }}
+        style={{ minHeight: '100%', maxHeight: '100%', minWidth: '80%', maxWidth: '90%', justifyContent: 'center', alignSelf: 'center', marginTop: filteredscreens.length>15 ? (Math.ceil((filteredscreens.length-16)/4)*(120)+'px') : 'auto', direction: 'rtl' }}
         isOpen={props.isOpen}
         centered
         fullscreen

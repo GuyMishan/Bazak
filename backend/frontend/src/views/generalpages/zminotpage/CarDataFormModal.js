@@ -49,6 +49,9 @@ const CarDataFormModal = (props) => {
   const [magadals, setMagadals] = useState([]);
   //new 18.8.22
   const [isgdodsadir, setIsgdodsadir] = useState(true);
+  //tipuls
+  const [tipuls, setTipuls] = useState([]);
+
 
   const loadcardata = async () => {
     await axios
@@ -117,6 +120,17 @@ const CarDataFormModal = (props) => {
       tempcardata.pikod = response.data.pikod;
     }
     setCarData(tempcardata);
+  };
+
+  const getTipultypes = async () => {
+    await axios
+      .get(`http://localhost:8000/api/tipul`)
+      .then((response) => {
+        setTipuls(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
 
   const getMagadals = async () => {
@@ -541,7 +555,7 @@ const CarDataFormModal = (props) => {
     }
     getMagadals();
     loadPikods();
-    // getTipultypes();
+    getTipultypes();
   }
 
   useEffect(() => {
@@ -1340,24 +1354,10 @@ const CarDataFormModal = (props) => {
                                           placeholder="סוג הטיפול"
                                         >
                                           <option value={"בחר"}>{"בחר"}</option>
-                                          <option value={"רישוי שנתי"}>
-                                            {"רישוי שנתי"}
-                                          </option>
-                                          <option value={"חצי תקופתי"}>
-                                            {"חצי תקופתי"}
-                                          </option>
-                                          <option value={"תקופתי מורחב"}>
-                                            {"תקופתי מורחב"}
-                                          </option>
-                                          <option value={"תקופתי"}>
-                                            {"תקופתי"}
-                                          </option>
-                                          <option value={"טיפול שבועי"}>
-                                            {"טיפול שבועי"}
-                                          </option>
-                                          <option value={"טיפול חודשי"}>
-                                            {"טיפול חודשי"}
-                                          </option>
+                                          {tipuls.map((tipul, i) => (
+                                            tipul ?
+                                               <option value={tipul.name}>{tipul.name}</option>
+                                              : null))}
                                         </Input>
                                       </div>
                                     </Col>
@@ -1444,12 +1444,15 @@ const CarDataFormModal = (props) => {
                                           float: "right",
                                           marginLeft: "5px",
                                           marginRight: "15px",
+                                          fontWeight:'bold',
+                                          fontSize:'15px',
                                         }}
                                       >
                                         האם עומד על ח"ח
                                       </p>
-                                      {p.hh_stands ?
+                                      {p.hh_stands?
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -1476,6 +1479,7 @@ const CarDataFormModal = (props) => {
                                         }}checked/>
                                       :
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -1657,24 +1661,10 @@ const CarDataFormModal = (props) => {
                                         placeholder="חריג טיפול"
                                       >
                                         <option value={"בחר"}>{"בחר"}</option>
-                                        <option value={"רישוי שנתי"}>
-                                          {"רישוי שנתי"}
-                                        </option>
-                                        <option value={"חצי תקופתי"}>
-                                          {"חצי תקופתי"}
-                                        </option>
-                                        <option value={"תקופתי מורחב"}>
-                                          {"תקופתי מורחב"}
-                                        </option>
-                                        <option value={"תקופתי"}>
-                                          {"תקופתי"}
-                                        </option>
-                                        <option value={"טיפול שבועי"}>
-                                          {"טיפול שבועי"}
-                                        </option>
-                                        <option value={"טיפול חודשי"}>
-                                          {"טיפול חודשי"}
-                                        </option>
+                                          {tipuls.map((tipul, i) => (
+                                            tipul ?
+                                               <option value={tipul.name}>{tipul.name}</option>
+                                              : null))}
                                       </Input>
                                     </div>
                                   </Col>
@@ -1719,12 +1709,15 @@ const CarDataFormModal = (props) => {
                                           float: "right",
                                           marginLeft: "5px",
                                           marginRight: "15px",
+                                          fontWeight:'bold',
+                                          fontSize:'15px',
                                         }}
                                       >
                                         האם עומד על ח"ח
                                       </p>
                                       {p.hh_stands?
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -1751,6 +1744,7 @@ const CarDataFormModal = (props) => {
                                         }}checked/>
                                       :
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -1984,12 +1978,15 @@ const CarDataFormModal = (props) => {
                                           float: "right",
                                           marginLeft: "5px",
                                           marginRight: "15px",
+                                          fontWeight:'bold',
+                                          fontSize:'15px',
                                         }}
                                       >
                                         האם עומד על ח"ח
                                       </p>
                                       {p.hh_stands?
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -2016,6 +2013,7 @@ const CarDataFormModal = (props) => {
                                         }}checked/>
                                       :
                                       <Input
+                                        style={{width:"18px", height:"18px"}}
                                         id="Is_hh_stand"
                                         type="checkbox"
                                         onChange={(e) => {
@@ -2263,15 +2261,15 @@ const CarDataFormModal = (props) => {
                   </Col>
                 </Row>
 
-                {user.role == "0" ||
+                {/* {user.role == "0" ||
                 user.role == "1" ||
-                isgdodsadir == false ? (
+                isgdodsadir == false ? ( */}
                   <div style={{ textAlign: "center", paddingTop: "20px" }}>
                     <button className="btn" onClick={clickSubmit}>
                       עדכן
                     </button>
                   </div>
-                ) : null}
+                {/* ) : null} */}
               </Container>
             ) : (
               <Container>
@@ -2618,8 +2616,10 @@ const CarDataFormModal = (props) => {
                     <div>
                       {finalspecialkeytwo.map((p, index) => {
                         return (
+
                           <div>
                             {p.type == "tipul" ? (
+                              <>
                               <Row>
                                 <Col xs={12} md={4}>
                                   <div>
@@ -2629,39 +2629,16 @@ const CarDataFormModal = (props) => {
                                       סוג הטיפול
                                     </p>
                                     <Input
-                                      onChange={(e) => {
-                                        const tipul = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo((currentSpec) =>
-                                            produce(currentSpec, (v) => {
-                                              v[index].tipul = tipul;
-                                            })
-                                          );
-                                      }}
                                       value={p.tipul}
                                       type="select"
                                       placeholder="סוג הטיפול"
                                       disabled
                                     >
-                                      <option value={"בחר"}>{"בחר"}</option>
-                                      <option value={"רישוי שנתי"}>
-                                        {"רישוי שנתי"}
-                                      </option>
-                                      <option value={"חצי תקופתי"}>
-                                        {"חצי תקופתי"}
-                                      </option>
-                                      <option value={"תקופתי מורחב"}>
-                                        {"תקופתי מורחב"}
-                                      </option>
-                                      <option value={"תקופתי"}>
-                                        {"תקופתי"}
-                                      </option>
-                                      <option value={"טיפול שבועי"}>
-                                        {"טיפול שבועי"}
-                                      </option>
-                                      <option value={"טיפול חודשי"}>
-                                        {"טיפול חודשי"}
-                                      </option>
+                                       <option value={"בחר"}>{"בחר"}</option>
+                                          {tipuls.map((tipul, i) => (
+                                            tipul ?
+                                               <option value={tipul.name}>{tipul.name}</option>
+                                              : null))}
                                     </Input>
                                   </div>
                                 </Col>
@@ -2673,16 +2650,6 @@ const CarDataFormModal = (props) => {
                                       תאריך כניסה לטיפול
                                     </p>
                                     <Input
-                                      onChange={(e) => {
-                                        const tipul_entry_date = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo((currentSpec) =>
-                                            produce(currentSpec, (v) => {
-                                              v[index].tipul_entry_date =
-                                                tipul_entry_date;
-                                            })
-                                          );
-                                      }}
                                       value={p.tipul_entry_date}
                                       type="date"
                                       placeholder="תאריך כניסה לטיפול"
@@ -2700,16 +2667,6 @@ const CarDataFormModal = (props) => {
                                       מיקום הטיפול
                                     </p>
                                     <Input
-                                      onChange={(e) => {
-                                        const mikum_tipul = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo((currentSpec) =>
-                                            produce(currentSpec, (v) => {
-                                              v[index].mikum_tipul =
-                                                mikum_tipul;
-                                            })
-                                          );
-                                      }}
                                       value={p.mikum_tipul}
                                       type="select"
                                       placeholder="מיקום הטיפול"
@@ -2730,7 +2687,52 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
+                              {p.hh_stands.map((hh_stand,i) => {
+                                return (
+                                  <>
+                                    <Row>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            מק"ט חסר
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
+                                            type="string"
+                                            placeholder={`מק"ט חסר`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            כמות
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
+                                            type="string"
+                                            placeholder={`כמות`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                  </>
+                                );
+                              })}</>
                             ) : p.type == "harig_tipul" ? (
+                              <>
                               <Row>
                                 <Col xs={12} md={4}>
                                   <div>
@@ -2755,25 +2757,11 @@ const CarDataFormModal = (props) => {
                                       placeholder="חריג טיפול"
                                       disabled
                                     >
-                                      <option value={"בחר"}>{"בחר"}</option>
-                                      <option value={"רישוי שנתי"}>
-                                        {"רישוי שנתי"}
-                                      </option>
-                                      <option value={"חצי תקופתי"}>
-                                        {"חצי תקופתי"}
-                                      </option>
-                                      <option value={"תקופתי מורחב"}>
-                                        {"תקופתי מורחב"}
-                                      </option>
-                                      <option value={"תקופתי"}>
-                                        {"תקופתי"}
-                                      </option>
-                                      <option value={"טיפול שבועי"}>
-                                        {"טיפול שבועי"}
-                                      </option>
-                                      <option value={"טיפול חודשי"}>
-                                        {"טיפול חודשי"}
-                                      </option>
+                                       <option value={"בחר"}>{"בחר"}</option>
+                                          {tipuls.map((tipul, i) => (
+                                            tipul ?
+                                               <option value={tipul.name}>{tipul.name}</option>
+                                              : null))}
                                     </Input>
                                   </div>
                                 </Col>
@@ -2805,7 +2793,52 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
+                              {p.hh_stands.map((hh_stand,i) => {
+                                return (
+                                  <>
+                                    <Row>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            מק"ט חסר
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
+                                            type="string"
+                                            placeholder={`מק"ט חסר`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            כמות
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
+                                            type="string"
+                                            placeholder={`כמות`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                  </>
+                                );
+                              })}</>
                             ) : p.type == "takala_mizdamenet" ? (
+                              <>
                               <Row>
                                 <Col xs={12} md={4}>
                                   <div>
@@ -2869,60 +2902,51 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                            ) : p.type == "hh_stand" ? (
-                              <Row>
-                                <Col xs={12} md={6}>
-                                  <div>
-                                    <p
-                                      style={{ margin: "0px", float: "right" }}
-                                    >
-                                      מק"ט חסר
-                                    </p>
-                                    <Input
-                                      onChange={(e) => {
-                                        const missing_makat_1 = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo((currentSpec) =>
-                                            produce(currentSpec, (v) => {
-                                              v[index].missing_makat_1 =
-                                                missing_makat_1;
-                                            })
-                                          );
-                                      }}
-                                      value={p.missing_makat_1}
-                                      type="string"
-                                      placeholder={`מק"ט חסר`}
-                                      disabled
-                                    ></Input>
-                                  </div>
-                                </Col>
-                                <Col xs={12} md={6}>
-                                  <div>
-                                    <p
-                                      style={{ margin: "0px", float: "right" }}
-                                    >
-                                      כמות
-                                    </p>
-                                    <Input
-                                      onChange={(e) => {
-                                        const missing_makat_2 = e.target.value;
-                                        if (e.target.value != "בחר")
-                                          setFinalSpecialKeytwo((currentSpec) =>
-                                            produce(currentSpec, (v) => {
-                                              v[index].missing_makat_2 =
-                                                missing_makat_2;
-                                            })
-                                          );
-                                      }}
-                                      value={p.missing_makat_2}
-                                      type="string"
-                                      placeholder={`כמות`}
-                                      disabled
-                                    ></Input>
-                                  </div>
-                                </Col>
-                              </Row>
-                            ) : null}
+                              {p.hh_stands.map((hh_stand,i) => {
+                                return (
+                                  <>
+                                    <Row>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            מק"ט חסר
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
+                                            type="string"
+                                            placeholder={`מק"ט חסר`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                      <Col xs={12} md={6}>
+                                        <div>
+                                          <p
+                                            style={{
+                                              margin: "0px",
+                                              float: "right",
+                                            }}
+                                          >
+                                            כמות
+                                          </p>
+                                          <Input
+                                            value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
+                                            type="string"
+                                            placeholder={`כמות`}
+                                            disabled
+                                          ></Input>
+                                        </div>
+                                      </Col>
+                                    </Row>
+                                  </>
+                                );
+                              })}</>
+                              ) : null}
                           </div>
                         );
                       })}

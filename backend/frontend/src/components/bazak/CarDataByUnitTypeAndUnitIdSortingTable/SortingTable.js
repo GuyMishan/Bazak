@@ -825,18 +825,18 @@ const SortingTable = (props) => {
         <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
           {/*filter */}
           <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
-
+          {/*working here */}
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
           </div>
-          {(user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+          {(user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
           !props.charts ? <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button> : null
           :null}
 
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
 
           <Row>
-            <Col xs={12} md={6} style={{ textAlign: 'right', left: (user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? '20rem': '11.5rem', marginTop: '1rem' }}>
+            <Col xs={12} md={6} style={{ textAlign: 'right', left: (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? '20rem': '11.5rem', marginTop: '1rem' }}>
               <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
             </Col>
           </Row>

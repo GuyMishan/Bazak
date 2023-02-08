@@ -21,11 +21,19 @@ exports.find = (req, res) => {
 }
 exports.update = async (req, res) => {
 
+    let roles = ['adminid', 'gdodid', 'hativaid', 'ogdaid', 'pikodid']
+
     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!user) {
         res.status(404).send({ message: 'שגיאה בעדכון' })
     }
-    res.status(200).send(user)
+    for(let i=0;i<roles.length;i++){
+        if( req.body[roles[i]] == undefined ){
+            user[roles[i]] = undefined;
+        }
+       }
+       await user.save();
+       res.status(200).send(user)
 
 
 }

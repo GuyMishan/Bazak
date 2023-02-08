@@ -317,13 +317,10 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
                                 <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_intipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                                 <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_harigtipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                                 <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_takalotmizdamnot})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <Progress color="guydanger" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                                 </div>
                                 : null}
                         </CardBody>
@@ -375,14 +372,12 @@ const ChartCard = (props) => { //instate - zamin/kashir
 
                         {collapseOpen ?
                             <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.chart.name} בטיפול: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} חריגי טיפול:  {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} בתקלות מזדמנות: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} עומדים על ח"ח: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                            <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_intipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_harigtipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot} <span style={{color:'red'}}>(ח"ח: {cardata_by_chart_hhstand_takalotmizdamnot})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                             </div>
                             : null}
                     </CardBody>

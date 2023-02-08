@@ -137,25 +137,25 @@ const EditUserForm = ({ match }) => {
       if (data.role === "0") {
       }
       if (data.role === "1") {
-        if (data.gdodid === "") {
+        if (data.gdodid === undefined || data.gdodid === "") {
           flag = false;
           ErrorReason += "גדוד ריק \n";
         }
       }
       if (data.role === "2") {
-        if (data.hativaid === "") {
+        if (data.hativaid === undefined || data.hativaid === "") {
           flag = false;
           ErrorReason += "חטיבה ריקה \n";
         }
       }
       if (data.role === "3") {
-        if (data.ogdaid === "") {
+        if (data.ogdaid === undefined || data.ogdaid === "") {
           flag = false;
           ErrorReason += "אוגדה ריקה \n";
         }
       }
       if (data.role === "4") {
-        if (data.pikodid === "") {
+        if (data.pikodid === undefined || data.pikodid === "") {
           flag = false;
           ErrorReason += "פיקוד ריק \n";
         }
