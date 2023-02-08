@@ -364,6 +364,21 @@ const SortingTable = (props) => {
         }
         temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
       }
+      //when drilling down
+      else{
+        if(props.charts[k].tenetree){
+          let temp_cardata_by_chart_copy4 =[]
+          let lastKey = Object.keys(props.charts[k].tenetree).pop();
+          console.log("lastkey: "+lastKey)
+          let lastValue = props.charts[k].tenetree[Object.keys(props.charts[k].tenetree).pop()];
+          console.log("lastvalue: "+lastValue)
+          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          console.log("temp: ");
+          console.log(temp)
+          temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
+          temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];//removes duplicates
+        }
+      }
 
       let temp_cardata_by_chart_copy1 = []
       for (let i = 0; i < props.charts[k].stand.length; i++) {
