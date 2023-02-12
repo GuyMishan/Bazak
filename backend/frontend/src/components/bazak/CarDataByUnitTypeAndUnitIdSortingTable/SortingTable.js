@@ -639,18 +639,44 @@ const SortingTable = (props) => {
             tempcardata.tipul = tempcardata.tipuls[j].tipul;
             tempcardata.tipul_entry_date = tempcardata.tipuls[j].tipul_entry_date ? tempcardata.tipuls[j].tipul_entry_date.split("-").reverse().join("-") : null;
             tempcardata.mikum_tipul = tempcardata.tipuls[j].mikum_tipul;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           else if (tempcardata.tipuls[j].type == 'harig_tipul') {
             tempcardata.harig_tipul = tempcardata.tipuls[j].harig_tipul;
             tempcardata.harig_tipul_date = tempcardata.tipuls[j].harig_tipul_date ? tempcardata.tipuls[j].harig_tipul_date.split("-").reverse().join("-") : null;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           else if (tempcardata.tipuls[j].type == 'takala_mizdamenet') {
             tempcardata.takala_mizdamenet = tempcardata.tipuls[j].takala_mizdamenet;
             tempcardata.takala_mizdamenet_date = tempcardata.tipuls[j].takala_mizdamenet_date;
-          }
-          else if (tempcardata.tipuls[j].type == 'hh_stand') {
-            tempcardata.missing_makat_1 = tempcardata.tipuls[j].missing_makat_1;
-            tempcardata.missing_makat_2 = tempcardata.tipuls[j].missing_makat_2;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           tempdata_to_excel.push(tempcardata)
         }

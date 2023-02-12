@@ -51,6 +51,8 @@ const CarDataFormModal = (props) => {
   const [isgdodsadir, setIsgdodsadir] = useState(true);
   //tipuls
   const [tipuls, setTipuls] = useState([]);
+  //expected_repair
+  const [isexpectedrepairmorethen72,SetIsexpectedrepairmorethen72] = useState(false);
 
 
   const loadcardata = async () => {
@@ -259,6 +261,14 @@ const CarDataFormModal = (props) => {
         toast.error("העברת סטטוס הכלי לעצור משמעותה עצירת הכלי לגמרי");
       }
       setCarData({ ...cardata, [evt.target.name]: value });
+      if(evt.target.name == "expected_repair"){
+        if(value == "מעל 72 שעות"){
+          setCarData({ ...cardata, ["zminot"]: "לא זמין", ["kshirot"]: "לא כשיר", [evt.target.name]: value });
+          SetIsexpectedrepairmorethen72(true);
+        }else{
+          SetIsexpectedrepairmorethen72(false);
+        }
+      }
     }
   }
 
@@ -1143,6 +1153,47 @@ const CarDataFormModal = (props) => {
                 </Row>
 
                 <Row>
+                {isexpectedrepairmorethen72 ?
+                  <>
+                  <Col>
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>
+                      זמינות
+                    </div>
+                    <Input
+                      style={{ border: "2px solid" }}
+                      placeholder="זמינות"
+                      type="select"
+                      name="zminot"
+                      value={cardata.zminot}
+                      onChange={handleChange}
+                      disabled
+                    >
+                      <option value={"בחר"}>בחר</option>
+                      <option value={"זמין"}>זמין</option>
+                      <option value={"לא זמין"}>לא זמין</option>
+                    </Input>
+                  </Col>
+                  <Col>
+                    <div style={{ textAlign: "right", paddingTop: "10px" }}>
+                      כשירות למלחמה
+                    </div>
+                    <Input
+                      style={{ border: "2px solid" }}
+                      placeholder="כשירות למלחמה"
+                      type="select"
+                      name="kshirot"
+                      value={cardata.kshirot}
+                      onChange={handleChange}
+                      disabled
+                    >
+                      <option value={"בחר"}>בחר</option>
+                      <option value={"כשיר"}>כשיר</option>
+                      <option value={"לא כשיר"}>לא כשיר</option>
+                    </Input>
+                  </Col>
+                  </>
+                  :
+                  <>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
                       זמינות
@@ -1177,6 +1228,7 @@ const CarDataFormModal = (props) => {
                       <option value={"לא כשיר"}>לא כשיר</option>
                     </Input>
                   </Col>
+                  </>}
                 </Row>
 
                 {cardata.kshirot == "לא כשיר" || cardata.zminot == "לא זמין" ? (
@@ -2214,8 +2266,9 @@ const CarDataFormModal = (props) => {
                           <option value={"בחר"}>{"בחר"}</option>
                           <option value={"עד 6 שעות"}>{"עד 6 שעות"}</option>
                           <option value={"עד 12 שעות"}>{"עד 12 שעות"}</option>
-                          <option value={"מעל 12 שעות"}>{"מעל 12 שעות"}</option>
-                          <option value={"מעל 24 שעות"}>{"מעל 24 שעות"}</option>
+                          <option value={"עד 24 שעות"}>{"עד 24 שעות"}</option>
+                          <option value={"עד 72 שעות"}>{"עד 72 שעות"}</option>
+                          <option value={"מעל 72 שעות"}>{"מעל 72 שעות"}</option>
                         </Input>
                       </Col>
                     </Row>
@@ -2687,7 +2740,8 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                              {p.hh_stands.map((hh_stand,i) => {
+                              {p.hh_stands ?
+                              p.hh_stands.map((hh_stand,i) => {
                                 return (
                                   <>
                                     <Row>
@@ -2730,7 +2784,7 @@ const CarDataFormModal = (props) => {
                                     </Row>
                                   </>
                                 );
-                              })}</>
+                              }):null}</>
                             ) : p.type == "harig_tipul" ? (
                               <>
                               <Row>
@@ -2793,7 +2847,8 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                              {p.hh_stands.map((hh_stand,i) => {
+                              {p.hh_stands?
+                              p.hh_stands.map((hh_stand,i) => {
                                 return (
                                   <>
                                     <Row>
@@ -2836,7 +2891,7 @@ const CarDataFormModal = (props) => {
                                     </Row>
                                   </>
                                 );
-                              })}</>
+                              }):null}</>
                             ) : p.type == "takala_mizdamenet" ? (
                               <>
                               <Row>
@@ -2902,7 +2957,8 @@ const CarDataFormModal = (props) => {
                                   </div>
                                 </Col>
                               </Row>
-                              {p.hh_stands.map((hh_stand,i) => {
+                              {p.hh_stands ?
+                              p.hh_stands.map((hh_stand,i) => {
                                 return (
                                   <>
                                     <Row>
@@ -2945,7 +3001,7 @@ const CarDataFormModal = (props) => {
                                     </Row>
                                   </>
                                 );
-                              })}</>
+                              }):null}</>
                               ) : null}
                           </div>
                         );
@@ -2985,8 +3041,9 @@ const CarDataFormModal = (props) => {
                           <option value={"בחר"}>{"בחר"}</option>
                           <option value={"עד 6 שעות"}>{"עד 6 שעות"}</option>
                           <option value={"עד 12 שעות"}>{"עד 12 שעות"}</option>
-                          <option value={"מעל 12 שעות"}>{"מעל 12 שעות"}</option>
-                          <option value={"מעל 24 שעות"}>{"מעל 24 שעות"}</option>
+                          <option value={"עד 24 שעות"}>{"עד 24 שעות"}</option>
+                          <option value={"עד 72 שעות"}>{"עד 72 שעות"}</option>
+                          <option value={"מעל 72 שעות"}>{"מעל 72 שעות"}</option>
                         </Input>
                       </Col>
                     </Row>
