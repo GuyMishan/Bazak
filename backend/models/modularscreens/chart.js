@@ -5,6 +5,7 @@ const chartSchema = new mongoose.Schema({
     name: { type: String },
     screenid: { type: String },
     chartid: {type: String, unique: true},
+    description: { type: String },
 
     yellowcolor: { type: Number },
     redcolor: { type: Number },

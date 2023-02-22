@@ -113,6 +113,8 @@ function ModularChartPage(props) {
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
           }
         }
@@ -128,6 +130,8 @@ function ModularChartPage(props) {
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -148,6 +152,8 @@ function ModularChartPage(props) {
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -167,6 +173,8 @@ function ModularChartPage(props) {
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -186,6 +194,8 @@ function ModularChartPage(props) {
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })

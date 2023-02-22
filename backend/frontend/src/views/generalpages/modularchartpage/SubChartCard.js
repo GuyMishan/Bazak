@@ -37,6 +37,9 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import arrowhead from "assets/img/arrowhead.png";
 import arrowhead_white from "assets/img/arrowhead_white.png";
+import red from "assets/img/red.png";
+import yellow from "assets/img/yellow.png";
+import green from "assets/img/green.png";
 
 const SubChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart, setCardata_by_chart] = useState(0)
@@ -195,9 +198,9 @@ const SubChartCard = (props) => { //instate - zamin/kashir
                                             : <h3 style={{ textAlign: 'center', fontWeight: 'bold', margin: '0px' }}>כשירות {props.chart.name}</h3>}
                         </div>
                     </CardHeader>
-                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer'}} onClick={(e) => toggleCollapse(e)}>
                         <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                            {(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 60 ?
+                            {(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) <= props.chart.redcolor ?
                                 <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
                                     {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                         root: {},
@@ -228,7 +231,7 @@ const SubChartCard = (props) => { //instate - zamin/kashir
                                         </div>
                                     </CircularProgressbarWithChildren>}
                                 </ProgressProvider>
-                                : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 80 ?
+                                : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) <= props.chart.yellowcolor  ?
                                     <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
                                         {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                             root: {},
@@ -291,6 +294,38 @@ const SubChartCard = (props) => { //instate - zamin/kashir
                                             </CircularProgressbarWithChildren>}
                                         </ProgressProvider>
                                         : null}
+                        </div>
+                       {/* מקרא לצבעים */}
+                       <div style={{display: 'inline-flex', marginTop:'10px'}}>
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.yellowcolor}-100</p>
+                            </>
+                            :
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.redcolor}-100</p>
+                            </>} 
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={yellow} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>{props.chart.redcolor}-{props.chart.yellowcolor}</p>
+                            </>
+                            :null}
+                            {props.chart.redcolor !=0 ?
+                            <>
+                            <img src={red} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>0-{props.chart.redcolor}</p>
+                            </>
+                            :null}
+                        </div>
+                        <div style={{textAlign: 'left', marginTop: `-${1.5*(props.chart.stand.length+1)}rem`,marginBottom:'1rem'}}>
+                            {props.chart.stand.map(stand =>(
+                                <h4 style={{marginBottom:'0px'}}>
+                                    {stand}
+                                </h4>
+                            ))}
                         </div>
 
                         {collapseOpen ?

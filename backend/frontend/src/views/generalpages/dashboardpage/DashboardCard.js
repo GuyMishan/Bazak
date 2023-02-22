@@ -6,6 +6,9 @@ import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from "components/general/CircularProgressBarAnimation/ProgressProvider";
 import arrowhead from "assets/img/arrowhead.png";
 import arrowhead_white from "assets/img/arrowhead_white.png";
+import red from "assets/img/red.png";
+import yellow from "assets/img/yellow.png";
+import green from "assets/img/green.png";
 
 // reactstrap components
 import {
@@ -262,6 +265,17 @@ function DashboardCard(props) { //instate - zamin/kashir
                                             </CircularProgressbarWithChildren>}
                                         </ProgressProvider>
                                         : null}
+                        </div>
+                        {/* מקרא לצבעים */}
+                        <div style={{display: 'inline-flex', marginTop:'10px'}}>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>80-100</p>
+
+                            <img src={yellow} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>60-80</p>
+
+                            <img src={red} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>0-60</p>
                         </div>
 
                         {collapseOpen ?

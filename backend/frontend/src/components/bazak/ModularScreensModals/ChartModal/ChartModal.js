@@ -197,9 +197,41 @@ const ChartModal = (props) => {
       ErrorReason += ", חסר שם שעון"
       flag = false;
     }
-    if(chartdata.name.length>40){
-      ErrorReason += ", שם תרשים ארוך מ-40 תווים"
-      flag = false;
+    else{
+      if(chartdata.name.length>40){
+        ErrorReason += ", שם תרשים ארוך מ-40 תווים"
+        flag = false;
+      }
+    }
+
+    if(chartdata.description){
+      if(chartdata.description.length>40){
+        ErrorReason += ", פירוט ארוך מ-40 תווים"
+        flag = false;
+      }
+    }
+
+    // if(((chartdata.yellowcolor == undefined) || (chartdata.yellowcolor == ""))){
+    //   ErrorReason += ", חסר טווח צהוב"
+    //   flag = false;
+    // }
+    // if(((chartdata.redcolor == undefined) || (chartdata.redcolor == ""))){
+    //   ErrorReason += ", חסר טווח אדום"
+    //   flag = false;
+    // }
+    if(chartdata.yellowcolor && chartdata.redcolor){
+      if(chartdata.yellowcolor>90 || chartdata.yellowcolor<0){
+        ErrorReason += ", טווח צהוב חייב להיות גדול מ-0 וקטן או שווה ל-90"
+        flag = false;
+      }
+      if(chartdata.redcolor>90 || chartdata.redcolor<0){
+        ErrorReason += ", טווח אדום חייב להיות גדול מ-0 וקטן או שווה ל-90"
+        flag = false;
+      }
+      if(chartdata.yellowcolor<=chartdata.redcolor && (chartdata.yellowcolor != 0 && chartdata.redcolor != 0)){
+        ErrorReason += ", טווח צהוב חייב להיות גדול מטווח אדום"
+        flag = false;
+      }
     }
 
     if (((unitsfilterarray.length > 0))) {
@@ -272,6 +304,13 @@ const ChartModal = (props) => {
     tempchartdata.screenid = props.screenid;
     tempchartdata.chartid = await GenerateChartid();
     tempchartdata.index = props.index;
+
+    if(tempchartdata.yellowcolor == undefined){
+      tempchartdata.yellowcolor = 0;
+    }
+    if(tempchartdata.redcolor == undefined){
+      tempchartdata.redcolor = 0;
+    }
 
     if (user.role=='1') {
       let tempunitsfilterarray = []
@@ -510,6 +549,16 @@ const ChartModal = (props) => {
             <Col xs={12} md={4} style={{ textAlign: 'right' }}>
               <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש שעון</button>
             </Col>
+            <Row>
+            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px' }}>
+              <div style={{ textAlign: 'center', paddingTop: '10px' }}>צהוב</div>
+              <Input type="number" name="yellowcolor" value={chartdata.yellowcolor} onChange={handleChange} step="10" min="0" max="90"/> 
+            </Col>
+            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px' }}>
+              <div style={{ textAlign: 'center', paddingTop: '10px' }}>אדום</div>
+              <Input type="number" name="redcolor" value={chartdata.redcolor} onChange={handleChange} step="10" min="0" max="90"/> 
+            </Col>
+            </Row>
           </Row>
 
           {chartdata.chartid ?
@@ -526,6 +575,13 @@ const ChartModal = (props) => {
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם שעון: </div>
               <Input type="text" name="name" value={chartdata.name} onChange={handleChange} />
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>(שם התרשים לא יכול להיות ארוך יותר מ-40 תווים)</div>
+            </Col>
+          </Row>
+          <Row style={{ padding: '0px' }}>
+            <Col style={{ padding: '0px' }} xs={12} md={4}>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}> פירוט(לא חובה): </div>
+              <Input type="text" name="description" value={chartdata.description} onChange={handleChange} />
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}>(פירוט לא יכול להיות ארוך יותר מ-40 תווים)</div>
             </Col>
           </Row>
 
