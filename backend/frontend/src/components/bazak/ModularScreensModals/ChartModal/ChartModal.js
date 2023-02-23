@@ -32,6 +32,9 @@ import deletepic from "assets/img/delete.png";
 import UnitsFilterObject from './UnitsFilterObject';
 import CarTypesFilterObject from './CarTypesFilterObject';
 import NormalAnimatedMultiSelect from 'components/general/Select/NormalAnimatedMultiSelect'
+import red from "assets/img/red.png";
+import yellow from "assets/img/yellow.png";
+import green from "assets/img/green.png";
 
 const ChartModal = (props) => {
   const { user } = isAuthenticated()
@@ -43,9 +46,23 @@ const ChartModal = (props) => {
   const [chartidimport, setChartidimport] = useState('')
   const [possiblestands, setPossiblestands] = useState([{ label: 'סדיר', value: 'סדיר' }, { label: 'הכן', value: 'הכן' }, { label: 'הח"י', value: 'הח"י' }])
   const [possiblestatusses, setPossiblestatusses] = useState([{ label: 'פעיל', value: 'פעיל' }, { label: 'מושבת', value: 'מושבת' }, { label: 'מיועד להשבתה', value: 'מיועד להשבתה' }, { label: 'עצור', value: 'עצור' }])
+  //
+  const [redchange, setRedchange] = useState(false)
+  const [yellowchange, SetYellowchange] = useState(false)
 
   const shortid = require('shortid')
   shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
+
+  function handleColorClick(evt) {
+    const name = evt.target.name;
+    console.log(evt)
+    if(name == 'red'){
+      setRedchange(true);
+    }
+    if(name == 'yellow'){
+      SetYellowchange(true);
+    }
+  }
 
   function handleChangeChartidimport(evt) {
     const value = evt.target.value;
@@ -550,13 +567,17 @@ const ChartModal = (props) => {
               <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש שעון</button>
             </Col>
             <Row>
-            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px' }}>
-              <div style={{ textAlign: 'center', paddingTop: '10px' }}>צהוב</div>
-              <Input type="number" name="yellowcolor" value={chartdata.yellowcolor} onChange={handleChange} step="10" min="0" max="90"/> 
+            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
+              <div style={{ textAlign: 'center', paddingTop: '10px'}}>ירוק <img height="20px" src={green}/></div>
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number"  value={100} disabled/> - <Input style={{marginRight:'3px'}} type="number" value={chartdata.yellowcolor} onChange={handleChange} disabled/> </div>
             </Col>
-            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px' }}>
-              <div style={{ textAlign: 'center', paddingTop: '10px' }}>אדום</div>
-              <Input type="number" name="redcolor" value={chartdata.redcolor} onChange={handleChange} step="10" min="0" max="90"/> 
+            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
+              <div name='yellow' style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', textDecoration: yellowchange ? 'line-through' :'none' }}>צהוב <img height="20px" src={yellow}/></div>
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="yellowcolor" value={chartdata.yellowcolor} onChange={handleChange} step="10" min="0" max="90"/>-<Input style={{marginRight:'3px'}} type="number"  value={chartdata.redcolor} disabled/> </div>
+            </Col>
+            <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
+              <div name='red' style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer' }}>אדום <img height="20px" src={red}/></div>
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="redcolor" value={chartdata.redcolor} onChange={handleChange} step="10" min="0" max="90"/>-<Input style={{marginRight:'3px'}} type="number"  value={0} disabled/> </div>
             </Col>
             </Row>
           </Row>

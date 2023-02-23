@@ -378,6 +378,13 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                             }
                         </div>
+                        {props.chart.description ?
+                            <div style={{ textAlign: 'center' }}>
+                                <h4>
+                                    {props.chart.description}
+                                </h4>
+                            </div>
+                            :<div style={{marginBottom:'2.4rem'}}/>}
                     </CardHeader>
                     <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer'}} onClick={(e) => toggleCollapse(e)}>
                         <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
