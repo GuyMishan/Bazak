@@ -1752,9 +1752,9 @@ const CarDataFormModal = (props) => {
                                     </div>
                                   </Col>
                                 </Row>
-                                {/* הוספת ח"ח */}
+                                {/* הוספת ח"ח ומעמל */}
                                 <Row>
-                                    <div>
+                                    <div style={{paddingLeft:'10px'}}>
                                       <p
                                         style={{
                                           margin: "0px",
@@ -1817,6 +1817,65 @@ const CarDataFormModal = (props) => {
                                               (currentSpec) =>
                                                 produce(currentSpec, (v) => {
                                                   delete v[index].hh_stands;
+                                                })
+                                            );
+                                          }
+                                        }}/>
+                                      }
+                                      </div>
+                                      <div>
+                                      <p
+                                        style={{
+                                          margin: "0px",
+                                          float: "right",
+                                          marginLeft: "5px",
+                                          marginRight: "15px",
+                                          fontWeight:'bold',
+                                          fontSize:'15px',
+                                        }}
+                                      >
+                                        האם בוצע טיפול מעמ”ל
+                                      </p>
+                                      {p.is_maamal?
+                                       <Input
+                                       style={{width:"18px", height:"18px"}}
+                                       id="Is_maamal"
+                                       type="checkbox"
+                                       onChange={(e) => {
+                                         if (e.target.checked == true) {
+                                           setFinalSpecialKeytwo(
+                                             (currentSpec) =>
+                                               produce(currentSpec, (v) => {
+                                                 v[index].is_maamal = true;
+                                               })
+                                           );
+                                         } else {
+                                           setFinalSpecialKeytwo(
+                                             (currentSpec) =>
+                                               produce(currentSpec, (v) => {
+                                                 delete v[index].is_maamal;
+                                               })
+                                           );
+                                         }
+                                       }} checked/>
+                                      :
+                                      <Input
+                                        style={{width:"18px", height:"18px"}}
+                                        id="Is_maamal"
+                                        type="checkbox"
+                                        onChange={(e) => {
+                                          if (e.target.checked == true) {
+                                            setFinalSpecialKeytwo(
+                                              (currentSpec) =>
+                                                produce(currentSpec, (v) => {
+                                                  v[index].is_maamal = true;
+                                                })
+                                            );
+                                          } else {
+                                            setFinalSpecialKeytwo(
+                                              (currentSpec) =>
+                                                produce(currentSpec, (v) => {
+                                                  delete v[index].is_maamal;
                                                 })
                                             );
                                           }

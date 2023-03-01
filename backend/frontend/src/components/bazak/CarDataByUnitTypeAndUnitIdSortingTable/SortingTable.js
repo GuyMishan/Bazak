@@ -496,6 +496,49 @@ const SortingTable = (props) => {
         setFilter({ ...filter, standfilter: [evt.currentTarget.value] })
       }
     }
+    if (evt.currentTarget.name == 'tipul') {
+      if (filter.tipulfilter) {
+        let temptipulfilter = [...filter.tipulfilter]
+        const index = temptipulfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          temptipulfilter.splice(index, 1);
+          if(evt.currentTarget.value == 'harig_tipul'){
+            if(filter.maamalfilter){
+              filter.maamalfilter.splice(0, 1);
+            }
+            if(filter.taarichtipulStart){
+              delete filter.taarichtipulStart;
+            }
+            if(filter.taarichtipulEnd){
+              delete filter.taarichtipulEnd;
+            }
+          }
+        }
+        else {
+          temptipulfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, tipulfilter: temptipulfilter })
+      }
+      else {
+        setFilter({ ...filter, tipulfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'is_maamal') {
+      if (filter.maamalfilter) {
+        let tempmaamalfilter = [...filter.maamalfilter]
+        const index = tempmaamalfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmaamalfilter.splice(index, 1);
+        }
+        else {
+          tempmaamalfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, maamalfilter: tempmaamalfilter })
+      }
+      else {
+        setFilter({ ...filter, maamalfilter: [evt.currentTarget.value] })
+      }
+    }
   }
 
   function handleChange8(selectedOption, name) {
@@ -512,6 +555,17 @@ const SortingTable = (props) => {
       setFilter(tempfilter);
     }
   }
+  function handleChangeForTaarichTipul(selectedOption) {
+    if (!(selectedOption.target.value == '')) {
+      setFilter({ ...filter, [selectedOption.target.name]: selectedOption.target.value});
+    }
+    else {
+      let tempfilter = { ...filter };
+      delete tempfilter[selectedOption.target.name];
+      setFilter(tempfilter);
+    }
+  }
+
 
   const applyfiltersontodata = () => {
     let tempdatabeforefilter = originaldata;
@@ -552,12 +606,82 @@ const SortingTable = (props) => {
       myArrayFiltered22 = myArrayFiltered2;
     }
 
-    let myArrayFiltered3 = []; //filter pikod
-    if (filter.pikod && filter.pikod.length > 0) {
-      myArrayFiltered3 = myArrayFiltered22.filter(item => filter.pikod.includes(item.pikod));
+    let myArrayFiltered23 = []; //filter tipulfilter
+    if (filter.tipulfilter && filter.tipulfilter.length > 0) {
+      myArrayFiltered23 = myArrayFiltered22.filter((el) => {
+        return filter.tipulfilter.some((f) => {
+          if(el.tipuls.length > 0){
+            let flag = false;
+            for(let i=0;i<el.tipuls.length;i++){
+              if(f === el.tipuls[i].type){
+                flag = true;
+              }
+            }
+            return flag;
+          }else{
+            return false
+          }
+        });
+      });
     }
     else {
-      myArrayFiltered3 = myArrayFiltered22;
+      myArrayFiltered23 = myArrayFiltered22;
+    }
+
+    let myArrayFiltered24 = []; //filter maamalfilter
+    if (filter.maamalfilter && filter.maamalfilter.length > 0) {
+      myArrayFiltered24 = myArrayFiltered23.filter((el) => {
+        return filter.maamalfilter.some(() => {
+          if(el.tipuls.length > 0){
+            let flag = false;
+            for(let i=0;i<el.tipuls.length;i++){
+              if(el.tipuls[i].is_maamal){
+                flag = true;
+              }
+            }
+            return flag;
+          }else{
+            return false
+          }
+        });
+      });
+    }
+    else {
+      myArrayFiltered24 = myArrayFiltered23;
+    }
+
+    let myArrayFiltered25 = []; //filter taarichtipul
+    if (filter.taarichtipulStart && filter.taarichtipulStart.length > 0 && filter.taarichtipulEnd && filter.taarichtipulEnd.length > 0) {
+      myArrayFiltered25 = myArrayFiltered24.filter((el) => {
+        if(el.tipuls.length > 0){
+          let flag = false;
+          let startDate = new Date(filter.taarichtipulStart);
+          let checkDate;
+          let endDate = new Date(filter.taarichtipulEnd);
+          for(let i=0;i<el.tipuls.length;i++){
+            if(el.tipuls[i].harig_tipul_date){
+              checkDate = new Date(el.tipuls[i].harig_tipul_date);
+              if(checkDate >= startDate && checkDate <= endDate){
+                flag = true;
+              }
+            }
+          }
+          return flag;
+        }else{
+          return false
+        }
+      });
+    }
+    else {
+      myArrayFiltered25 = myArrayFiltered24;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered25.filter(item => filter.pikod.includes(item.pikod));
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered25;
     }
 
     let myArrayFiltered4 = []; //filter ogda
@@ -865,7 +989,7 @@ const SortingTable = (props) => {
 
         <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
           {/*filter */}
-          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
+          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} handleChangeForTaarichTipul={handleChangeForTaarichTipul}/>
           {/*working here */}
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>

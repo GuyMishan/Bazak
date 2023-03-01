@@ -558,7 +558,7 @@ const ChartModal = (props) => {
           <h1 style={{ textAlign: 'center' }}>יצירת שעון</h1>
         }
         <div>
-          <Row style={{ padding: '0px' }}>
+          <Row style={{ padding: '0px'}}>
             <Col style={{ padding: '0px' }} xs={12} md={4}>
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא שעון: </div>
               <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} placeholder="ניתן להזין קוד שעון שקיבלת לייבוא!"/> 
