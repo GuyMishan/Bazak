@@ -54,13 +54,22 @@ const ChartModal = (props) => {
   shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
   function handleColorClick(evt) {
-    const name = evt.target.name;
-    console.log(evt)
+    const name = evt.currentTarget.getAttribute('name');
     if(name == 'red'){
-      setRedchange(true);
+      if(redchange == true){
+        setRedchange(false);
+      }else{
+        setRedchange(true);
+        setChartData({ ...chartdata, ["redcolor"]: 0 });
+      }
     }
     if(name == 'yellow'){
-      SetYellowchange(true);
+      if(yellowchange == true){
+        SetYellowchange(false);
+      }else{
+        SetYellowchange(true);
+        setChartData({ ...chartdata, ["yellowcolor"]: 0 });
+      }    
     }
   }
 
@@ -569,15 +578,23 @@ const ChartModal = (props) => {
             <Row>
             <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
               <div style={{ textAlign: 'center', paddingTop: '10px'}}>ירוק <img height="20px" src={green}/></div>
-              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number"  value={100} disabled/> - <Input style={{marginRight:'3px'}} type="number" value={chartdata.yellowcolor} onChange={handleChange} disabled/> </div>
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number"  value={100} disabled/> - <Input style={{marginRight:'3px'}} type="number" value={yellowchange? redchange? '0' :chartdata.redcolor :chartdata.yellowcolor} onChange={handleChange} disabled/> </div>
             </Col>
             <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
-              <div name='yellow' style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', textDecoration: yellowchange ? 'line-through' :'none' }}>צהוב <img height="20px" src={yellow}/></div>
+              <div name='yellow' onClick={handleColorClick} style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', textDecoration: yellowchange ? 'line-through' :'none' }}>צהוב <img height="20px" src={yellow}/></div>
+              {yellowchange?
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="yellowcolor" value={0} onChange={handleChange} step="10" min="0" max="90" disabled/>-<Input style={{marginRight:'3px'}} type="number"  value={0} disabled/> </div>
+              :
               <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="yellowcolor" value={chartdata.yellowcolor} onChange={handleChange} step="10" min="0" max="90"/>-<Input style={{marginRight:'3px'}} type="number"  value={chartdata.redcolor} disabled/> </div>
+              }
             </Col>
             <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
-              <div name='red' style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer' }}>אדום <img height="20px" src={red}/></div>
+              <div name='red' onClick={handleColorClick}  style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', textDecoration: redchange ? 'line-through' :'none'  }}>אדום <img height="20px" src={red}/></div>
+              {redchange?
+              <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="redcolor" value={0} onChange={handleChange} step="10" min="0" max="90" disabled/>-<Input style={{marginRight:'3px'}} type="number"  value={0} disabled/> </div>
+              :
               <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="redcolor" value={chartdata.redcolor} onChange={handleChange} step="10" min="0" max="90"/>-<Input style={{marginRight:'3px'}} type="number"  value={0} disabled/> </div>
+              }
             </Col>
             </Row>
           </Row>
