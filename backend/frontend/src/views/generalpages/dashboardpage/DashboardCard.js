@@ -291,7 +291,6 @@ function DashboardCard(props) { //instate - zamin/kashir
                     </CardBody>
                 </Card>
             </Col> : null
-        // <h1>hello</h1>
     );
 }
 

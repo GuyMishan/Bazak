@@ -47,6 +47,7 @@ const ManageUsersFilter = (props) => {
     const getroles = async () => {
         let temproles = [];
         temproles.push('הרשאת אדמין');
+        temproles.push('הרשאת כלל צה"ל');
         temproles.push('הרשאת פיקוד');
         temproles.push('הרשאת אוגדה');
         temproles.push('הרשאת חטיבה');

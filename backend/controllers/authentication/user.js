@@ -21,7 +21,7 @@ exports.find = (req, res) => {
 }
 exports.update = async (req, res) => {
 
-    let roles = ['adminid', 'gdodid', 'hativaid', 'ogdaid', 'pikodid']
+    let roles = ['adminid', 'gdodid', 'hativaid', 'ogdaid', 'pikodid', 'generalid']
 
     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!user) {
@@ -235,7 +235,7 @@ exports.usersvalidatedaggregate = (req, res) => {
                             User.aggregate(readpikoduser)
                                 .then((result) => {
                                     tempallusers = tempallusers.concat([...result]);
-                                    User.find({ role: "0" })
+                                    User.find({ role: ["0","5"] })
                                         .then((result) => {
                                             tempallusers = tempallusers.concat([...result])
                                             tempallusers = tempallusers.filter((el) => {
@@ -436,7 +436,7 @@ exports.usersnotvalidatedaggregate = (req, res) => {
                             User.aggregate(readpikoduser)
                                 .then((result) => {
                                     tempallusers = tempallusers.concat([...result]);
-                                    User.find({ role: "0" })
+                                    User.find({ role: ["0","5"] })
                                         .then((result) => {
                                             tempallusers = tempallusers.concat([...result])
                                             tempallusers = tempallusers.filter((el) => {

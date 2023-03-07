@@ -264,6 +264,9 @@ const SortingTable = (props) => {
         case 'admin':
           myArrayFiltered2 = myArrayFiltered1;
           break;
+        case 'general':
+          myArrayFiltered2 = myArrayFiltered1;
+          break;
         case 'pikod':
           myArrayFiltered2 = myArrayFiltered1.filter((el) => {
             return props.match.params.unitid === el.pikod;
@@ -990,7 +993,7 @@ const SortingTable = (props) => {
         <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
           {/*filter */}
           <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} handleChangeForTaarichTipul={handleChangeForTaarichTipul}/>
-          {/*working here */}
+          
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
           </div>

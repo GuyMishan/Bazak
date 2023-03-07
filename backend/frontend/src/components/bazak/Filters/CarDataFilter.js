@@ -330,7 +330,7 @@ const CarDataFilter = (props) => {
                         </Col>
                         <Col xs={12} md={8} style={{ textAlign: 'right' }}>
                             <Row style={{ paddingTop: '10px', marginBottom: '15px' }}>
-                                {((props.unittype == "admin")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general")) ?
                                     <>
                                         {(!(props.filter.ogda) || !(props.filter.ogda.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -343,7 +343,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod")) ?
                                     <>
                                         {((props.filter.pikod) && (props.filter.pikod.length > 0) && (!(props.filter.hativa) || !(props.filter.hativa.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -356,7 +356,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
                                     <>
                                         {((props.filter.ogda) && (props.filter.ogda.length > 0) && (!(props.filter.gdod) || !(props.filter.gdod.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -369,7 +369,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
                                     <>
                                         {((props.filter.hativa) && (props.filter.hativa.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>

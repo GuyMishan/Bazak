@@ -207,7 +207,7 @@ function UnitTreePage({ match }) {
 
     function handleTreeClick(event) {
         var idstr = event.key; //idstr = _id
-        if (match.params.unittype == 'admin') {
+        if (match.params.unittype == 'admin' || match.params.unittype == 'general') {
             if (event.type == "pikod") {
                 history.push(`/dashboard/pikod/${idstr}/magadal/0/true`);
             }
@@ -257,7 +257,7 @@ function UnitTreePage({ match }) {
     }
 
     useEffect(() => {
-        if (match.params.unittype == 'admin')
+        if (match.params.unittype == 'admin' || match.params.unittype == 'general')
             loadAdminData();
         if (match.params.unittype == 'pikod')
             loadPikodData();

@@ -170,19 +170,12 @@ const EditUserForm = ({ match }) => {
 
   const FixUser = (event) => {
     event.preventDefault();
-    if (data.role === "0") {
+    if (data.role === "0" || data.role === "5") {
       delete data.gdodid;
       delete data.hativaid;
       delete data.ogdaid;
       delete data.pikodid;
     }
-    // if (data.role === "5") {
-    //   data.site_permission = 'צפייה';
-    //   delete data.gdodid;
-    //   delete data.hativaid;
-    //   delete data.ogdaid;
-    //   delete data.pikodid;
-    // }
     if (data.role === "1") {
       delete data.hativaid;
       delete data.ogdaid;
@@ -305,7 +298,7 @@ const EditUserForm = ({ match }) => {
                     >
                       <option value="">הרשאה</option>
                       <option value="0">מנהל מערכת</option>
-                      {/* <option value="5">משתמש כלל צה"ל</option> */}
+                      <option value="5">משתמש כלל צה"ל</option>
                       <option value="1">הרשאת גדוד</option>
                       <option value="2">הרשאת חטיבה</option>
                       <option value="3">הרשאת אוגדה</option>
@@ -316,9 +309,9 @@ const EditUserForm = ({ match }) => {
                   {data.role === "0" ? (
                     <div style={{textAlign:'right', paddingTop: "10px"}}>מנהל מערכת</div>
                   ) :
-                  //  data.role === "5" ? (
-                  //   <div style={{textAlign:'right', paddingTop: "10px"}}>משתמש כלל צה"ל</div>
-                  // ) : 
+                   data.role === "5" ? (
+                    <div style={{textAlign:'right', paddingTop: "10px"}}>משתמש כלל צה"ל</div>
+                  ) : 
                   data.role === "1" ? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
@@ -359,7 +352,7 @@ const EditUserForm = ({ match }) => {
                     <div style={{textAlign:'right', paddingTop: "10px"}}>נא להכניס הרשאה</div>
                   ) : null}
 
-                  {data.role != "" && data.role != "0" ? (
+                  {data.role != "" && data.role != "0"? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         הרשאת עריכה

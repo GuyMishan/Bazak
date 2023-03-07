@@ -102,7 +102,7 @@ function AssessmentPage(props) {
             <div>
                 <AssessmentFormModal isOpen={isassessmentdataformopen} assessmentdataid={assessmentdataidformodal} Toggle={Toggle} ToggleForModal={ToggleForModal} unittype={props.unittype} unitid={props.unitid} user={user} />
 
-                {user.role == '0' ?
+                {user.role == '0' || user.role == '5' ?
                     <div style={{ display: 'flex', justifyContent: 'right', paddingBottom: '15px' }}>
                         <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ marginRight: '10px' }}>הוסף הערכת מצב</button>
                     </div> : null}
@@ -114,7 +114,7 @@ function AssessmentPage(props) {
                                 <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
                                     <Row>
                                         <Col xs={12} md={3} style={{ textAlign: 'center', padding: '0px' }}>
-                                            {user.role == '0' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) || (user.role == '3' && user.ogdaid && user.ogdaid == assessment.pikod) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+                                            {user.role == '0' || user.role == '5' || (user.role == '4' && user.pikodid && user.pikodid == assessment.pikod) || (user.role == '3' && user.ogdaid && user.ogdaid == assessment.pikod) && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
                                                 <div style={{ display: 'flex', justifyContent: 'right' }}>
                                                     {props.theme == 'white-content' ? <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic_black} style={{ height: "100%" }}></img></button>
                                                         : <button className='btn-empty' style={{ height: "50px" }} value={assessment._id} onClick={Toggle}><img src={editpic} style={{ height: "100%" }} ></img></button>}

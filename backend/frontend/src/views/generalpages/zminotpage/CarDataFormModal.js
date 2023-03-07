@@ -60,6 +60,9 @@ const CarDataFormModal = (props) => {
       .get(`http://localhost:8000/api/cardata/${props.cardataid}`)
       .then((response) => {
         let tempcardata = response.data[0];
+        if(tempcardata.expected_repair ==  "מעל 72 שעות"){
+          SetIsexpectedrepairmorethen72(true)
+        }
         if (tempcardata.latest_recalibration_date)
           tempcardata.latest_recalibration_date =
             tempcardata.latest_recalibration_date.slice(0, 10);
@@ -552,7 +555,6 @@ const CarDataFormModal = (props) => {
         tempcardata
       );
       toast.success(`צ' עודכן בהצלחה`);
-      console.log(tempcardata.updatedBy, result.updatedBy);
       props.ToggleForModal();
     }
   }
@@ -599,8 +601,11 @@ const CarDataFormModal = (props) => {
   }, [cardata.mkabaz]);
 
   useEffect(() => {
-    if (props.isOpen == true) init();
+    if (props.isOpen == true){
+      init();
+    }
     else {
+      SetIsexpectedrepairmorethen72(false)
       setCarData({});
       setFinalSpecialKeytwo([]);
     }
@@ -930,7 +935,7 @@ const CarDataFormModal = (props) => {
                 </Row>
 
                 <Row style={{ paddingTop: "10px" }}>
-                  {props.unittype == "admin" || props.unittype == "notype" ? (
+                  {props.unittype == "admin"|| props.unittype == "general" || props.unittype == "notype" ? (
                     <>
                       {!cardata.ogda ? (
                         <Col
@@ -969,7 +974,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ? (
                     <>
@@ -1010,7 +1015,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ||
                   props.unittype == "ogda" ? (
@@ -1052,7 +1057,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ||
                   props.unittype == "ogda" ||
@@ -2519,7 +2524,7 @@ const CarDataFormModal = (props) => {
                 </Row>
 
                 <Row style={{ paddingTop: "10px" }}>
-                  {props.unittype == "admin" || props.unittype == "notype" ? (
+                  {props.unittype == "admin"|| props.unittype == "general" || props.unittype == "notype" ? (
                     <>
                       <Col
                         style={{
@@ -2540,7 +2545,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ? (
                     <>
@@ -2563,7 +2568,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ||
                   props.unittype == "ogda" ? (
@@ -2587,7 +2592,7 @@ const CarDataFormModal = (props) => {
                     </>
                   ) : null}
 
-                  {props.unittype == "admin" ||
+                  {props.unittype == "admin"|| props.unittype == "general" ||
                   props.unittype == "notype" ||
                   props.unittype == "pikod" ||
                   props.unittype == "ogda" ||

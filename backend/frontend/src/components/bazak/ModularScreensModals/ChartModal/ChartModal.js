@@ -84,7 +84,7 @@ const ChartModal = (props) => {
         if (chartdata.screenid) { //for update
           tempchart.screenid = chartdata.screenid;
         }
-        if (user.role != '0') {
+        if (user.role != '0' || user.role != '5') {
           var flag = true;
           for (var i = 0; i < tempchart.units.length; i++) {
              var targetUnitId = Object.values(tempchart.units[i])[1]
