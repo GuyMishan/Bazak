@@ -524,6 +524,12 @@ const ChartModal = (props) => {
     await axios.get(`http://localhost:8000/api/modularscreens/chartbychartid/${tempchartid}`)
       .then(response => {
         let tempchart = response.data[0];
+        if(tempchart.redcolor==0){
+          setRedchange(true)
+        }
+        if(tempchart.yellowcolor==0){
+          SetYellowchange(true)
+        }
         setChartData(tempchart);
         setUnitsfilterarray(tempchart.units);
         setCartypesfilterarray(tempchart.tenetree);
@@ -547,6 +553,8 @@ const ChartModal = (props) => {
       setUnitsfilterarray([])
       setCartypesfilterarray([])
       setChartidimport('')
+      setRedchange(false)
+      SetYellowchange(false)
     }
   }, [props.isOpen])
 
@@ -567,15 +575,15 @@ const ChartModal = (props) => {
           <h1 style={{ textAlign: 'center' }}>יצירת שעון</h1>
         }
         <div>
-          <Row style={{ padding: '0px'}}>
+          <Row style={{ padding: '0px',flexWrap:'nowrap'}}>
             <Col style={{ padding: '0px' }} xs={12} md={4}>
               <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא שעון: </div>
               <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} placeholder="ניתן להזין קוד שעון שקיבלת לייבוא!"/> 
             </Col>
-            <Col xs={12} md={4} style={{ textAlign: 'right' }}>
+            <Col xs={8} md={2} style={{ textAlign: 'right' }}>
               <button className='btn-new-blue' style={{ margin: '0px', marginTop: '33px' }} onClick={ImportChartfunc}>חפש שעון</button>
             </Col>
-            <Row>
+            <Row style={{flexWrap:'nowrap'}}>
             <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
               <div style={{ textAlign: 'center', paddingTop: '10px'}}>ירוק <img height="20px" src={green}/></div>
               <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number"  value={100} disabled/> - <Input style={{marginRight:'3px'}} type="number" value={yellowchange? redchange? '0' :chartdata.redcolor :chartdata.yellowcolor} onChange={handleChange} disabled/> </div>

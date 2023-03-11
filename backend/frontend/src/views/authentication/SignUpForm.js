@@ -22,9 +22,9 @@ import Select from 'components/general/Select/AnimatedSelect'
 
 export default function SignUpForm() {
   const [data, setData] = useState({
-    name: "",
-    lastname: "",
-    personalnumber: "",
+    name: '',
+    lastname: '',
+    personalnumber: '',
     role: "",
     gdodid: "",
     hativaid: "",
