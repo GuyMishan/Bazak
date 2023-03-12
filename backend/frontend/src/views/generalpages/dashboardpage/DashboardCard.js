@@ -280,11 +280,11 @@ function DashboardCard(props) { //instate - zamin/kashir
 
                         {collapseOpen ?
                             <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.cartype.name} בטיפול: {cardata_by_cartype_intipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_cartype_hhstand_intipul})</span></h6>
+                                <h6>{props.cartype.name} בטיפול: {cardata_by_cartype_intipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_intipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_intipul / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_intipul / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.cartype.name} חריגי טיפול:  {cardata_by_cartype_harigtipul} <span style={{color:'red'}}>(ח"ח: {cardata_by_cartype_hhstand_harigtipul})</span></h6>
+                                <h6>{props.cartype.name} חריגי טיפול:  {cardata_by_cartype_harigtipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_harigtipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_harigtipul / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_harigtipul / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.cartype.name} בתקלות מזדמנות: {cardata_by_cartype_takalotmizdamnot} <span style={{color:'red'}}>(ח"ח: {cardata_by_cartype_hhstand_takalotmizdamnot})</span></h6>
+                                <h6>{props.cartype.name} בתקלות מזדמנות: {cardata_by_cartype_takalotmizdamnot} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_takalotmizdamnot})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_takalotmizdamnot / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_takalotmizdamnot / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                             </div>
                             : null}
