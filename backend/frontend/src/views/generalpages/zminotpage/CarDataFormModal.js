@@ -262,7 +262,7 @@ const CarDataFormModal = (props) => {
       if(evt.target.name == "expected_repair"){
         if(value == "מעל 72 שעות"){
           setCarData({ ...cardata, ["zminot"]: "לא זמין", ["kshirot"]: "לא כשיר", [evt.target.name]: value });
-          toast.error("שים לב, צפי תיקון עודכן למעל 72 שעות, זמינות וכשירות הכלי עודכנו ללא זמין ולא כשיר");
+          toast.info("שים לב, צפי תיקון עודכן למעל 72 שעות, זמינות וכשירות הכלי עודכנו ללא זמין ולא כשיר");
         }
       }
     }
@@ -380,6 +380,11 @@ const CarDataFormModal = (props) => {
       cardata.kshirot == ""
     ) {
       ErrorReason += ",חובה להזין האם הכלי זמין/כשיר";
+      flag = false;
+    }
+
+    if(cardata.expected_repair == 'מעל 72 שעות' && (cardata.zminot == "זמין" || cardata.kshirot == "כשיר")){
+      ErrorReason += ",שים לב, צפי תיקון עודכן למעל 72 שעות, זמינות וכשירות הכלי עודכנו ללא זמין ולא כשיר";
       flag = false;
     }
 
