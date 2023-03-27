@@ -123,7 +123,7 @@ const SortingTable = (props) => {
             {headerGroups.map((headerGroup) => (
               <tr {...headerGroup.getHeaderGroupProps()}>
                 {headerGroup.headers.map((column) => (
-                  <th  >
+                  <th style={{ position: 'sticky', top: '-2px' }}>
                     <div {...column.getHeaderProps(column.getSortByToggleProps())}> {column.render('Header')} </div>
                     <div>{column.canFilter ? column.render('Filter') : null}</div>
                     <div>
@@ -142,7 +142,7 @@ const SortingTable = (props) => {
               page.map(row => {
                 prepareRow(row)
                 return (
-                  <tr className="">
+                  <tr className=""  >
                     {
                       row.cells.map(cell => {
                         if (cell.column.id == "see") {
