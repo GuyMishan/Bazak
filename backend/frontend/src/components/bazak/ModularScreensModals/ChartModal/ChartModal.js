@@ -577,7 +577,7 @@ const ChartModal = (props) => {
         <div>
           <Row style={{ padding: '0px',flexWrap:'nowrap'}}>
             <Col style={{ padding: '0px' }} xs={12} md={4}>
-              <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא שעון: </div>
+              <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>ייבוא שעון: </h6></div>
               <Input type="text" value={chartidimport} onChange={handleChangeChartidimport} placeholder="ניתן להזין קוד שעון שקיבלת לייבוא!"/> 
             </Col>
             <Col xs={8} md={2} style={{ textAlign: 'right' }}>
@@ -589,7 +589,7 @@ const ChartModal = (props) => {
               <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number"  value={100} disabled/> - <Input style={{marginRight:'3px'}} type="number" value={yellowchange? redchange? '0' :chartdata.redcolor :chartdata.yellowcolor} onChange={handleChange} disabled/> </div>
             </Col>
             <Col style={{ padding: '0px',paddingRight:'15px',paddingLeft:'15px'}}>
-              <div name='yellow' onClick={handleColorClick} style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', textDecoration: yellowchange ? 'line-through' :'none' }}>צהוב <img height="20px" src={yellow}/></div>
+              <div name='yellow' onClick={handleColorClick} style={{ textAlign: 'center', paddingTop: '10px', cursor: 'pointer', color:'white', textDecoration: yellowchange ? 'line-through' :'none' }}>צהוב <img height="20px" src={yellow}/></div>
               {yellowchange?
               <div style={{display:"flex", alignItems: 'center', width:'140px'}}><Input style={{marginLeft:'3px'}} type="number" name="yellowcolor" value={0} onChange={handleChange} step="10" min="0" max="90" disabled/>-<Input style={{marginRight:'3px'}} type="number"  value={0} disabled/> </div>
               :

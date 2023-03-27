@@ -1014,7 +1014,7 @@ const CarDataFormModal = (props) => {
                 <Row>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      פלוגה
+                     <h6>פלוגה</h6> 
                     </div>
                     <Input
                       placeholder="פלוגה"
@@ -1026,7 +1026,7 @@ const CarDataFormModal = (props) => {
                   </Col>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      שבצ"ק
+                      <h6>שבצ"ק</h6>
                     </div>
                     <Input
                       placeholder={`שבצ"ק`}
@@ -1038,7 +1038,7 @@ const CarDataFormModal = (props) => {
                   </Col>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      מיקום בימ"ח
+                      <h6>מיקום בימ"ח</h6>
                     </div>
                     <Input
                       placeholder={`מיקום בימ"ח`}
@@ -1050,7 +1050,7 @@ const CarDataFormModal = (props) => {
                   </Col>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      מעמד הכלי
+                      <h6>מעמד הכלי</h6>
                     </div>
                     <Input
                       placeholder="מעמד הכלי"
@@ -1069,7 +1069,7 @@ const CarDataFormModal = (props) => {
 
                 <Row>
                   <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>זמינות</h6></div>
                   <Input style={{ border: '2px solid' }} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange}>
                     <option value={'בחר'}>בחר</option>
                     <option value={'זמין'}>זמין</option>
@@ -1077,7 +1077,7 @@ const CarDataFormModal = (props) => {
                   </Input>
                   </Col>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>כשירות למלחמה</h6></div>
                     <Input style={{ border: '2px solid' }} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange}>
                       <option value={'בחר'}>בחר</option>
                       <option value={'כשיר'}>כשיר</option>
@@ -1089,7 +1089,7 @@ const CarDataFormModal = (props) => {
                 {cardata.kshirot == "לא כשיר" || cardata.zminot == "לא זמין" ? (
                   <>
                     {/* tipuls */}
-                    <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>סיבות אי זמינות</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}><h6>סיבות אי זמינות</h6></div>
 
                     <div>
                       {finalspecialkeytwo.length == 0 ? (
@@ -1127,7 +1127,7 @@ const CarDataFormModal = (props) => {
                                   <Row>
                                     <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>סוג הטיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>סוג הטיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const tipul = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1144,7 +1144,7 @@ const CarDataFormModal = (props) => {
                                     </Col>
                                     <Col xs={12} md={4}>
                                      <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>תאריך כניסה לטיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>תאריך כניסה לטיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const tipul_entry_date = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1155,7 +1155,7 @@ const CarDataFormModal = (props) => {
                                     </Col> 
                                     <Col xs={12} md={4}>
                                      <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>מיקום הטיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>מיקום הטיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const mikum_tipul = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1184,7 +1184,7 @@ const CarDataFormModal = (props) => {
                                           fontSize:'15px',
                                         }}
                                       >
-                                        האם עומד על ח"ח
+                                       <h5>האם עומד על ח"ח</h5>
                                       </p>
                                       {p.hh_stands?
                                       <Input
@@ -1284,7 +1284,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    מק"ט חסר
+                                                    <h6>מק"ט חסר</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1317,7 +1317,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    כמות
+                                                    <h6>כמות</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1372,7 +1372,7 @@ const CarDataFormModal = (props) => {
                                 <Row>
                                   <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>חריג טיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>חריג טיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const harig_tipul = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1389,7 +1389,7 @@ const CarDataFormModal = (props) => {
                                   </Col>
                                   <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>תאריך חריגת טיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>תאריך חריגת טיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const harig_tipul_date = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1412,7 +1412,7 @@ const CarDataFormModal = (props) => {
                                           fontSize:'15px',
                                         }}
                                       >
-                                        האם עומד על ח"ח
+                                        <h5>האם עומד על ח"ח</h5>
                                       </p>
                                       {p.hh_stands?
                                       <Input
@@ -1481,7 +1481,7 @@ const CarDataFormModal = (props) => {
                                           fontSize:'15px',
                                         }}
                                       >
-                                        האם בוצע טיפול מעמ”ל
+                                        <h5>האם בוצע טיפול מעמ”ל</h5>
                                       </p>
                                       {p.is_maamal?
                                        <Input
@@ -1571,7 +1571,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    מק"ט חסר
+                                                    <h6>מק"ט חסר</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1604,7 +1604,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    כמות
+                                                    <h6>כמות</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1659,7 +1659,7 @@ const CarDataFormModal = (props) => {
                                 <Row>
                                   <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>תקלה מזדמנת</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>תקלה מזדמנת</h6></p>
                                       <Input onChange={(e) => {
                                         const takala_mizdamenet = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1675,7 +1675,7 @@ const CarDataFormModal = (props) => {
                                   </Col>
                                   <Col xs={12} md={4}>
                                     <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>תאריך תקלה מזמנת</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>תאריך תקלה מזמנת</h6></p>
                                       <Input onChange={(e) => {
                                         const takala_mizdamenet_date = e.target.value;
                                         if (e.target.value != "בחר")
@@ -1698,7 +1698,7 @@ const CarDataFormModal = (props) => {
                                           fontSize:'15px',
                                         }}
                                       >
-                                        האם עומד על ח"ח
+                                        <h5>האם עומד על ח"ח</h5>
                                       </p>
                                       {p.hh_stands?
                                       <Input
@@ -1798,7 +1798,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    מק"ט חסר
+                                                    <h6>מק"ט חסר</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1831,7 +1831,7 @@ const CarDataFormModal = (props) => {
                                                       float: "right",
                                                     }}
                                                   >
-                                                    כמות
+                                                    <h6>כמות</h6>
                                                   </p>
                                                   <Input
                                                     onChange={(e) => {
@@ -1893,14 +1893,14 @@ const CarDataFormModal = (props) => {
 
                     <Row>
                       <Col>
-                        <div style={{ textAlign: 'right', paddingTop: '10px' }}>מהות התקלה</div>
+                        <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מהות התקלה</h6></div>
                         <Input placeholder="מהות התקלה" type="textarea" name="takala_info" value={cardata.takala_info} onChange={handleChange} />
                       </Col>
                     </Row>
 
                     <Row>
                       <Col>
-                        <div style={{ textAlign: 'right', paddingTop: '10px' }}>צפי תיקון</div>
+                        <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>צפי תיקון</h6></div>
                         <Input placeholder="צפי תיקון" type="select" name="expected_repair" value={cardata.expected_repair} onChange={handleChange}>
                           <option value={"בחר"}>{"בחר"}</option>
                           <option value={"עד 6 שעות"}>{"עד 6 שעות"}</option>
@@ -1926,11 +1926,11 @@ const CarDataFormModal = (props) => {
 
               <Row>
                 <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום</div>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מיקום</h6></div>
                   <Input placeholder="מיקום" type="string" name="mikum" value={cardata.mikum} onChange={handleChange} />
                 </Col>
                 <Col>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מועד כיול אחרון</div>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מועד כיול אחרון</h6></div>
                   <Input placeholder="מועד כיול אחרון" type="date" name="latest_recalibration_date" value={cardata.latest_recalibration_date} onChange={handleChange} min="1900-01-01" max="2040-01-01"/>
                 </Col>
               </Row>
@@ -2027,19 +2027,19 @@ const CarDataFormModal = (props) => {
 
                 <Row>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>פלוגה</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>פלוגה</h6></div>
                     <Input placeholder="פלוגה" type="string" name="pluga" value={cardata.pluga} onChange={handleChange} disabled/>
                   </Col>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>שבצ"ק</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>שבצ"ק</h6></div>
                     <Input placeholder={`שבצ"ק`} type="string" name="shabzak" value={cardata.shabzak} onChange={handleChange} disabled/>
                   </Col>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מיקום בימ"ח</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מיקום בימ"ח</h6></div>
                     <Input placeholder={`מיקום בימ"ח`} type="string" name="mikum_bimh" value={cardata.mikum_bimh} onChange={handleChange} disabled/>
                   </Col>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>מעמד הכלי</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מעמד הכלי</h6></div>
                     <Input placeholder="מעמד הכלי" type="select" name="stand" value={cardata.stand} onChange={handleChange} disabled>
                       <option value={'בחר'}>בחר</option>
                       <option value={'סדיר'}>סדיר</option>
@@ -2051,7 +2051,7 @@ const CarDataFormModal = (props) => {
 
                 <Row>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>זמינות</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>זמינות</h6></div>
                     <Input style={{ border: '2px solid' }} placeholder="זמינות" type="select" name="zminot" value={cardata.zminot} onChange={handleChange} disabled>
                       <option value={'בחר'}>בחר</option>
                       <option value={'זמין'}>זמין</option>
@@ -2059,7 +2059,7 @@ const CarDataFormModal = (props) => {
                     </Input>
                   </Col>
                   <Col>
-                    <div style={{ textAlign: 'right', paddingTop: '10px' }}>כשירות למלחמה</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>כשירות למלחמה</h6></div>
                     <Input style={{ border: '2px solid' }} placeholder="כשירות למלחמה" type="select" name="kshirot" value={cardata.kshirot} onChange={handleChange} disabled>
                       <option value={'בחר'}>בחר</option>
                       <option value={'כשיר'}>כשיר</option>
@@ -2071,7 +2071,7 @@ const CarDataFormModal = (props) => {
                 {cardata.kshirot == "לא כשיר" || cardata.zminot == "לא זמין" ? (
                   <>
                     {/* tipuls */}
-                    <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}>סיבות אי זמינות</div>
+                    <div style={{ textAlign: 'right', paddingTop: '10px', fontWeight: "bold" }}><h6>סיבות אי זמינות</h6></div>
 
                     <div>
                       {finalspecialkeytwo.map((p, index) => {
@@ -2094,13 +2094,13 @@ const CarDataFormModal = (props) => {
                                 </Col>
                                 <Col xs={12} md={4}>
                                   <div>
-                                    <p style={{ margin: '0px', float: 'right' }}>תאריך כניסה לטיפול</p>
+                                    <p style={{ margin: '0px', float: 'right' }}><h6>תאריך כניסה לטיפול</h6></p>
                                     <Input value={p.tipul_entry_date} type="date" placeholder="תאריך כניסה לטיפול" min="1900-01-01" max="2040-01-01" disabled/>
                                   </div>
                                 </Col>
                                 <Col xs={12} md={4}>
                                   <div>
-                                    <p style={{ margin: '0px', float: 'right' }}>מיקום הטיפול</p>
+                                    <p style={{ margin: '0px', float: 'right' }}><h6>מיקום הטיפול</h6></p>
                                     <Input value={p.mikum_tipul} type="select" placeholder="מיקום הטיפול" disabled>
                                       <option value={"בחר"}>{"בחר"}</option>
                                       <option value={"ביחידה"}>{"ביחידה"}</option>
@@ -2124,7 +2124,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            מק"ט חסר
+                                            <h6>מק"ט חסר</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
@@ -2142,7 +2142,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            כמות
+                                            <h6>כמות</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
@@ -2161,7 +2161,7 @@ const CarDataFormModal = (props) => {
                               <Row>
                                 <Col xs={12} md={4}>
                                   <div>
-                                    <p style={{ margin: '0px', float: 'right' }}>חריג טיפול</p>
+                                    <p style={{ margin: '0px', float: 'right' }}><h6>חריג טיפול</h6></p>
                                     <Input onChange={(e) => {
                                         const harig_tipul = e.target.value;
                                         if (e.target.value != "בחר")
@@ -2178,7 +2178,7 @@ const CarDataFormModal = (props) => {
                                 </Col>
                                 <Col xs={12} md={4}>
                                   <div>
-                                      <p style={{ margin: '0px', float: 'right' }}>תאריך חריגת טיפול</p>
+                                      <p style={{ margin: '0px', float: 'right' }}><h6>תאריך חריגת טיפול</h6></p>
                                       <Input onChange={(e) => {
                                         const harig_tipul_date = e.target.value;
                                         if (e.target.value != "בחר")
@@ -2201,7 +2201,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            מק"ט חסר
+                                            <h6>מק"ט חסר</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
@@ -2219,7 +2219,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            כמות
+                                            <h6>כמות</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
@@ -2241,7 +2241,7 @@ const CarDataFormModal = (props) => {
                                     <p
                                       style={{ margin: "0px", float: "right" }}
                                     >
-                                      תקלה מזדמנת
+                                      <h6>תקלה מזדמנת</h6>
                                     </p>
                                     <Input
                                       onChange={(e) => {
@@ -2274,7 +2274,7 @@ const CarDataFormModal = (props) => {
                                     <p
                                       style={{ margin: "0px", float: "right" }}
                                     >
-                                      תאריך תקלה מזמנת
+                                      <h6>תאריך תקלה מזדמנת</h6>
                                     </p>
                                     <Input
                                       onChange={(e) => {
@@ -2290,7 +2290,7 @@ const CarDataFormModal = (props) => {
                                       }}
                                       value={p.takala_mizdamenet_date}
                                       type="date"
-                                      placeholder="תאריך תקלה מזמנת"
+                                      placeholder="תאריך תקלה מזדמנת"
                                       min="1900-01-01"
                                       max="2040-01-01"
                                       disabled
@@ -2311,7 +2311,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            מק"ט חסר
+                                            <h6>מק"ט חסר</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_1?p.hh_stands[i].missing_makat_1:""}
@@ -2329,7 +2329,7 @@ const CarDataFormModal = (props) => {
                                               float: "right",
                                             }}
                                           >
-                                            כמות
+                                            <h6>כמות</h6>
                                           </p>
                                           <Input
                                             value={p.hh_stands[i].missing_makat_2?p.hh_stands[i].missing_makat_2:""}
@@ -2353,7 +2353,7 @@ const CarDataFormModal = (props) => {
                     <Row>
                       <Col>
                         <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                          מהות התקלה
+                          <h6>מהות התקלה</h6>
                         </div>
                         <Input
                           placeholder="מהות התקלה"
@@ -2369,7 +2369,7 @@ const CarDataFormModal = (props) => {
                     <Row>
                       <Col>
                         <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                          צפי תיקון
+                          <h6>צפי תיקון</h6>
                         </div>
                         <Input
                           placeholder="צפי תיקון"
@@ -2394,7 +2394,7 @@ const CarDataFormModal = (props) => {
                 <Row>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      מיקום
+                      <h6>מיקום</h6>
                     </div>
                     <Input
                       placeholder="מיקום"
@@ -2407,7 +2407,7 @@ const CarDataFormModal = (props) => {
                   </Col>
                   <Col>
                     <div style={{ textAlign: "right", paddingTop: "10px" }}>
-                      מועד כיול אחרון
+                      <h6>מועד כיול אחרון</h6>
                     </div>
                     <Input
                       placeholder="מועד כיול אחרון"
