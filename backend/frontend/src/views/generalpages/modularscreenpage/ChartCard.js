@@ -37,6 +37,10 @@ import editpic from "assets/img/edit.png";
 import deletepic from "assets/img/delete.png";
 import arrowhead from "assets/img/arrowhead.png";
 import arrowhead_white from "assets/img/arrowhead_white.png";
+import red from "assets/img/red.png";
+import yellow from "assets/img/yellow.png";
+import green from "assets/img/green.png";
+
 
 const ChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart, setCardata_by_chart] = useState(0)
@@ -46,7 +50,9 @@ const ChartCard = (props) => { //instate - zamin/kashir
     const [cardata_by_chart_intipul, setCardata_by_chart_intipul] = useState(0)
     const [cardata_by_chart_harigtipul, setCardata_by_chart_harigtipul] = useState(0)
     const [cardata_by_chart_takalotmizdamnot, setCardata_by_chart_takalotmizdamnot] = useState(0)
-    const [cardata_by_chart_hhstand, setCardata_by_chart_hhstand] = useState(0)
+    const [cardata_by_chart_hhstand_intipul, setCardata_by_chart_hhstand_intipul] = useState(0)
+    const [cardata_by_chart_hhstand_harigtipul, setCardata_by_chart_hhstand_harigtipul] = useState(0)
+    const [cardata_by_chart_hhstand_takalotmizdamnot, setCardata_by_chart_hhstand_takalotmizdamnot] = useState(0)
     //
     const [collapseOpen, setcollapseOpen] = useState(false);
 
@@ -88,7 +94,10 @@ const ChartCard = (props) => { //instate - zamin/kashir
             for (let i = 0; i < props.chart.units.length; i++) {
                 let lastKey = Object.keys(props.chart.units[i]).pop();
                 let lastValue = props.chart.units[i][Object.keys(props.chart.units[i]).pop()]
-                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+                let temp = [];
+                for(let j=0;j<lastValue.length;j++){
+                    temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+                }
                 temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
             }
             temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
@@ -99,7 +108,10 @@ const ChartCard = (props) => { //instate - zamin/kashir
             for (let i = 0; i < props.chart.tenetree.length; i++) {
                 let lastKey = Object.keys(props.chart.tenetree[i]).pop();
                 let lastValue = props.chart.tenetree[i][Object.keys(props.chart.tenetree[i]).pop()]
-                let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+                let temp = [];
+                for(let j=0;j<lastValue.length;j++){
+                    temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+                }
                 temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
             }
             temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
@@ -133,25 +145,35 @@ const ChartCard = (props) => { //instate - zamin/kashir
         let temp_cardata_by_chart_intipul = [];
         let temp_cardata_by_chart_harigtipul = [];
         let temp_cardata_by_chart_takalotmizdamnot = [];
-        let temp_cardata_by_chart_hhstand = [];
+        let temp_cardata_by_chart_hhstand_intipul = [];
+        let temp_cardata_by_chart_hhstand_harigtipul = [];
+        let temp_cardata_by_chart_hhstand_takalotmizdamnot = [];
         for (let i = 0; i < temp_cardata_by_chart_not_instate.length; i++) {
             let is_intipul = false;
             let is_harigtipul = false;
             let is_takalotmizdamnot = false;
-            let is_hhstand = false;
+            let is_hhstand_intipul = false;
+            let is_hhstand_harigtipul = false;
+            let is_hhstand_takalotmizdamnot = false;
 
             for (let j = 0; j < temp_cardata_by_chart_not_instate[i].tipuls.length; j++) {
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'tipul') {
                     is_intipul = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_intipul = true;
+                    }
                 }
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'harig_tipul') {
                     is_harigtipul = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_harigtipul = true;
+                    }
                 }
                 if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'takala_mizdamenet') {
                     is_takalotmizdamnot = true;
-                }
-                if (temp_cardata_by_chart_not_instate[i].tipuls[j].type == 'hh_stand') {
-                    is_hhstand = true;
+                    if(temp_cardata_by_chart_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_takalotmizdamnot = true;
+                    }
                 }
             }
             if (is_intipul)
@@ -160,8 +182,12 @@ const ChartCard = (props) => { //instate - zamin/kashir
                 temp_cardata_by_chart_harigtipul.push(temp_cardata_by_chart_not_instate[i])
             if (is_takalotmizdamnot)
                 temp_cardata_by_chart_takalotmizdamnot.push(temp_cardata_by_chart_not_instate[i])
-            if (is_hhstand)
-                temp_cardata_by_chart_hhstand.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_intipul)
+                temp_cardata_by_chart_hhstand_intipul.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_harigtipul)
+                temp_cardata_by_chart_hhstand_harigtipul.push(temp_cardata_by_chart_not_instate[i])
+            if (is_hhstand_takalotmizdamnot)
+                temp_cardata_by_chart_hhstand_takalotmizdamnot.push(temp_cardata_by_chart_not_instate[i])
         }
 
         setCardata_by_chart(temp_cardata_by_chart.length)
@@ -171,7 +197,9 @@ const ChartCard = (props) => { //instate - zamin/kashir
         setCardata_by_chart_intipul(temp_cardata_by_chart_intipul.length);
         setCardata_by_chart_harigtipul(temp_cardata_by_chart_harigtipul.length);
         setCardata_by_chart_takalotmizdamnot(temp_cardata_by_chart_takalotmizdamnot.length);
-        setCardata_by_chart_hhstand(temp_cardata_by_chart_hhstand.length);
+        setCardata_by_chart_hhstand_intipul(temp_cardata_by_chart_hhstand_intipul.length);
+        setCardata_by_chart_hhstand_harigtipul(temp_cardata_by_chart_hhstand_harigtipul.length);
+        setCardata_by_chart_hhstand_takalotmizdamnot(temp_cardata_by_chart_hhstand_takalotmizdamnot.length);
     }
 
     useEffect(() => {
@@ -190,10 +218,17 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                     : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                                 }
                             </div>
+                            {props.chart.description ?
+                            <div style={{ textAlign: 'center' }}>
+                                <h4>
+                                    {props.chart.description}
+                                </h4>
+                            </div>
+                            :<div style={{marginBottom:'2.4rem'}}/>}
                         </CardHeader>
-                        <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                        <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer'}} onClick={(e) => toggleCollapse(e)}>
                             <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
-                                {(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 60 ?
+                                {(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) <= props.chart.redcolor ?
                                     <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
                                         {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                             root: {},
@@ -224,7 +259,7 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                             </div>
                                         </CircularProgressbarWithChildren>}
                                     </ProgressProvider>
-                                    : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) < 80 ?
+                                    : (cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0) <= props.chart.yellowcolor ?
                                         <ProgressProvider valueStart={0} valueEnd={(cardata_by_chart != 0 ? ((cardata_by_chart_instate / cardata_by_chart) * 100) : 0)}>
                                             {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
                                                 root: {},
@@ -288,17 +323,47 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                             </ProgressProvider>
                                             : null}
                             </div>
+                            {/* מקרא לצבעים */}
+                            <div style={{display: 'inline-flex', marginTop:'10px'}}>
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.yellowcolor}-100</p>
+                            </>
+                            :
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.redcolor}-100</p>
+                            </>} 
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={yellow} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>{props.chart.redcolor}-{props.chart.yellowcolor}</p>
+                            </>
+                            :null}
+                            {props.chart.redcolor !=0 ?
+                            <>
+                            <img src={red} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>0-{props.chart.redcolor}</p>
+                            </>
+                            :null}
+                            </div>
+                            <div style={{textAlign: 'left', marginTop: `-${1.5*(props.chart.stand.length+1)}rem`,marginBottom:'1rem'}}>
+                            {props.chart.stand.map(stand =>(
+                                <h4 style={{marginBottom:'0px'}}>
+                                    {stand}
+                                </h4>
+                            ))}
+                            </div>
 
                             {collapseOpen ?
                                 <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                    <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul}</h6>
-                                    <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                    <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul}</h6>
-                                    <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                    <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot}</h6>
-                                    <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                    <h6>{props.chart.name} עומדים על ח"ח: {cardata_by_chart_hhstand}</h6>
-                                    <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_hhstand / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul} <span style={{color:'DarkTurquoise'}}>חלפים: {cardata_by_chart_hhstand_intipul})</span></h6>
+                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_chart_hhstand_harigtipul})</span></h6>
+                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                                <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_chart_hhstand_takalotmizdamnot})</span></h6>
+                                <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                                 </div>
                                 : null}
                         </CardBody>
@@ -313,8 +378,15 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                 : <><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/modularchartpage/${props.chart.chartid}/notype/0`}><img style={{ cursor: 'pointer' }} src={arrowhead_white} height='40px'></img></Link><h3 style={{ textAlign: 'center', fontWeight: 'bold', marginTop: '-40px', marginBottom: '0px',paddingRight:'2rem',paddingLeft:'2rem' }}>כשירות {props.chart.name}</h3></>
                             }
                         </div>
+                        {props.chart.description ?
+                            <div style={{ textAlign: 'center' }}>
+                                <h4>
+                                    {props.chart.description}
+                                </h4>
+                            </div>
+                            :<div style={{marginBottom:'2.4rem'}}/>}
                     </CardHeader>
-                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer' }} onClick={(e) => toggleCollapse(e)}>
+                    <CardBody style={{ textAlign: 'center', margin: 'auto', cursor: 'pointer'}} onClick={(e) => toggleCollapse(e)}>
                         <div style={{ width: '50%', marginLeft: 'auto', marginRight: 'auto' }}>
                                 <ProgressProvider valueStart={0} valueEnd={0}>
                                     {value => <CircularProgressbarWithChildren value={value} /*text={`${value}%`}*/ styles={{
@@ -347,17 +419,47 @@ const ChartCard = (props) => { //instate - zamin/kashir
                                     </CircularProgressbarWithChildren>}
                                 </ProgressProvider>
                         </div>
+                       {/* מקרא לצבעים */}
+                       <div style={{display: 'inline-flex', marginTop:'10px'}}>
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.yellowcolor}-100</p>
+                            </>
+                            :
+                            <>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>{props.chart.redcolor}-100</p>
+                            </>} 
+                            {props.chart.yellowcolor !=0 ?
+                            <>
+                            <img src={yellow} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>{props.chart.redcolor}-{props.chart.yellowcolor}</p>
+                            </>
+                            :null}
+                            {props.chart.redcolor !=0 ?
+                            <>
+                            <img src={red} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>0-{props.chart.redcolor}</p>
+                            </>
+                            :null}
+                        </div>
+                        <div style={{textAlign: 'left', marginTop: `-${1.5*(props.chart.stand.length+1)}rem`,marginBottom:'1rem'}}>
+                            {props.chart.stand.map(stand =>(
+                                <h4 style={{marginBottom:'0px'}}>
+                                    {stand}
+                                </h4>
+                            ))}
+                        </div>
 
                         {collapseOpen ?
                             <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.chart.name} בטיפול: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} חריגי טיפול:  {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} בתקלות מזדמנות: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
-                                <h6>{props.chart.name} עומדים על ח"ח: {0}</h6>
-                                <Progress color="guyblue" value={0} style={{ height: '10px', marginBottom: '8px' }}>{0}%</Progress>
+                            <h6>{props.chart.name} בטיפול: {cardata_by_chart_intipul} <span style={{color:'DarkTurquoise'}}>חלפים: {cardata_by_chart_hhstand_intipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_intipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} חריגי טיפול:  {cardata_by_chart_harigtipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_chart_hhstand_harigtipul})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_harigtipul / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
+                            <h6>{props.chart.name} בתקלות מזדמנות: {cardata_by_chart_takalotmizdamnot} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_chart_hhstand_takalotmizdamnot})</span></h6>
+                            <Progress color="guyblue" value={(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_chart_not_instate != 0 ? ((cardata_by_chart_takalotmizdamnot / cardata_by_chart_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                             </div>
                             : null}
                     </CardBody>

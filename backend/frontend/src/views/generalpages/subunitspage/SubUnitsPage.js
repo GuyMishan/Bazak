@@ -75,6 +75,9 @@ function SubUnitsPage({ match, theme }) {
       case 'admin':
         myArrayFiltered2 = myArrayFiltered1;
         break;
+      case 'general':
+        myArrayFiltered2 = myArrayFiltered1;
+        break;
       case 'pikod':
         myArrayFiltered2 = myArrayFiltered1.filter((el) => {
           return match.params.unitid === el.pikod;
@@ -98,11 +101,9 @@ function SubUnitsPage({ match, theme }) {
     }
 
     let myArrayFiltered3 = []; //filter ismushbat
-
     myArrayFiltered3 = myArrayFiltered2.filter((el) => {
       return 'מושבת' != el.status;
     });
-
     setCardatas(myArrayFiltered3);
     setIsdataloaded(true);
   }

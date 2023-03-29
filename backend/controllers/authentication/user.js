@@ -21,11 +21,19 @@ exports.find = (req, res) => {
 }
 exports.update = async (req, res) => {
 
+    let roles = ['adminid', 'gdodid', 'hativaid', 'ogdaid', 'pikodid', 'generalid']
+
     const user = await User.findByIdAndUpdate(req.params.id, req.body, { new: true })
     if (!user) {
         res.status(404).send({ message: 'שגיאה בעדכון' })
     }
-    res.status(200).send(user)
+    for(let i=0;i<roles.length;i++){
+        if( req.body[roles[i]] == undefined ){
+            user[roles[i]] = undefined;
+        }
+       }
+       await user.save();
+       res.status(200).send(user)
 
 
 }
@@ -227,7 +235,7 @@ exports.usersvalidatedaggregate = (req, res) => {
                             User.aggregate(readpikoduser)
                                 .then((result) => {
                                     tempallusers = tempallusers.concat([...result]);
-                                    User.find({ role: "0" })
+                                    User.find({ role: ["0","5"] })
                                         .then((result) => {
                                             tempallusers = tempallusers.concat([...result])
                                             tempallusers = tempallusers.filter((el) => {
@@ -428,7 +436,7 @@ exports.usersnotvalidatedaggregate = (req, res) => {
                             User.aggregate(readpikoduser)
                                 .then((result) => {
                                     tempallusers = tempallusers.concat([...result]);
-                                    User.find({ role: "0" })
+                                    User.find({ role: ["0","5"] })
                                         .then((result) => {
                                             tempallusers = tempallusers.concat([...result])
                                             tempallusers = tempallusers.filter((el) => {

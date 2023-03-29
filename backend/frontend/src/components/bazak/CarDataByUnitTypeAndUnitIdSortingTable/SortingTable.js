@@ -264,6 +264,9 @@ const SortingTable = (props) => {
         case 'admin':
           myArrayFiltered2 = myArrayFiltered1;
           break;
+        case 'general':
+          myArrayFiltered2 = myArrayFiltered1;
+          break;
         case 'pikod':
           myArrayFiltered2 = myArrayFiltered1.filter((el) => {
             return props.match.params.unitid === el.pikod;
@@ -341,8 +344,11 @@ const SortingTable = (props) => {
         let temp_cardata_by_chart_copy3 = []
         for (let i = 0; i < props.charts[k].units.length; i++) {
           let lastKey = Object.keys(props.charts[k].units[i]).pop();
-          let lastValue = props.charts[k].units[i][Object.keys(props.charts[k].units[i]).pop()]
-          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          let lastValue = props.charts[k].units[i][Object.keys(props.charts[k].units[i]).pop()];
+          let temp = [];
+          for(let j=0;j<lastValue.length;j++){
+            temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+          }
           temp_cardata_by_chart_copy3 = temp_cardata_by_chart_copy3.concat(temp);//theres duplicates
         }
         temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy3)]; // removes duplicates
@@ -353,10 +359,28 @@ const SortingTable = (props) => {
         for (let i = 0; i < props.charts[k].tenetree.length; i++) {
           let lastKey = Object.keys(props.charts[k].tenetree[i]).pop();
           let lastValue = props.charts[k].tenetree[i][Object.keys(props.charts[k].tenetree[i]).pop()]
-          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          let temp = [];
+          for(let j=0;j<lastValue.length;j++){
+            temp = temp.concat(temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue[j]))));
+          }
           temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
         }
         temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];// removes duplicates
+      }
+      //when drilling down
+      else{
+        if(props.charts[k].tenetree){
+          let temp_cardata_by_chart_copy4 =[]
+          let lastKey = Object.keys(props.charts[k].tenetree).pop();
+          console.log("lastkey: "+lastKey)
+          let lastValue = props.charts[k].tenetree[Object.keys(props.charts[k].tenetree).pop()];
+          console.log("lastvalue: "+lastValue)
+          let temp = temp_cardata_by_chart.filter(cardata => ((cardata[lastKey] == lastValue)));
+          console.log("temp: ");
+          console.log(temp)
+          temp_cardata_by_chart_copy4 = temp_cardata_by_chart_copy4.concat(temp);//theres duplicates
+          temp_cardata_by_chart = [...new Set(temp_cardata_by_chart_copy4)];//removes duplicates
+        }
       }
 
       let temp_cardata_by_chart_copy1 = []
@@ -475,6 +499,49 @@ const SortingTable = (props) => {
         setFilter({ ...filter, standfilter: [evt.currentTarget.value] })
       }
     }
+    if (evt.currentTarget.name == 'tipul') {
+      if (filter.tipulfilter) {
+        let temptipulfilter = [...filter.tipulfilter]
+        const index = temptipulfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          temptipulfilter.splice(index, 1);
+          if(evt.currentTarget.value == 'harig_tipul'){
+            if(filter.maamalfilter){
+              filter.maamalfilter.splice(0, 1);
+            }
+            if(filter.taarichtipulStart){
+              delete filter.taarichtipulStart;
+            }
+            if(filter.taarichtipulEnd){
+              delete filter.taarichtipulEnd;
+            }
+          }
+        }
+        else {
+          temptipulfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, tipulfilter: temptipulfilter })
+      }
+      else {
+        setFilter({ ...filter, tipulfilter: [evt.currentTarget.value] })
+      }
+    }
+    if (evt.currentTarget.name == 'is_maamal') {
+      if (filter.maamalfilter) {
+        let tempmaamalfilter = [...filter.maamalfilter]
+        const index = tempmaamalfilter.indexOf(evt.currentTarget.value);
+        if (index > -1) {
+          tempmaamalfilter.splice(index, 1);
+        }
+        else {
+          tempmaamalfilter.push(evt.currentTarget.value)
+        }
+        setFilter({ ...filter, maamalfilter: tempmaamalfilter })
+      }
+      else {
+        setFilter({ ...filter, maamalfilter: [evt.currentTarget.value] })
+      }
+    }
   }
 
   function handleChange8(selectedOption, name) {
@@ -491,6 +558,17 @@ const SortingTable = (props) => {
       setFilter(tempfilter);
     }
   }
+  function handleChangeForTaarichTipul(selectedOption) {
+    if (!(selectedOption.target.value == '')) {
+      setFilter({ ...filter, [selectedOption.target.name]: selectedOption.target.value});
+    }
+    else {
+      let tempfilter = { ...filter };
+      delete tempfilter[selectedOption.target.name];
+      setFilter(tempfilter);
+    }
+  }
+
 
   const applyfiltersontodata = () => {
     let tempdatabeforefilter = originaldata;
@@ -531,12 +609,82 @@ const SortingTable = (props) => {
       myArrayFiltered22 = myArrayFiltered2;
     }
 
-    let myArrayFiltered3 = []; //filter pikod
-    if (filter.pikod && filter.pikod.length > 0) {
-      myArrayFiltered3 = myArrayFiltered22.filter(item => filter.pikod.includes(item.pikod));
+    let myArrayFiltered23 = []; //filter tipulfilter
+    if (filter.tipulfilter && filter.tipulfilter.length > 0) {
+      myArrayFiltered23 = myArrayFiltered22.filter((el) => {
+        return filter.tipulfilter.some((f) => {
+          if(el.tipuls.length > 0){
+            let flag = false;
+            for(let i=0;i<el.tipuls.length;i++){
+              if(f === el.tipuls[i].type){
+                flag = true;
+              }
+            }
+            return flag;
+          }else{
+            return false
+          }
+        });
+      });
     }
     else {
-      myArrayFiltered3 = myArrayFiltered22;
+      myArrayFiltered23 = myArrayFiltered22;
+    }
+
+    let myArrayFiltered24 = []; //filter maamalfilter
+    if (filter.maamalfilter && filter.maamalfilter.length > 0) {
+      myArrayFiltered24 = myArrayFiltered23.filter((el) => {
+        return filter.maamalfilter.some(() => {
+          if(el.tipuls.length > 0){
+            let flag = false;
+            for(let i=0;i<el.tipuls.length;i++){
+              if(el.tipuls[i].is_maamal){
+                flag = true;
+              }
+            }
+            return flag;
+          }else{
+            return false
+          }
+        });
+      });
+    }
+    else {
+      myArrayFiltered24 = myArrayFiltered23;
+    }
+
+    let myArrayFiltered25 = []; //filter taarichtipul
+    if (filter.taarichtipulStart && filter.taarichtipulStart.length > 0 && filter.taarichtipulEnd && filter.taarichtipulEnd.length > 0) {
+      myArrayFiltered25 = myArrayFiltered24.filter((el) => {
+        if(el.tipuls.length > 0){
+          let flag = false;
+          let startDate = new Date(filter.taarichtipulStart);
+          let checkDate;
+          let endDate = new Date(filter.taarichtipulEnd);
+          for(let i=0;i<el.tipuls.length;i++){
+            if(el.tipuls[i].harig_tipul_date){
+              checkDate = new Date(el.tipuls[i].harig_tipul_date);
+              if(checkDate >= startDate && checkDate <= endDate){
+                flag = true;
+              }
+            }
+          }
+          return flag;
+        }else{
+          return false
+        }
+      });
+    }
+    else {
+      myArrayFiltered25 = myArrayFiltered24;
+    }
+
+    let myArrayFiltered3 = []; //filter pikod
+    if (filter.pikod && filter.pikod.length > 0) {
+      myArrayFiltered3 = myArrayFiltered25.filter(item => filter.pikod.includes(item.pikod));
+    }
+    else {
+      myArrayFiltered3 = myArrayFiltered25;
     }
 
     let myArrayFiltered4 = []; //filter ogda
@@ -618,18 +766,44 @@ const SortingTable = (props) => {
             tempcardata.tipul = tempcardata.tipuls[j].tipul;
             tempcardata.tipul_entry_date = tempcardata.tipuls[j].tipul_entry_date ? tempcardata.tipuls[j].tipul_entry_date.split("-").reverse().join("-") : null;
             tempcardata.mikum_tipul = tempcardata.tipuls[j].mikum_tipul;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           else if (tempcardata.tipuls[j].type == 'harig_tipul') {
             tempcardata.harig_tipul = tempcardata.tipuls[j].harig_tipul;
             tempcardata.harig_tipul_date = tempcardata.tipuls[j].harig_tipul_date ? tempcardata.tipuls[j].harig_tipul_date.split("-").reverse().join("-") : null;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           else if (tempcardata.tipuls[j].type == 'takala_mizdamenet') {
             tempcardata.takala_mizdamenet = tempcardata.tipuls[j].takala_mizdamenet;
             tempcardata.takala_mizdamenet_date = tempcardata.tipuls[j].takala_mizdamenet_date;
-          }
-          else if (tempcardata.tipuls[j].type == 'hh_stand') {
-            tempcardata.missing_makat_1 = tempcardata.tipuls[j].missing_makat_1;
-            tempcardata.missing_makat_2 = tempcardata.tipuls[j].missing_makat_2;
+            if(tempcardata.tipuls[j].hh_stands){
+              tempcardata.missing_makat_1 = [];
+              tempcardata.missing_makat_2 = [];
+              for(let x=0;x<tempcardata.tipuls[j].hh_stands.length;x++){
+                tempcardata.missing_makat_1[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_1;
+                tempcardata.missing_makat_2[x] = tempcardata.tipuls[j].hh_stands[x].missing_makat_2;
+              }
+              tempcardata.missing_makat_1 = tempcardata.missing_makat_1.toString();
+              tempcardata.missing_makat_2 = tempcardata.missing_makat_2.toString();
+            }
           }
           tempdata_to_excel.push(tempcardata)
         }
@@ -818,19 +992,19 @@ const SortingTable = (props) => {
 
         <div className="table-responsive" style={{ overflow: 'auto', height: (windowSize.innerHeight) * 0.9 }}>
           {/*filter */}
-          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} />
-
+          <CarDataFilter originaldata={originaldata} filter={filter} setfilterfunction={setfilterfunction} unittype={props.unittype} unitid={props.unitid} cartype={props.cartype} carid={props.carid}/*handleChange2={handleChange2}*/ allColumns={allColumns} handleChange8={handleChange8} handleChangeForTaarichTipul={handleChangeForTaarichTipul}/>
+          
           <div style={{ float: 'right', paddingBottom: '5px' }}>
             <button className="btn-new-blue" onClick={FixDataAndExportToExcel}>הורד כקובץ אקסל</button>
           </div>
-          {(user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
+          {(user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ?
           !props.charts ? <button className="btn-new-blue" value={undefined} onClick={Toggle} style={{ float: 'right', marginRight: '10px' }}>הוסף צ'</button> : null
           :null}
 
           <GlobalFilter filter={globalFilter} setFilter={setGlobalFilter} />
 
           <Row>
-            <Col xs={12} md={6} style={{ textAlign: 'right', left: (user.role == '0' || user.role == '1') && (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? '20rem': '11.5rem', marginTop: '1rem' }}>
+            <Col xs={12} md={6} style={{ textAlign: 'right', left: (user.site_permission == undefined || user.site_permission == 'צפייה ועריכה') ? '20rem': '11.5rem', marginTop: '1rem' }}>
               <LatestUpdateDateComponent cardatas={data} isdataloaded={isdataloaded} />
             </Col>
           </Row>

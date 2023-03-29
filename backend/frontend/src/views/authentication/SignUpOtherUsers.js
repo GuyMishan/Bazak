@@ -190,14 +190,7 @@ export default function SignUpForm() {
   const FixUser = (event) => {
     event.preventDefault();
     //check and fix roles
-    if (data.role === "0") {
-      delete data.gdodid;
-      delete data.hativaid;
-      delete data.ogdaid;
-      delete data.pikodid;
-    } 
-    if (data.role === "5") {
-      data.site_permission = 'צפייה';
+    if (data.role === "0" || data.role === "5") {
       delete data.gdodid;
       delete data.hativaid;
       delete data.ogdaid;
@@ -367,7 +360,7 @@ export default function SignUpForm() {
                     >
                       <option value="">הרשאה</option>
                       <option value="0">מנהל מערכת</option>
-                      {/* <option value="5">משתמש כלל צה"ל</option> */}
+                      <option value="5">משתמש כלל צה"ל</option>
                       <option value="1">הרשאת גדוד</option>
                       <option value="2">הרשאת חטיבה</option>
                       <option value="3">הרשאת אוגדה</option>

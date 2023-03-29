@@ -56,7 +56,7 @@ export default function NormalAnimatedMultiSelect(props) {
                 theme == "white-content" ?
                     <Select
                         isMulti={true}
-                        closeMenuOnSelect={true}
+                        closeMenuOnSelect={false}
                         components={animatedComponents}
                         options={dataoptions}
                         onChange={handleChange3}
@@ -67,7 +67,7 @@ export default function NormalAnimatedMultiSelect(props) {
                     <div style={{ color: 'white' }}>
                         <Select
                             isMulti={true}
-                            closeMenuOnSelect={true}
+                            closeMenuOnSelect={false}
                             components={animatedComponents}
                             options={dataoptions}
                             onChange={handleChange3}

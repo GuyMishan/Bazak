@@ -6,6 +6,9 @@ import 'react-circular-progressbar/dist/styles.css';
 import ProgressProvider from "components/general/CircularProgressBarAnimation/ProgressProvider";
 import arrowhead from "assets/img/arrowhead.png";
 import arrowhead_white from "assets/img/arrowhead_white.png";
+import red from "assets/img/red.png";
+import yellow from "assets/img/yellow.png";
+import green from "assets/img/green.png";
 
 // reactstrap components
 import {
@@ -31,7 +34,9 @@ function DashboardCard(props) { //instate - zamin/kashir
     const [cardata_by_cartype_intipul, setCardata_by_cartype_intipul] = useState(0)
     const [cardata_by_cartype_harigtipul, setCardata_by_cartype_harigtipul] = useState(0)
     const [cardata_by_cartype_takalotmizdamnot, setCardata_by_cartype_takalotmizdamnot] = useState(0)
-    const [cardata_by_cartype_hhstand, setCardata_by_cartype_hhstand] = useState(0)
+    const [cardata_by_cartype_hhstand_intipul, setCardata_by_cartype_hhstand_intipul] = useState(0)
+    const [cardata_by_cartype_hhstand_harigtipul, setCardata_by_cartype_hhstand_harigtipul] = useState(0)
+    const [cardata_by_cartype_hhstand_takalotmizdamnot, setCardata_by_cartype_hhstand_takalotmizdamnot] = useState(0)
     //
     const [collapseOpen, setcollapseOpen] = useState(false);
 
@@ -81,28 +86,39 @@ function DashboardCard(props) { //instate - zamin/kashir
             temp_cardata_by_cartype_not_instate = temp_cardata_by_cartype.filter(cardata => ((cardata.kshirot != 'כשיר')));
         }
 
+        //calculate intipul/harigtipul/takalotmizdamnot/hhstand
         let temp_cardata_by_cartype_intipul = [];
         let temp_cardata_by_cartype_harigtipul = [];
         let temp_cardata_by_cartype_takalotmizdamnot = [];
-        let temp_cardata_by_cartype_hhstand = [];
+        let temp_cardata_by_cartype_hhstand_intipul = [];
+        let temp_cardata_by_cartype_hhstand_harigtipul = [];
+        let temp_cardata_by_cartype_hhstand_takalotmizdamnot = [];
         for (let i = 0; i < temp_cardata_by_cartype_not_instate.length; i++) {
             let is_intipul = false;
             let is_harigtipul = false;
             let is_takalotmizdamnot = false;
-            let is_hhstand = false;
+            let is_hhstand_intipul = false;
+            let is_hhstand_harigtipul = false;
+            let is_hhstand_takalotmizdamnot = false;
 
             for (let j = 0; j < temp_cardata_by_cartype_not_instate[i].tipuls.length; j++) {
                 if (temp_cardata_by_cartype_not_instate[i].tipuls[j].type == 'tipul') {
                     is_intipul = true;
+                    if(temp_cardata_by_cartype_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_intipul = true;
+                    }
                 }
                 if (temp_cardata_by_cartype_not_instate[i].tipuls[j].type == 'harig_tipul') {
                     is_harigtipul = true;
+                    if(temp_cardata_by_cartype_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_harigtipul = true;
+                    }
                 }
                 if (temp_cardata_by_cartype_not_instate[i].tipuls[j].type == 'takala_mizdamenet') {
                     is_takalotmizdamnot = true;
-                }
-                if (temp_cardata_by_cartype_not_instate[i].tipuls[j].type == 'hh_stand') {
-                    is_hhstand = true;
+                    if(temp_cardata_by_cartype_not_instate[i].tipuls[j].hh_stands){
+                        is_hhstand_takalotmizdamnot = true;
+                    }
                 }
             }
             if (is_intipul)
@@ -111,8 +127,12 @@ function DashboardCard(props) { //instate - zamin/kashir
                 temp_cardata_by_cartype_harigtipul.push(temp_cardata_by_cartype_not_instate[i])
             if (is_takalotmizdamnot)
                 temp_cardata_by_cartype_takalotmizdamnot.push(temp_cardata_by_cartype_not_instate[i])
-            if (is_hhstand)
-                temp_cardata_by_cartype_hhstand.push(temp_cardata_by_cartype_not_instate[i])
+            if (is_hhstand_intipul)
+                temp_cardata_by_cartype_hhstand_intipul.push(temp_cardata_by_cartype_not_instate[i])
+            if (is_hhstand_harigtipul)
+                temp_cardata_by_cartype_hhstand_harigtipul.push(temp_cardata_by_cartype_not_instate[i])
+            if (is_hhstand_takalotmizdamnot)
+                temp_cardata_by_cartype_hhstand_takalotmizdamnot.push(temp_cardata_by_cartype_not_instate[i])
         }
 
         setCardata_by_cartype(temp_cardata_by_cartype.length)
@@ -122,7 +142,9 @@ function DashboardCard(props) { //instate - zamin/kashir
         setCardata_by_cartype_intipul(temp_cardata_by_cartype_intipul.length);
         setCardata_by_cartype_harigtipul(temp_cardata_by_cartype_harigtipul.length);
         setCardata_by_cartype_takalotmizdamnot(temp_cardata_by_cartype_takalotmizdamnot.length);
-        setCardata_by_cartype_hhstand(temp_cardata_by_cartype_hhstand.length);
+        setCardata_by_cartype_hhstand_intipul(temp_cardata_by_cartype_hhstand_intipul.length);
+        setCardata_by_cartype_hhstand_harigtipul(temp_cardata_by_cartype_hhstand_harigtipul.length);
+        setCardata_by_cartype_hhstand_takalotmizdamnot(temp_cardata_by_cartype_hhstand_takalotmizdamnot.length);
     }
 
     useEffect(() => {
@@ -244,23 +266,31 @@ function DashboardCard(props) { //instate - zamin/kashir
                                         </ProgressProvider>
                                         : null}
                         </div>
+                        {/* מקרא לצבעים */}
+                        <div style={{display: 'inline-flex', marginTop:'10px'}}>
+                            <img src={green} height="20px" style={{marginLeft:'5px'}}/>
+                            <p>80-100</p>
+
+                            <img src={yellow} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>60-80</p>
+
+                            <img src={red} height="20px" style={{marginLeft:'5px', marginRight:'10px'}}/>
+                            <p>0-60</p>
+                        </div>
 
                         {collapseOpen ?
                             <div style={{ width: '80%', marginLeft: 'auto', marginRight: 'auto', paddingTop: '25px' }}>
-                                <h6>{props.cartype.name} בטיפול: {cardata_by_cartype_intipul}</h6>
+                                <h6>{props.cartype.name} בטיפול: {cardata_by_cartype_intipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_intipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_intipul / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_intipul / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.cartype.name} חריגי טיפול:  {cardata_by_cartype_harigtipul}</h6>
+                                <h6>{props.cartype.name} חריגי טיפול:  {cardata_by_cartype_harigtipul} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_harigtipul})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_harigtipul / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_harigtipul / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.cartype.name} בתקלות מזדמנות: {cardata_by_cartype_takalotmizdamnot}</h6>
+                                <h6>{props.cartype.name} בתקלות מזדמנות: {cardata_by_cartype_takalotmizdamnot} <span style={{color:'DarkTurquoise'}}>(חלפים: {cardata_by_cartype_hhstand_takalotmizdamnot})</span></h6>
                                 <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_takalotmizdamnot / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_takalotmizdamnot / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
-                                <h6>{props.cartype.name} עומדים על ח"ח: {cardata_by_cartype_hhstand}</h6>
-                                <Progress color="guyblue" value={(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_hhstand / cardata_by_cartype_not_instate) * 100) : 0)} style={{ height: '10px', marginBottom: '8px' }}>{(cardata_by_cartype_not_instate != 0 ? ((cardata_by_cartype_hhstand / cardata_by_cartype_not_instate) * 100) : 0).toFixed(0)}%</Progress>
                             </div>
                             : null}
                     </CardBody>
                 </Card>
             </Col> : null
-        // <h1>hello</h1>
     );
 }
 

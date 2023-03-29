@@ -31,6 +31,8 @@ const CarDataFilter = (props) => {
     const [kshirots, setKshirots] = useState([])
 
     const [stands, setStands] = useState([])
+
+    const [tipuls, setTipuls] = useState([]);
     //units
     const [gdods, setGdods] = useState([]);
     const [hativas, setHativas] = useState([]);
@@ -67,8 +69,14 @@ const CarDataFilter = (props) => {
         tempstands.push('הכן');
         tempstands.push('הח"י');
         setStands(tempstands)
+    } 
+    const getTipuls = async () => {
+        let temptipuls = [];
+        temptipuls.push(['טיפול','tipul']);
+        temptipuls.push(['חריג טיפול', 'harig_tipul']);
+        temptipuls.push(['תקלה מזדמנת','takala_mizdamenet']);
+        setTipuls(temptipuls)
     }
-
     const getMagadals = async () => {
         await axios.get(`http://localhost:8000/api/magadal`)
             .then(response => {
@@ -207,6 +215,7 @@ const CarDataFilter = (props) => {
         getKshirots();
         getZminots();
         getStands();
+        getTipuls();
         getMagadals();
         loadPikods();
     }
@@ -293,9 +302,35 @@ const CarDataFilter = (props) => {
                                 }
                             }) : null}
                         </Col>
+                        <Col xs={12} md={1} style={{ textAlign: 'right' }}>
+                            <h4 style={{ fontWeight: 'bold' }}>סיבת אי זמינות</h4>
+                            {tipuls ? tipuls.map((tipul, index) => {
+                                {
+                                    return (
+                                        <>
+                                        <Row>
+                                            {props.filter.tipulfilter && props.filter.tipulfilter.indexOf(tipul[1]) != -1 ?
+                                                <button className="btn-empty" name={'tipul'} value={tipul[1]} onClick={props.setfilterfunction}><h6 style={{ color: 'blue', }}>{tipul[0]}</h6></button>
+                                                : <button className="btn-empty" name={'tipul'} value={tipul[1]} onClick={props.setfilterfunction}><h6 style={{ fontWeight: 'unset' }}>{tipul[0]}</h6></button>}
+                                        </Row>
+                                        {tipul[0] == 'חריג טיפול' ?
+                                        props.filter.tipulfilter && props.filter.tipulfilter.indexOf('harig_tipul') != -1 ?
+                                        <Row>
+                                           {props.filter.maamalfilter && props.filter.maamalfilter.indexOf('is_maamal') != -1 ?
+                                               <button className="btn-empty" name={'is_maamal'} value={'is_maamal'} onClick={props.setfilterfunction}><h6 style={{ color: 'blue', }}>{'האם ביצע טיפול מעמ"ל'}</h6></button>
+                                               : 
+                                               <button className="btn-empty" name={'is_maamal'} value={'is_maamal'} onClick={props.setfilterfunction}><h6 style={{ fontWeight: 'unset' }}>{'האם ביצע טיפול מעמ"ל'}</h6></button>}
+                                        </Row>
+                                        :null
+                                        :null}
+                                        </>
+                                    )
+                                }
+                            }) : null}
+                        </Col>
                         <Col xs={12} md={8} style={{ textAlign: 'right' }}>
                             <Row style={{ paddingTop: '10px', marginBottom: '15px' }}>
-                                {((props.unittype == "admin")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general")) ?
                                     <>
                                         {(!(props.filter.ogda) || !(props.filter.ogda.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -308,7 +343,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod")) ?
                                     <>
                                         {((props.filter.pikod) && (props.filter.pikod.length > 0) && (!(props.filter.hativa) || !(props.filter.hativa.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -321,7 +356,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod") || (props.unittype == "ogda")) ?
                                     <>
                                         {((props.filter.ogda) && (props.filter.ogda.length > 0) && (!(props.filter.gdod) || !(props.filter.gdod.length > 0))) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -334,7 +369,7 @@ const CarDataFilter = (props) => {
                                             </Col>}
                                     </> : null}
 
-                                {((props.unittype == "admin") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
+                                {((props.unittype == "admin") || (props.unittype == "general") || (props.unittype == "pikod") || (props.unittype == "ogda") || (props.unittype == "hativa")) ?
                                     <>
                                         {((props.filter.hativa) && (props.filter.hativa.length > 0)) ?
                                             <Col style={{ justifyContent: 'right', alignContent: 'right', textAlign: 'right' }}>
@@ -402,6 +437,19 @@ const CarDataFilter = (props) => {
                             </Row>
                         </Col>
                     </Row>
+
+                    {props.filter.tipulfilter && props.filter.tipulfilter.indexOf('harig_tipul') != -1 ?
+                    <div>
+                        <Row style={{margin:'0px', marginBottom:'20px'}}>
+                          <Col xs={12} md={1} style={{ textAlign: 'right' }}>
+                          <h4 style={{ fontWeight: 'bold', width:'150px' }}>תאריך חריג טיפול</h4>
+                            <div style={{display:'flex', alignItems:'center', width:'120px'}}>
+                                <Input name={'taarichtipulEnd'} onChange={props.handleChangeForTaarichTipul} type="date" min={props.filter.taarichtipulStart ? props.filter.taarichtipulStart :"1900-01-01"} max="2040-01-01" /> - <Input name={'taarichtipulStart'} onChange={props.handleChangeForTaarichTipul} type="date" min="1900-01-01" max={props.filter.taarichtipulEnd ? props.filter.taarichtipulEnd :"2040-01-01"} />
+                            </div>
+                          </Col>
+                        </Row>
+                    </div>
+                    :null}
 
                     <div>
                         <Row>

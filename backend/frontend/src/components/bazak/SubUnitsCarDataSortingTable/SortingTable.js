@@ -68,7 +68,7 @@ const SortingTable = (props) => {
     }
 
     let temp_data_arr = []
-    if (props.unittype == 'admin') {
+    if (props.unittype == 'admin' || props.unittype == 'general') {
       let response1 = await axios.get(`http://localhost:8000/api/pikod`,)
       let temp_pikods = response1.data;
       for (let i = 0; i < temp_pikods.length; i++) {
@@ -410,7 +410,7 @@ const SortingTable = (props) => {
                 SumNumCarKashir = SumNumCarKashir + data.cardatas[i].numberofcars_kashir;
               }
               return (<tr>
-                {props.unittype == 'admin' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/pikod/${data.pikod._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.pikod.name}</Link></th>
+                {props.unittype == 'admin' || props.unittype == 'general' && data.pikod ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/pikod/${data.pikod._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.pikod.name}</Link></th>
                   : props.unittype == 'pikod' && data.ogda ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/ogda/${data.ogda._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.ogda.name}</Link></th>
                     : props.unittype == 'ogda' && data.hativa ? <th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/subunitspage/hativa/${data.hativa._id}/${props.match.params.cartype}/${props.match.params.carid}`}>{data.hativa.name}</Link></th>
                       : props.unittype == 'hativa' && data.gdod ? <><th style={{ width: `${100 / 3}%`, minWidth: '150px' }}><Link style={{ textDecoration: 'none', color: 'inherit' }} to={`/zminotpage/gdod/${data.gdod._id}/magadal/0/false/false`}>{data.gdod.name}</Link></th> <td>{data.maxdate.toISOString().slice(0, 10).split("-").reverse().join("/")}</td></>
@@ -447,7 +447,7 @@ const SortingTable = (props) => {
                           <p style={{ color: '#ff2128' }}>
                             {((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0)}%
                             <br></br>
-                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcar}
+                            {cardatas.numberofcars_kashir + '/' + cardatas.numberofcars}
                           </p> :
                           ((cardatas.numberofcars_kashir / cardatas.numberofcars) * 100).toFixed(0) <= 80 ?
                             <p style={{ color: '#ffca3a' }}>

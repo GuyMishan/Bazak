@@ -88,7 +88,7 @@ const ScreenModal = (props) => {
               delete response.data[i].screenid;
               response.data[i].screenid = tempscreenid;
               response.data[i].chartid = await GenerateChartid();
-            if(user.role != '0' || user.role != '5'){
+            if(user.role != '0'){
               for(let j = 0 ; j<response.data[i].units.length; j++){
                 if(response.data[i].units[j].gdod){
                   var targetUnitId = response.data[i].units[j].gdod
@@ -360,7 +360,7 @@ const ScreenModal = (props) => {
 
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={4}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>ייבוא מסך: </div>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>ייבוא מסך: </h6></div>
                 <Input type="text" value={screenidimport} onChange={handleChangeScreenidimport} placeholder="ניתן להזין קוד מסך שקיבלת לייבוא!"/>
               </Col>
               <Col xs={12} md={4} style={{ textAlign: 'right' }}>
@@ -371,7 +371,7 @@ const ScreenModal = (props) => {
             {screendata.screenid ?
               <Row style={{ padding: '0px' }}>
                 <Col style={{ padding: '0px' }} xs={12} md={12}>
-                  <div style={{ textAlign: 'right', paddingTop: '10px' }}>מזהה מסך:  {screendata.screenid}</div>
+                  <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מזהה מסך: {screendata.screenid}</h6></div>
                 </Col>
               </Row>
               :
@@ -379,14 +379,14 @@ const ScreenModal = (props) => {
 
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={4}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>שם מסך: </div>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>שם מסך: </h6></div>
                 <Input type="text" name="name" value={screendata.name} onChange={handleChange} />
               </Col>
             </Row>
 
             <Row style={{ padding: '0px' }}>
               <Col style={{ padding: '0px' }} xs={12} md={4}>
-                <div style={{ textAlign: 'right', paddingTop: '10px' }}>מספר שעונים בשורה: </div>
+                <div style={{ textAlign: 'right', paddingTop: '10px' }}><h6>מספר שעונים בשורה: </h6></div>
                 <Input type="select" name="chartsinline" value={screendata.chartsinline} onChange={handleChange}>
                   <option value={'בחר'}>בחר</option>
                   <option value={'6'}>6</option>

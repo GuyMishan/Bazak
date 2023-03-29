@@ -137,25 +137,25 @@ const EditUserForm = ({ match }) => {
       if (data.role === "0") {
       }
       if (data.role === "1") {
-        if (data.gdodid === "") {
+        if (data.gdodid === undefined || data.gdodid === "") {
           flag = false;
           ErrorReason += "גדוד ריק \n";
         }
       }
       if (data.role === "2") {
-        if (data.hativaid === "") {
+        if (data.hativaid === undefined || data.hativaid === "") {
           flag = false;
           ErrorReason += "חטיבה ריקה \n";
         }
       }
       if (data.role === "3") {
-        if (data.ogdaid === "") {
+        if (data.ogdaid === undefined || data.ogdaid === "") {
           flag = false;
           ErrorReason += "אוגדה ריקה \n";
         }
       }
       if (data.role === "4") {
-        if (data.pikodid === "") {
+        if (data.pikodid === undefined || data.pikodid === "") {
           flag = false;
           ErrorReason += "פיקוד ריק \n";
         }
@@ -170,14 +170,7 @@ const EditUserForm = ({ match }) => {
 
   const FixUser = (event) => {
     event.preventDefault();
-    if (data.role === "0") {
-      delete data.gdodid;
-      delete data.hativaid;
-      delete data.ogdaid;
-      delete data.pikodid;
-    }
-    if (data.role === "5") {
-      data.site_permission = 'צפייה';
+    if (data.role === "0" || data.role === "5") {
       delete data.gdodid;
       delete data.hativaid;
       delete data.ogdaid;
@@ -315,9 +308,11 @@ const EditUserForm = ({ match }) => {
 
                   {data.role === "0" ? (
                     <div style={{textAlign:'right', paddingTop: "10px"}}>מנהל מערכת</div>
-                  ) : data.role === "5" ? (
+                  ) :
+                   data.role === "5" ? (
                     <div style={{textAlign:'right', paddingTop: "10px"}}>משתמש כלל צה"ל</div>
-                  ) : data.role === "1" ? (
+                  ) : 
+                  data.role === "1" ? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         גדוד
@@ -357,7 +352,7 @@ const EditUserForm = ({ match }) => {
                     <div style={{textAlign:'right', paddingTop: "10px"}}>נא להכניס הרשאה</div>
                   ) : null}
 
-                  {data.role != "" && data.role != "0" && data.role != "5" ? (
+                  {data.role != "" && data.role != "0"? (
                     <>
                       <div style={{ textAlign: "right", paddingTop: "10px" }}>
                         הרשאת עריכה

@@ -259,6 +259,25 @@ function ModularScreenPage(props) {
             )
             .then((response3) => {});
         }
+        //to fix charts with no colors
+        if (tempcardata[i].redcolor == undefined) {
+          tempcardata[i].redcolor = 60;
+          let response3 = await axios
+            .put(
+              `http://localhost:8000/api/modularscreens/chart/${tempcardata[i].chartid}`,
+              tempcardata[i]
+            )
+            .then((response3) => {});
+        }
+        if (tempcardata[i].yellowcolor == undefined) {
+          tempcardata[i].yellowcolor = 80;
+          let response3 = await axios
+            .put(
+              `http://localhost:8000/api/modularscreens/chart/${tempcardata[i].chartid}`,
+              tempcardata[i]
+            )
+            .then((response3) => {});
+        }
       }
       quickSort(tempcardata, 0, tempcardata.length - 1);
       setCharts(tempcardata);
@@ -507,7 +526,6 @@ function ModularScreenPage(props) {
       >
         תצוגת שעונים
       </button>
-
       <CarDataByUnitTypeAndUnitIdSortingTable charts={filteredcharts} />
     </>
   );

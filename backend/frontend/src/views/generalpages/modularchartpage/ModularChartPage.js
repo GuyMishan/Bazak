@@ -102,19 +102,21 @@ function ModularChartPage(props) {
     if (props.match.params.cartype == 'notype') {
       if (tempchart.tenetree.length > 0) {
         for (let i = 0; i < tempchart.tenetree.length; i++) {
-          let tempsubchart = {};
-          tempsubchart.tenetree = [tempchart.tenetree[i]];
-
-          //axios to find name..
-          let lastKey = Object.keys(tempsubchart.tenetree[0]).pop();
-          let lastValue = tempsubchart.tenetree[0][lastKey]
-          let response = await axios.get(`http://localhost:8000/api/${lastKey}/${lastValue}`)
-          tempsubchart.name = response.data.name
-
-          tempsubchart.units = tempchart.units;
-          tempsubchart.stand = tempchart.stand;
-          tempsubchart.status = tempchart.status;
-          tempsubcharts.push(tempsubchart)
+          for(let j=0;j<tempchart.tenetree[i][Object.keys([tempchart.tenetree[i]][0]).pop()].length;j++){
+            let tempsubchart = {};
+            //axios to find name..
+            let lastKey = Object.keys([tempchart.tenetree[i]][0]).pop();
+            let lastValue = [tempchart.tenetree[i]][0][lastKey][j]
+              let response = await axios.get(`http://localhost:8000/api/${lastKey}/${lastValue}`)
+              tempsubchart.name = response.data.name;
+              tempsubchart.tenetree = {[Object.keys([tempchart.tenetree[i]][0]).pop()]:response.data._id};
+              tempsubchart.units = tempchart.units;
+              tempsubchart.stand = tempchart.stand;
+              tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
+              tempsubcharts.push(tempsubchart)
+          }
         }
       }
       else {
@@ -122,12 +124,14 @@ function ModularChartPage(props) {
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let tempsubchart = {};
-              tempsubchart.tenetree = [{ magadal: response.data[i]._id }];
+              tempsubchart.tenetree = { magadal: response.data[i]._id };
               tempsubchart.name = response.data[i].name
 
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -142,12 +146,14 @@ function ModularChartPage(props) {
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let tempsubchart = {};
-              tempsubchart.tenetree = [{ magad: response.data[i]._id }];
+              tempsubchart.tenetree = { magad: response.data[i]._id };
               tempsubchart.name = response.data[i].name
 
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -161,12 +167,14 @@ function ModularChartPage(props) {
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let tempsubchart = {};
-              tempsubchart.tenetree = [{ mkabaz: response.data[i]._id }];
+              tempsubchart.tenetree = { mkabaz: response.data[i]._id };
               tempsubchart.name = response.data[i].name
 
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -180,12 +188,14 @@ function ModularChartPage(props) {
           .then(response => {
             for (let i = 0; i < response.data.length; i++) {
               let tempsubchart = {};
-              tempsubchart.tenetree = [{ makat: response.data[i]._id }];
+              tempsubchart.tenetree = { makat: response.data[i]._id };
               tempsubchart.name = response.data[i].name
 
               tempsubchart.units = tempchart.units;
               tempsubchart.stand = tempchart.stand;
               tempsubchart.status = tempchart.status;
+              tempsubchart.yellowcolor = tempchart.yellowcolor;
+              tempsubchart.redcolor = tempchart.redcolor;
               tempsubcharts.push(tempsubchart)
             }
           })
@@ -194,7 +204,6 @@ function ModularChartPage(props) {
           })
       }
     }
-
     setSubcharts(tempsubcharts)
     setFilteredsubcharts(tempsubcharts)
   }
